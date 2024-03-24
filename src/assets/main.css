@@ -1,0 +1,67 @@
+@import './base.css';
+
+html {
+  --vari1: #546552;
+  --vari2: #d9ca7c;
+  --vari3: #f5d28d;
+  --vari4: #e0cdb1;
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  font-weight: normal;
+
+
+}
+
+.actions {
+  margin-top: .8rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.return {
+  background-color: #c2b5b5;
+}
+
+button.dq::before {
+  content: '🚫';
+  padding-right: .3rem;
+  color: transparent;
+  text-shadow: 0 0 0 black;
+}
+
+.un-dq {
+  background-color: maroon;
+  color: #ddd;
+}
+.un-dq::before {
+  content: '🚫';
+  padding-right: .3rem;
+  color: transparent;
+  text-shadow: 0 0 0 #ddd;
+}
+
+.next {
+  background-color: #145014;
+}
+
+.danger {
+  background-color: darkred;
+  color: #eee
+}
+
+a, .green {
+  text-decoration: none;
+  color: hsl(46, 48%, 87%);
+  transition: 0.4s;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(147, 9%, 81%, 0.2);
+  }
+}

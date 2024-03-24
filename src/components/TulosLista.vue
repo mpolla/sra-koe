@@ -1,0 +1,375 @@
+<script setup lang="ts">
+
+import { usePisteetStore } from '@/stores/pisteet'
+import { ref } from "vue";
+import { RastiSuorituksenTila, SraAmpumakoe } from "@/classes/SraAmpumakoe";
+import { PDFDocument, rgb } from 'pdf-lib'
+import download from "downloadjs"
+
+const pisteetStore = usePisteetStore()
+
+let lisattavapelaaja = ref('')
+
+// Ampujien listaus näytetään heti muokkaustilassa jos lista on tyhjä
+let muokkausTila = ref(Object.keys(pisteetStore.pisteet).length < 1)
+
+const lisaaPelaaja = (nimi: string) => {
+  if (nimi == null || nimi == '') {
+    return
+  }
+  const lisattavanEtunimi = nimi.split(' ')[0]
+  const toisellaSamaEtunimi = Object.keys(pisteetStore.pisteet).map((it) => it.split(' ')[0]).filter(x => x === lisattavanEtunimi).length > 0
+  if (pisteetStore.pisteet[nimi] !== undefined) {
+    console.warn("Ampuja nimellä " + nimi + " on jo listalla.")
+    return
+  }
+  if (toisellaSamaEtunimi && nimi.split(' ').length == 1) {
+    console.warn("Ampuja etunimellä " + lisattavanEtunimi + " on jo listalla. Lisää sukunimi.")
+    return
+  }
+  pisteetStore.lisaaPelaaja(nimi)
+  lisattavapelaaja.value = ''
+}
+
+const muotoileOsumakerroin = (osumakerroin: number) => {
+  if (osumakerroin == null || isNaN(osumakerroin)) {
+    return ""
+  }
+  else {
+    return "(" + osumakerroin.toFixed(2) + ")"
+  }
+}
+
+const muotoileTulos = (kaikkiRastitSuoritettu: boolean, osumakerroin: number, ampuja: string) => {
+  if (ampuja in pisteetStore.hylkaykset) {
+    return "HYLÄTTY"
+  }
+
+  if (!kaikkiRastitSuoritettu) {
+    return "KESKEN"
+  }
+  if (osumakerroin >= 1.3) {
+    return "HYVÄKSYTTY"
+  }
+  return "HYLÄTTY"
+}
+
+const aloitaLinkkki = () => {
+  return 'kirjaus/0/' + Object.keys(pisteetStore.pisteet)[0]
+}
+
+const mapClass = (tila: RastiSuorituksenTila) => {
+  switch (tila) {
+    case RastiSuorituksenTila.Kesken:
+      return 'incomplete'
+    case RastiSuorituksenTila.Suorittamatta:
+      return 'notdone'
+    case RastiSuorituksenTila.Suoritettu:
+      return 'done'
+  }
+}
+
+const vahvistaPoisto = (ampuja: string) => {
+  if (confirm(`Poista ampujan ${ampuja} tulostiedot?`)) {
+    pisteetStore.poistaAmpuja(ampuja)
+  }
+}
+
+const reset = () => {
+  if (confirm("Haluatko todella tyhjentää listan ja poistaa kaikki tulokset?")) {
+    pisteetStore.reset()
+  }
+}
+
+const kirjaaHylkays = (ampuja: string) => {
+  const peruste = window.prompt("Ampujan " + ampuja + " hylkäämisen syy?", "") as string
+  if (peruste != null && peruste !== "") {
+    pisteetStore.kirjaaHylkays(ampuja, peruste)
+  }
+}
+
+
+
+const muokkaaLabel = () => {
+  return muokkausTila.value ? "Valmis" : "Muokkaa listaa"
+}
+
+const muotoileLuku = (luku: number) : string => {
+  if (luku == 0) {
+    return ""
+  } else {
+    return luku.toString()
+  }
+}
+
+const muotoileAika = (luku: number) : string => {
+  if (luku == 0 || luku == undefined) {
+    return ""
+  } else {
+    return luku.toFixed(2)
+  }
+}
+
+
+async function createPdf(ampuja: string) {
+
+  const RASTI_Y_OFFSET = [687, 573, 469, 366, 262]
+
+  const ROW_H = 12
+
+  const T1_X = 393
+  const T2_X = 427
+  const OSUMAT_X = 465
+  const PISTEET_X = 505
+  const AIKA_X = 538
+
+  const fontBytes = await fetch('sra-ampumakoe.pdf').then((res) => res.arrayBuffer());
+  const pdfDoc = await PDFDocument.load(fontBytes)
+  const pages = pdfDoc.getPages()
+
+  // Peitetään ResUL logo
+  pages[0].drawRectangle({
+    x: 250,
+    y: 720,
+    width: 80,
+    height: 40,
+    borderColor: rgb(1, 1, 1),
+    color: rgb(1, 1, 1),
+    opacity: 1,
+    borderWidth: 1.5,
+  })
+
+  pages[0].setFontColor(rgb(0.1, 0.1, 0.97))
+
+  pages[0].drawText(ampuja, {x: 60, y: 714, size: 12})
+
+  for (let rasti in SraAmpumakoe.rastit) {
+    for (let rivi in [0,1,2,3,4,5]) {
+      // Taulu 1
+      pages[0].drawText(muotoileLuku(pisteetStore.pisteet[ampuja][rasti][rivi][0]), {x: T1_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi)*ROW_H, size: 10})
+      // Taulu 2
+      pages[0].drawText(muotoileLuku(pisteetStore.pisteet[ampuja][rasti][rivi][1]), {x: T2_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi)*ROW_H, size: 10})
+      // Osumat
+      pages[0].drawText(muotoileLuku(pisteetStore.getPelaajaRastiLuokkaOsumat(ampuja, Number(rasti))[rivi]), {x: OSUMAT_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi)*ROW_H, size: 10})
+      // Pisteet
+      pages[0].drawText(muotoileLuku(pisteetStore.getPelaajaRastiPisteet(ampuja, Number(rasti))[rivi]), {x: PISTEET_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi)*ROW_H, size: 10})
+      // Aika
+      if (Number(rivi) < 3) {
+        pages[0].drawText(muotoileAika(pisteetStore.getPelaajanRastiAjat(ampuja, Number(rasti))[rivi]), {x: AIKA_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi) * ROW_H, size: 10})
+      }
+    }
+
+    // Yhteenlasketut pisteet ja aika
+    pages[0].drawText(muotoileLuku(pisteetStore.getPelaajaRastiPisteSumma(ampuja, Number(rasti))), {x: PISTEET_X, y: RASTI_Y_OFFSET[rasti] - 5 * ROW_H, size: 10})
+    pages[0].drawText(muotoileAika(pisteetStore.getPelaajanRastiAika(ampuja as string, Number(rasti))), {x: AIKA_X, y: RASTI_Y_OFFSET[rasti] - 5 * ROW_H, size: 10})
+  }
+
+  // Aikasumma, pistesumma, osumakerroin
+  pages[0].drawText(muotoileLuku(pisteetStore.getPelaajanPisteSumma(ampuja)), {x: 552, y: 165, size: 10})
+  pages[0].drawText(muotoileAika(pisteetStore.getPelaajanAikaSumma(ampuja)), {x: 552, y: 149, size: 10})
+  pages[0].drawText(muotoileOsumakerroin(pisteetStore.getPelaajanOsumakerroin(ampuja as string)), {x: 552, y: 137, size: 10})
+
+  const pdfBytes = await pdfDoc.save()
+  download(pdfBytes, "sra-ampumakoe.pdf", "application/pdf");
+}
+
+// onMounted(() => {
+//   lisaaPelaaja('Katriina')
+//   lisaaPelaaja('Maija')
+//   lisaaPelaaja('Heidi')
+//   lisaaPelaaja('Tiina')
+// })
+
+</script>
+
+<template>
+  <main>
+    <h2>Ampujat</h2>
+
+    <ul v-if="muokkausTila" class="ampujat">
+      <li v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet">{{ ampuja }} <span @click="vahvistaPoisto(ampuja as string)" class="remove">⮿</span></li>
+
+    </ul>
+
+
+    <table v-if="!muokkausTila">
+      <tr>
+        <th class="nimi">Nimi</th>
+        <th class="rastipallot">Suoritetut rastit</th>
+        <th class="osumakerroin">Tulos ja osumakerroin</th>
+        <th class="tulos">Pöytäkirja</th>
+        <th v-if="muokkausTila">Poista</th>
+      </tr>
+      <tr v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet" v-bind:class="{dq: pisteetStore.getHylkaysperuste(ampuja as string) }">
+        <td class="nimi">
+          {{ ampuja }}
+
+        </td>
+        <td class="rastipallot">
+          <div v-bind:key="rasti" class="rastipallo" v-bind:class="mapClass(pisteetStore.getRastiSuorituksenTila(ampuja as string, rasti))"  v-for="rasti in [0,1,2,3,4]">
+            <a :href="'#/kirjaus/' + rasti + '/' + ampuja">{{ rasti+1 }}</a></div>
+        </td>
+
+        <td>
+          <span id="tulos" v-bind:class="muotoileTulos(pisteetStore.getKaikkiRastitSuoritettu(ampuja as string), pisteetStore.getPelaajanOsumakerroin(ampuja as string), ampuja as string)">
+          {{ muotoileTulos(pisteetStore.getKaikkiRastitSuoritettu(ampuja as string), pisteetStore.getPelaajanOsumakerroin(ampuja as string), ampuja as string) }}
+          </span>
+          {{ muotoileOsumakerroin(pisteetStore.getPelaajanOsumakerroin(ampuja as string)) }}
+        </td>
+
+        <td><button @click="createPdf(ampuja as string)">⭳ PDF</button></td>
+
+        <td v-if="muokkausTila"><button class="danger" @click="vahvistaPoisto(ampuja as string)">🗑 POISTA</button></td>
+      </tr>
+
+    </table>
+
+    <fieldset v-if="muokkausTila" >
+      <legend>Lisää ampuja</legend>
+      <input placeholder="Ampujan nimi" id="uusinimi" name="uusinimi" v-model="lisattavapelaaja" v-on:keyup.enter="lisaaPelaaja(lisattavapelaaja)"/>
+      <input type="submit" value="Lisää" @click="lisaaPelaaja(lisattavapelaaja);"  />
+    </fieldset>
+
+    <div class="actions">
+      <button class="action danger" v-if="muokkausTila && Object.keys(pisteetStore.pisteet).length > 0" @click="reset()">Poista kaikki</button>
+      <button v-if="muokkausTila && Object.keys(pisteetStore.pisteet).length > 1" @click="pisteetStore.satunnaistaJarjestys()" class="action">⤭ Järjestä satunnaisesti</button>
+
+      <button class="action" @click="muokkausTila = !muokkausTila">{{ muokkaaLabel() }}</button>
+      <button v-if="!muokkausTila" class="action" @click="$router.push(aloitaLinkkki())">Aloita ampumakoe</button>
+    </div>
+
+  </main>
+</template>
+<style scoped>
+
+table {
+  border-radius: .3rem;
+  background: #dccdb8;
+  width: 100%;
+  td {
+    text-align: center;
+  }
+}
+tr {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+th.rastipallot {
+  min-width: 6rem;
+}
+
+#tulos {
+  font-weight: bold;
+  &.KESKEN {
+    color: darkgray;
+  }
+  &.HYVÄKSYTTY {
+    color: darkgreen;
+  }
+  &.HYLÄTTY {
+    color: darkred;
+  }
+
+
+}
+
+
+
+tr.dq {
+  background-color: #b0b0b0;
+  .rastipallo {
+    color: #222;
+    background: #8f8f8f;
+    a {
+      color: #494949;
+    }
+  }
+  .rastipallo.notdone {
+    a {
+      color: transparent;
+    }
+  }
+}
+
+
+.rastipallot {
+  .rastipallo:first-child {
+    border-bottom-left-radius: 40%;
+    border-top-left-radius: 40%;
+  }
+  .rastipallo:last-child {
+    border-top-right-radius: 40%;
+    border-bottom-right-radius: 40%;
+  }
+}
+
+.rastipallo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: 0;
+  font-size: 70%;
+}
+
+.rastipallo.done {
+  background-color: var(--vari1);
+  a {
+    color: white;
+  }
+}
+
+.rastipallo.notdone {
+  background-color: var(--vari2);
+  color: #444;
+}
+
+
+.rastipallo.incomplete {
+  background-color: rgba(139, 0, 0, 0.75);
+  content: 'P';
+  a {
+    content: 'i';
+    color: #145014;
+  }
+}
+
+th {
+  word-wrap: anywhere;
+}
+
+td {
+  border: 1px solid #ccc;
+
+  a {
+    color: #1e4f1e;
+  }
+}
+
+.ampujat li {
+  display: inline-block;
+  background-color: var(--vari1);
+  color: var(--vari2);
+  border-radius: .8rem;
+  padding: 0 .6rem 0 .6rem;
+  margin: .1rem;
+
+
+  .remove {
+    color: white;
+    padding: .2rem 0 .2rem 0;
+  }
+
+}
+
+
+.toimenpide {
+  background-color: #145014;
+  float: right;
+  padding: .6rem;
+  color: #8ac28a;
+}
+
+
+</style>
