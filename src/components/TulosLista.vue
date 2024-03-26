@@ -187,7 +187,7 @@ async function createPdf(ampuja: string) {
     <h2>Ampujat</h2>
 
     <ul v-if="muokkausTila" class="ampujat">
-      <li v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet">{{ ampuja }} <span @click="vahvistaPoisto(ampuja as string)" class="remove">⮿</span></li>
+      <li v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet">{{ ampuja }} <span @click="vahvistaPoisto(ampuja as string)" class="remove">ⓧ</span></li>
 
     </ul>
 
@@ -328,10 +328,8 @@ tr.dq {
 
 .rastipallo.incomplete {
   background-color: rgba(139, 0, 0, 0.75);
-  content: 'P';
   a {
-    content: 'i';
-    color: #145014;
+    color: #eee;
   }
 }
 
@@ -364,12 +362,7 @@ td {
 }
 
 
-.toimenpide {
-  background-color: #145014;
-  float: right;
-  padding: .6rem;
-  color: #8ac28a;
-}
+
 
 
 </style>

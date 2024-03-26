@@ -13,8 +13,8 @@ import { RouterLink, RouterView } from 'vue-router'
     <div class="wrapper">
 
       <nav class="sivuvalikko">
-        <RouterLink to="/">☰ Tuloslista</RouterLink>
-        <RouterLink to="/about">🛈 Tietoja</RouterLink>
+        <RouterLink to="/"><span class="icon">☰</span> Tuloslista</RouterLink>
+        <RouterLink to="/about"><span class="icon">ⓘ</span> Tietoja</RouterLink>
       </nav>
     </div>
   </header>
@@ -58,6 +58,14 @@ nav.sivuvalikko {
   text-align: center;
   background-image: linear-gradient(to bottom, rgba(84, 101, 82, .7), rgba(84, 101, 82, 1)), url("./assets/metsa.jpg");
   background-repeat: no-repeat;
+
+
+        span.icon {
+          display: inline-block;
+          padding: 0 0 0 .3rem;
+        }
+
+
 
 }
 

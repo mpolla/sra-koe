@@ -13,8 +13,6 @@ html {
   padding: 2rem;
 
   font-weight: normal;
-
-
 }
 
 .actions {
@@ -59,6 +57,11 @@ a, .green {
   color: hsl(46, 48%, 87%);
   transition: 0.4s;
 }
+
+.action {
+  font-size: 120%
+}
+
 
 @media (hover: hover) {
   a:hover {

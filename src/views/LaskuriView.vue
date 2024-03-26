@@ -468,18 +468,19 @@ nav {
   display: flex;
 }
 
+/* http://tarangchokshi.weebly.com/blog/how-to-create-flat-style-breadcrumb-links-with-css */
 nav.rastit {
   ul {
     margin: auto;
-
     width: 100%;
     padding: 0;
   }
-
   ul li {
     display: inline-block;
-
-
+    a {
+      width: 3.9rem;
+      padding: .2rem .4rem 0 .9rem;
+    }
   }
   ul li.done a {
     display: flex;
@@ -488,7 +489,7 @@ nav.rastit {
     background-color: #777;
     color: var(--vari2);
     text-align: center;
-    padding: .2rem .4rem 0 .9rem;
+
     white-space: nowrap;
     position: relative;
     font-size: 95%;
@@ -507,15 +508,12 @@ nav.rastit {
     z-index: 10;
   }
 
-
-
   ul li.todo a {
     display: flex;
     float: left;
     height: 30px;
     background-color: var(--vari2);
     text-align: center;
-    padding: .2rem .4rem 0 .9rem;
     white-space: nowrap;
     position: relative;
     font-size: 95%;
@@ -541,7 +539,6 @@ nav.rastit {
     height: 30px;
     background-color: white;
     text-align: center;
-    padding: .2rem .4rem 0 .9rem;
     white-space: nowrap;
     position: relative;
     font-size: 95%;
@@ -560,7 +557,6 @@ nav.rastit {
     top: 0;
     z-index: 10;
   }
-
   ul li a:before {
     content: "";
     border-top: 15px solid transparent;
