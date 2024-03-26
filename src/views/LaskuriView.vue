@@ -341,6 +341,7 @@ const peruHylkays = (ampuja: string) => {
   padding: .3rem;
   border-radius: 10px;
   background: #cadbe7;
+  color: #224;
   /*max-width: 600px;*/
   width: 85%;
   position: relative;
@@ -568,6 +569,7 @@ nav.rastit {
     z-index: 5;
   }
   ul li:first-child a {
+    width: 3.4rem;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
   }
@@ -615,6 +617,7 @@ span.inactive {
 table {
   border-radius: .3rem;
   background: #dccdb8;
+  color: #222;
   width: 100%;
 
 
