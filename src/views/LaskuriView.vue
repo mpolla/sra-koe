@@ -323,6 +323,10 @@ const peruHylkays = (ampuja: string) => {
   vertical-align: center;
   align-content: center;
 
+  .rastiotsikko {
+    color: #222;
+  }
+
   .tulos {
     align-content: center;
     min-width: 4rem;

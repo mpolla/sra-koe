@@ -59,7 +59,8 @@ a, .green {
 }
 
 .action {
-  font-size: 120%
+  font-size: 120%;
+  padding: .25rem;
 }
 
 
