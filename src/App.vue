@@ -26,7 +26,7 @@ import { RouterLink, RouterView } from 'vue-router'
 <style>
 
 #app {
-  padding: .6rem;
+  padding: 0;
 }
 
 body {
@@ -38,35 +38,23 @@ body {
 header {
   line-height: 1.5;
   max-height: 100vh;
-
-
-
-
-
 }
 
 nav {
-
   width: 100%;
   text-align: center;
 }
 
 nav.sivuvalikko {
-
-
   width: 100%;
   text-align: center;
   background-image: linear-gradient(to bottom, rgba(84, 101, 82, .7), rgba(84, 101, 82, 1)), url("./assets/metsa.jpg");
   background-repeat: no-repeat;
 
-
-        span.icon {
-          display: inline-block;
-          padding: 0 0 0 .3rem;
-        }
-
-
-
+  span.icon {
+    display: inline-block;
+    padding: 0 0 0 .3rem;
+  }
 }
 
 nav.rastit {
