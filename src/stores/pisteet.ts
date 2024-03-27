@@ -17,6 +17,7 @@ const jarjestysOnSama = (a: string[], b: string[]) => {
 
 export const usePisteetStore = defineStore('pisteet', {
   state: () => ({
+    turvallisuuskoulutusSuoritettu: false,
     count: 0,
     pisteet: {} as AmpujaPisteet,
     ajat: {} as AmpujaAjat,
@@ -27,6 +28,8 @@ export const usePisteetStore = defineStore('pisteet', {
     lisaaPelaaja(nimi: any) {
       this.pisteet[nimi] = new Array(5).fill(0).map(() => new Array(6).fill(0).map(() => new Array(2).fill(0)))
       this.ajat[nimi] = new Array(5).fill(0).map(() => new Array(3).fill(0))
+      // Jos lisätään uusi ampuja, tarvitaan uusi vahvistus, että turvallisuuskoulutus on annettu kaikille
+      this.turvallisuuskoulutusSuoritettu = false
     },
     getPelaajanPisteet(nimi: any): number[][][] {
       return this.pisteet[nimi]
@@ -110,6 +113,13 @@ export const usePisteetStore = defineStore('pisteet', {
       delete this.pisteet[ampuja]
       delete this.ajat[ampuja]
       delete this.hylkaykset[ampuja]
+
+      // Merkintä turvallisuuskouluksesta vanhenee jos kaikki osallistujat poistetaan.
+      if (Object.keys(this.ajat).length == 0) {
+        this.turvallisuuskoulutusSuoritettu = false
+      }
+
+
     },
     getKaikkiRastitSuoritettu(ampuja: string) {
       return [0,1,2,3,4].map((x) => this.getRastiSuorituksenTila(ampuja, x)).filter((x) => x === RastiSuorituksenTila.Suoritettu).length === 5
@@ -127,6 +137,7 @@ export const usePisteetStore = defineStore('pisteet', {
       this.pisteet = {}
       this.ajat =  {}
       this.hylkaykset = {}
+      this.turvallisuuskoulutusSuoritettu = false
     },
     // Järjestä ampujien lista satunnaisesti
     satunnaistaJarjestys() {

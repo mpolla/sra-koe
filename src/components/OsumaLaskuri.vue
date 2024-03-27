@@ -70,7 +70,8 @@ const plus = () => {
 }
 
 button {
-  width: 1.8rem;
+  width: 1.9rem;
+  height: 1.9rem;
 }
 
 button:disabled {
@@ -79,6 +80,8 @@ button:disabled {
 
 input.osumat {
   width: 1.5rem;
+  height: 2.0rem;
+  font-size: 120%;
   background: #fff9d6;
   border: none;
   text-align: center;

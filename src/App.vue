@@ -51,6 +51,10 @@ nav.sivuvalikko {
   background-image: linear-gradient(to bottom, rgba(84, 101, 82, .7), rgba(84, 101, 82, 1)), url("./assets/metsa.jpg");
   background-repeat: no-repeat;
 
+  a {
+    color: var(--vari2);
+  }
+
   span.icon {
     display: inline-block;
     padding: 0 0 0 .3rem;

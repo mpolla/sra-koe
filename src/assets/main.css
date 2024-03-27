@@ -2,7 +2,7 @@
 
 html {
   --vari1: #546552;
-  --vari2: #d9ca7c;
+  --vari2: #e7d7a6;
   --vari3: #f5d28d;
   --vari4: #e0cdb1;
 }
@@ -47,10 +47,7 @@ button.dq::before {
   background-color: #145014;
 }
 
-.danger {
-  background-color: darkred;
-  color: #eee
-}
+
 
 a, .green {
   text-decoration: none;
@@ -61,6 +58,12 @@ a, .green {
 .action {
   font-size: 120%;
   padding: .25rem;
+
+  &.danger {
+    background-color: darkred;
+    color: #eee
+  }
+
 }
 
 

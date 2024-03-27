@@ -238,6 +238,10 @@ const peruHylkays = (ampuja: string) => {
       </ul>
     </nav>
 
+
+    <div class="main">
+
+
     <div class="ohje" v-if="!(ampuja in pisteetStore.hylkaykset)">
       "{{ ohjeFraasi(rasti, ampuja) }}" <div class="puhu" @click="sano(ohjeFraasi(rasti, ampuja))">🔊</div>
     </div>
@@ -251,7 +255,7 @@ const peruHylkays = (ampuja: string) => {
       <button v-else @click="peruHylkays(ampuja as string)">Peru hylkäys</button>
     </div>
 
-    <table :class="{ dq: ampuja in pisteetStore.hylkaykset }">
+    <table class="rasti" :class="{ dq: ampuja in pisteetStore.hylkaykset }">
       <tr>
         <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0] > 0 ? 'ok' : 'notok'">{{ pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0] > 0 ? '✔' : '⏱' }}</th>
         <td>
@@ -277,12 +281,12 @@ const peruHylkays = (ampuja: string) => {
     </table>
 
     <br/>
-    <table class="rasti" :class="{ dq: ampuja in pisteetStore.hylkaykset }">
+    <table cellspacing="0" class="rasti" :class="{ dq: ampuja in pisteetStore.hylkaykset }">
       <thead>
       <tr>
         <th class="osumaluokka"></th>
-        <th class="taulu" v-bind:class="taulunPisteytysValmis(ampuja, rasti, 0) ? 'ok' : 'notok'" :style="{'background' : 'url('+ getImageUrl() +')', 'background-size' : '40%', 'background-repeat': 'no-repeat', 'background-position': 'top'}"><span>{{  taulunPisteytysValmis(ampuja, rasti, 0) ? '✔' : 'T1' }}</span></th>
-        <th class="taulu" v-bind:class="taulunPisteytysValmis(ampuja, rasti, 1) ? 'ok' : 'notok'" :style="{'background' : 'url('+ getImageUrl() +')', 'background-size' : '40%', 'background-repeat': 'no-repeat', 'background-position': 'top'}"><span>{{  taulunPisteytysValmis(ampuja, rasti, 1) ? '✔' : 'T2' }}</span></th>
+        <th class="taulu" v-bind:class="taulunPisteytysValmis(ampuja, rasti, 0) ? 'ok' : 'notok'"><span>{{  taulunPisteytysValmis(ampuja, rasti, 0) ? '✔' : 'T1' }}</span></th>
+        <th class="taulu" v-bind:class="taulunPisteytysValmis(ampuja, rasti, 1) ? 'ok' : 'notok'"><span>{{  taulunPisteytysValmis(ampuja, rasti, 1) ? '✔' : 'T2' }}</span></th>
         <th class="osumat">Osumat</th>
         <th class="pisteet">Pisteet</th>
         <!--        <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAika(ampuja, rasti) > 0 ? 'ok' : 'notok'">Aika</th>-->
@@ -312,10 +316,16 @@ const peruHylkays = (ampuja: string) => {
       <!--      <button class="action" :disabled="pisteetStore.getRastiSuorituksenTila(ampuja, rasti) != RastiSuorituksenTila.Suoritettu" @click="$router.push(seuraavaLinkki(rasti, ampuja))">Seuraava</button>-->
       <button class="action" @click="$router.push(seuraavaLinkki(rasti, ampuja))">Seuraava ampuja</button>
     </div>
+    </div>
 
   </main>
 </template>
 <style>
+
+.main {
+  margin: 0 .2rem 0 .2rem;
+}
+
 
 .rastiotsikkopalkki {
   display: flex;
@@ -383,7 +393,10 @@ const peruHylkays = (ampuja: string) => {
 /** Ampujien lista pisteytysnäkymässä */
 
 .ampuja.done {
-  background-color: #505050;
+  background-color: #8d8d8d;
+  a {
+    color: var(--vari2);
+  }
   :before {
     content: '✔';
     color: transparent;
@@ -428,7 +441,7 @@ const peruHylkays = (ampuja: string) => {
   ::before {
     content: '🚫';
     color: transparent;
-    text-shadow: 0 0 0 #795252;
+    text-shadow: 0 0 0 #754444;
     padding-right: .4rem;
   }
 }
@@ -589,11 +602,11 @@ nav.rastit {
     display: none;
   }
   ul li a:hover {
-    background: #fa5ba5;
+    background: rgba(200,200,200,0.5);
     transition: 0.4s;
   }
   ul li a:hover:after {
-    border-left-color: #fa5ba5;
+    border-left-color: rgba(200,200,200,0.5);
     transition: 0.4s;
   }
 }
@@ -618,28 +631,20 @@ span.inactive {
   color: #8f9d8f;
 }
 
-table {
+table.rasti {
   border-radius: .3rem;
-  background: #dccdb8;
+  background: var(--vari2);
   color: #222;
   width: 100%;
-
-
-
   td {
-    background: #eee8d2;
+    background: rgba(255,255,255,0.5);
     text-align: center;
-  }
-}
-
-table.kokonaistulos {
-  th {
-    width: 63%;
   }
 }
 
 th {
   font-size: 140%;
+  background-color: var(--vari2);
 }
 
 
@@ -651,10 +656,23 @@ th.taulu {
   height: 60px;
   vertical-align: bottom;
 
+  background : url("../assets/logo.svg");
+  background-size: 40%;
+  background-repeat: no-repeat;
+  background-position: top;
+  background-color: var(--vari2);
+  &.ok {
+    span {
+      color: darkgreen;
+      font-weight: bold;
+    }
+  }
+  &.notok {
+    span {
+      color: #4d4032;
+      font-weight: normal;
 
-  span {
-    color: #52473a;
-    font-weight: bold;
+    }
   }
 }
 th.osumat {
@@ -670,54 +688,42 @@ th.aika {
 }
 
 
-th.ok {
+th.aika {
+padding: .3rem;
+}
+
+th.aika.ok {
   padding: .3rem;
   background-color: var(--vari2);
   color: darkgreen;
   font-size: 140%;
   transition: 1s;
-  /*color: white;*/
   span {
     color: darkgreen;
   }
 }
 
-
-th.notok {
-  padding: .3rem;
-  color: black;
-  background: var(--vari2);
-
-}
-th.notok::after {
-  content: "";
-}
-
-td {
-  border: 1px solid #ccc;
-  background: white;
-}
-
 input.sekunnit {
-  width: 4rem;
+  width: 5rem;
   background: #fff9d6;
   border: none;
   text-align: right;
-}
-
-
-table.dq {
-  background-color: #aaa;
-  td, th {
-    background-color: #bbb;
-    input {
-      background-color: #bbb;
-    }
-  }
+  font-size: 130%;
+  height: 1.5rem;
 }
 
 .actions {
   margin-bottom: .4rem;
+}
+
+.rasti.dq {
+  background-color: #c7c7c7;
+  tr { background-color: #c7c7c7; }
+  th {background-color: #c7c7c7;}
+  td {
+    background-color: #c7c7c7;
+    input { background-color: #c7c7c7; }
+  }
 }
 
 

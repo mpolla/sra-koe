@@ -54,8 +54,12 @@ const muotoileTulos = (kaikkiRastitSuoritettu: boolean, osumakerroin: number, am
   return "HYLÄTTY"
 }
 
-const aloitaLinkkki = () => {
-  return 'kirjaus/0/' + Object.keys(pisteetStore.pisteet)[0]
+const jatkaLinkkki = () => {
+  if (pisteetStore.turvallisuuskoulutusSuoritettu !== true) {
+    return 'turvallisuus'
+  } else {
+    return 'kirjaus/0/' + Object.keys(pisteetStore.pisteet)[0]
+  }
 }
 
 const mapClass = (tila: RastiSuorituksenTila) => {
@@ -91,7 +95,7 @@ const kirjaaHylkays = (ampuja: string) => {
 
 
 const muokkaaLabel = () => {
-  return muokkausTila.value ? "Valmis" : "Muokkaa listaa"
+  return muokkausTila.value ? "Jatka" : "Muokkaa listaa"
 }
 
 const muotoileLuku = (luku: number) : string => {
@@ -109,6 +113,9 @@ const muotoileAika = (luku: number) : string => {
     return luku.toFixed(2)
   }
 }
+
+
+
 
 
 async function createPdf(ampuja: string) {
@@ -184,32 +191,36 @@ async function createPdf(ampuja: string) {
 
 <template>
   <main>
-    <h2>Ampujat</h2>
+
+    <div class="intro" v-if="muokkausTila">
+      Tervetuloa SRA ampumakokeeseen. Syötä ampumakokeeseen ostallistuvien henkilöiden nimet alla. Sovellukseen
+      kirjatut tiedot tallentuvat ainoastaan päätelaitteen muistiin. Tietoja ei tallenneta ja jaeta verkossa. Voit
+      ladata PDF-muotoiset tulospöytäkirjat tuloksien kirjaamisen jälkeen.
+    </div>
+
+    <h2 v-if="muokkausTila">Ampujat</h2>
+    <h2 v-if="!muokkausTila">Tuloslista</h2>
 
     <ul v-if="muokkausTila" class="ampujat">
       <li v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet">{{ ampuja }} <span @click="vahvistaPoisto(ampuja as string)" class="remove">ⓧ</span></li>
-
     </ul>
 
-
-    <table v-if="!muokkausTila">
+    <table id="tuloslista" cellspacing="0" v-if="!muokkausTila">
       <tr>
         <th class="nimi">Nimi</th>
-        <th class="rastipallot">Suoritetut rastit</th>
-        <th class="osumakerroin">Tulos ja osumakerroin</th>
+        <th class="rastipallot">Rastit</th>
+        <th class="osumakerroin">Tulos ja HF</th>
         <th class="tulos">Pöytäkirja</th>
         <th v-if="muokkausTila">Poista</th>
       </tr>
       <tr v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet" v-bind:class="{dq: pisteetStore.getHylkaysperuste(ampuja as string) }">
         <td class="nimi">
-          {{ ampuja }}
-
+          {{ ampuja }} <span v-if="ampuja in pisteetStore.hylkaykset">🚫</span>
         </td>
         <td class="rastipallot">
           <div v-bind:key="rasti" class="rastipallo" v-bind:class="mapClass(pisteetStore.getRastiSuorituksenTila(ampuja as string, rasti))"  v-for="rasti in [0,1,2,3,4]">
             <a :href="'#/kirjaus/' + rasti + '/' + ampuja">{{ rasti+1 }}</a></div>
         </td>
-
         <td>
           <span id="tulos" v-bind:class="muotoileTulos(pisteetStore.getKaikkiRastitSuoritettu(ampuja as string), pisteetStore.getPelaajanOsumakerroin(ampuja as string), ampuja as string)">
           {{ muotoileTulos(pisteetStore.getKaikkiRastitSuoritettu(ampuja as string), pisteetStore.getPelaajanOsumakerroin(ampuja as string), ampuja as string) }}
@@ -227,70 +238,96 @@ async function createPdf(ampuja: string) {
     <fieldset v-if="muokkausTila" >
       <legend>Lisää ampuja</legend>
       <input placeholder="Ampujan nimi" id="uusinimi" name="uusinimi" v-model="lisattavapelaaja" v-on:keyup.enter="lisaaPelaaja(lisattavapelaaja)"/>
-      <input type="submit" value="Lisää" @click="lisaaPelaaja(lisattavapelaaja);"  />
+      <input type="submit" value="Lisää" @click="lisaaPelaaja(lisattavapelaaja);pisteetStore.turvallisuuskoulutusSuoritettu = false;"  />
     </fieldset>
 
     <div class="actions">
       <button class="action danger" v-if="muokkausTila && Object.keys(pisteetStore.pisteet).length > 0" @click="reset()">Poista kaikki</button>
       <button v-if="muokkausTila && Object.keys(pisteetStore.pisteet).length > 1" @click="pisteetStore.satunnaistaJarjestys()" class="action">⤭ Järjestä satunnaisesti</button>
 
-      <button class="action" @click="muokkausTila = !muokkausTila">{{ muokkaaLabel() }}</button>
-      <button v-if="!muokkausTila" class="action" @click="$router.push(aloitaLinkkki())">Aloita ampumakoe</button>
+<!--      <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 || !muokkausTila" @click="muokkausTila = !muokkausTila">{{ muokkaaLabel() }}</button>-->
+
+      <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 && !muokkausTila" @click="muokkausTila = !muokkausTila">Muokkaa osallistujia</button>
+      <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 && muokkausTila && pisteetStore.turvallisuuskoulutusSuoritettu" @click="muokkausTila = !muokkausTila">Jatka</button>
+      <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 && muokkausTila && pisteetStore.turvallisuuskoulutusSuoritettu == false" @click="$router.push('turvallisuus')">Jatka</button>
+
+      <button v-if="!muokkausTila && pisteetStore.turvallisuuskoulutusSuoritettu" class="action" @click="$router.push('kirjaus/0/' + Object.keys(pisteetStore.pisteet)[0])">Aloita ampumakoe</button>
     </div>
 
   </main>
 </template>
 <style scoped>
 
-table {
-  border-radius: .3rem;
-  background: #dccdb8;
-  width: 100%;
-  td {
-    text-align: center;
-  }
-}
-tr {
-  background-color: rgba(255, 255, 255, 0.3);
+main {
+  padding: 0;
 }
 
-th.rastipallot {
-  min-width: 6rem;
+.intro {
+  line-height: 1.3;
+  padding: .6rem;
+  font-size: 100%;
+}
+
+table#tuloslista {
+  border-radius: .3rem;
+  width: 100%;
+
+
+  tr {
+
+    height: 3rem;
+
+    &:nth-child(odd) {
+      background-color: #f5f5f5;
+    }
+    &:nth-child(even) {
+      background-color: #e7e7e7;
+    }
+
+    td {
+      text-align: center;
+    }
+
+    th {
+      word-wrap: anywhere;
+      font-size: 105%;
+      background-color: #ececec;
+      border-bottom: 2px solid #145014;
+      color: var(--vari1);
+      font-weight: bold;
+
+      &.rastipallot {
+        min-width: 6rem;
+      }
+    }
+
+    &.dq {
+      div.rastipallo {
+        background-color: #ccc;
+        a {
+          color: #333;
+        }
+      }
+    }
+  }
 }
 
 #tulos {
   font-weight: bold;
   &.KESKEN {
-    color: darkgray;
+    color: #2f2f2f;
   }
   &.HYVÄKSYTTY {
     color: darkgreen;
   }
   &.HYLÄTTY {
     color: darkred;
-  }
-
-
-}
-
-
-
-tr.dq {
-  background-color: #b0b0b0;
-  .rastipallo {
-    color: #222;
-    background: #8f8f8f;
-    a {
-      color: #494949;
-    }
-  }
-  .rastipallo.notdone {
-    a {
-      color: transparent;
+    :before {
+      content: 'g';
+      background-color: blue;
     }
   }
 }
-
 
 .rastipallot {
   .rastipallo:first-child {
@@ -311,58 +348,58 @@ tr.dq {
   height: 1.1rem;
   margin: 0;
   font-size: 70%;
-}
 
-.rastipallo.done {
-  background-color: var(--vari1);
-  a {
-    color: white;
+  &.done {
+    background-color: var(--vari1);
+    a {
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: bold;
+    }
   }
-}
-
-.rastipallo.notdone {
-  background-color: var(--vari2);
-  color: #444;
-}
-
-
-.rastipallo.incomplete {
-  background-color: rgba(139, 0, 0, 0.75);
-  a {
-    color: #eee;
+  &.notdone {
+    background-color: var(--vari2);
+    a {
+      color: var(--vari1);
+      font-weight: bold;
+    }
   }
-}
-
-th {
-  word-wrap: anywhere;
-}
-
-td {
-  border: 1px solid #ccc;
-
-  a {
-    color: #1e4f1e;
-  }
-}
-
-.ampujat li {
-  display: inline-block;
-  background-color: var(--vari1);
-  color: var(--vari2);
-  border-radius: .8rem;
-  padding: 0 .6rem 0 .6rem;
-  margin: .1rem;
-
-
-  .remove {
-    color: white;
-    padding: .2rem 0 .2rem 0;
+  &.incomplete {
+    background-color: #dea187;
+    a {
+      color: var(--vari1);
+      font-weight: bold;
+    }
   }
 
 }
 
+.ampujat {
+
+  margin: 0;
+  padding: .5rem 0 .5rem 0;
+
+  li {
+    display: inline-block;
+    background-color: var(--vari1);
+    color: #f1f1f1;
+    border-radius: .8rem;
+    padding: 0 .6rem 0 .6rem;
+    margin: .1rem;
+
+    .remove {
+      display: inherit;
+      padding: .2rem 0 .3rem 0;
+
+      &:hover {
+        color: darkred;
+      }
+    }
+  }
+}
 
 
-
+fieldset {
+  margin: 1rem 0 1.5rem 0;
+}
 
 </style>
