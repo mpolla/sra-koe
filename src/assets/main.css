@@ -1,5 +1,10 @@
 @import './base.css';
 
+:root {
+  --color-text: #191a0f;
+}
+
+
 html {
   --vari1: #546552;
   --vari2: #e7d7a6;
