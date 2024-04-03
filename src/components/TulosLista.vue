@@ -1,5 +1,9 @@
 <script setup lang="ts">
 
+
+// https://www.flickr.com/photos/30478819@N08/44723128954
+// https://commons.wikimedia.org/wiki/File:200909-F-NS874-1163_-_7th_SFG_Soldiers_conduct_Best_ODA_Competition_(Image_12_of_13).jpg
+
 import { usePisteetStore } from '@/stores/pisteet'
 import { ref } from "vue";
 import { RastiSuorituksenTila, SraAmpumakoe } from "@/classes/SraAmpumakoe";
@@ -259,7 +263,7 @@ async function createPdf(ampuja: string) {
 <style scoped>
 
 main {
-  padding: 0;
+  padding: .5rem;
 }
 
 .intro {

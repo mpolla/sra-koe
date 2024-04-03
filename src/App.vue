@@ -50,6 +50,7 @@ nav.sivuvalikko {
   text-align: center;
   background-image: linear-gradient(to bottom, rgba(84, 101, 82, .7), rgba(84, 101, 82, 1)), url("./assets/metsa.jpg");
   background-repeat: no-repeat;
+  background-size: cover;
 
   a {
     color: var(--vari2);
