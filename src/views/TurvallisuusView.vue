@@ -36,7 +36,7 @@ const pisteetStore = usePisteetStore()
 
   <div class="turvallisuuscheckbox">
     <input v-model="pisteetStore.turvallisuuskoulutusSuoritettu" type="checkbox"/>
-    <label for="checkbox">Kaikki ampukakokeen osallistujat tuntevat yllä olevat turvalliset aseen käsittelyn säännöt.</label>
+    <label for="checkbox">Kaikki ampumakokeen osallistujat tuntevat yllä olevat turvalliset aseen käsittelyn säännöt.</label>
   </div>
 
   <div class="actions jatka">
