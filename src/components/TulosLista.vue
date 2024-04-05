@@ -234,7 +234,7 @@ async function createPdf(ampuja: string) {
           {{ muotoileOsumakerroin(pisteetStore.getPelaajanOsumakerroin(ampuja as string)) }}
         </td>
 
-        <td><button @click="createPdf(ampuja as string)">⭳ PDF</button></td>
+        <td><button @click="createPdf(ampuja as string)">PDF</button></td>
 
         <td v-if="muokkausTila"><button class="danger" @click="vahvistaPoisto(ampuja as string)">🗑 POISTA</button></td>
       </tr>
@@ -273,7 +273,7 @@ body {
 
 
 main {
-  background-image: linear-gradient(to bottom, rgba(233, 233, 233, .2), rgba(233, 233, 233, 1)), url("src/assets/tausta.jpg");
+  background-image: linear-gradient(to bottom, rgba(233, 233, 233, .2), rgba(233, 233, 233, 1)), url("../assets/tausta.jpg");
   background-repeat: no-repeat;
   padding: 9rem 0 0 0;
 

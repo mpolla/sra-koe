@@ -49,7 +49,7 @@ const pisteetStore = usePisteetStore()
 <style>
 
 main.turvallisuus {
-  background-image: linear-gradient(to bottom, rgba(233, 233, 233, .3), rgba(233, 233, 233, 2)), url("src/assets/9mm.jpg");
+  background-image: linear-gradient(to bottom, rgba(233, 233, 233, .3), rgba(233, 233, 233, 2)), url("../assets/9mm.jpg");
   padding: 8rem 0 0 0;
 
 }
