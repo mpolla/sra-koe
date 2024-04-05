@@ -194,7 +194,9 @@ async function createPdf(ampuja: string) {
 </script>
 
 <template>
-  <main>
+  <main v-bind:class="{ muok: !muokkausTila }">
+
+    <div class="sisalto">
 
     <div class="intro" v-if="muokkausTila">
       Tervetuloa SRA ampumakokeeseen. Syötä ampumakokeeseen ostallistuvien henkilöiden nimet alla. Sovellukseen
@@ -258,19 +260,38 @@ async function createPdf(ampuja: string) {
       <button v-if="!muokkausTila && pisteetStore.turvallisuuskoulutusSuoritettu" class="action" @click="$router.push('kirjaus/0/' + Object.keys(pisteetStore.pisteet)[0])">Aloita ampumakoe</button>
     </div>
 
+    </div>
   </main>
 </template>
 <style scoped>
 
-main {
-  padding: .5rem;
+
+body {
+  background-color: red;
+
 }
 
-.intro {
-  line-height: 1.3;
-  padding: .6rem;
-  font-size: 100%;
+
+main {
+  background-image: linear-gradient(to bottom, rgba(233, 233, 233, .2), rgba(233, 233, 233, 1)), url("src/assets/tausta.jpg");
+  background-repeat: no-repeat;
+  padding: 9rem 0 0 0;
+
+  &.muok {
+    padding: 0 0 0 0;
+  }
+
 }
+
+.sisalto {
+
+
+  background-color: rgba(233,233,233, .7);
+  padding: 1rem;
+  line-height: 1.5;
+
+}
+
 
 table#tuloslista {
   border-radius: .3rem;

@@ -10,6 +10,10 @@ const pisteetStore = usePisteetStore()
 
 
 <template>
+
+  <main class="turvallisuus">
+    <div class="sisalto">
+
   <h1>Turvallisuus</h1>
   <p>
     Turvallisen aseen käsittelyn säännöt
@@ -38,9 +42,22 @@ const pisteetStore = usePisteetStore()
   <div class="actions jatka">
     <button class="action" :disabled="!pisteetStore.turvallisuuskoulutusSuoritettu" @click="pisteetStore.turvallisuuskoulutusSuoritettu = true; $router.push('/')">Jatka</button>
   </div>
+    </div>
+  </main>
 </template>
 
 <style>
+
+main.turvallisuus {
+  background-image: linear-gradient(to bottom, rgba(233, 233, 233, .3), rgba(233, 233, 233, 2)), url("src/assets/9mm.jpg");
+  padding: 8rem 0 0 0;
+
+}
+
+.sisalto {
+  background-color: rgba(233,233,233,.8);
+  padding: 1rem;
+}
 
 
 .about h1,h2 {
@@ -66,8 +83,9 @@ a {
 }
 
 .turvallisuuscheckbox {
-  padding: 3rem 0 3rem 0;
+  padding: 1rem 0 1rem 0;
 }
+
 
 
 </style>
