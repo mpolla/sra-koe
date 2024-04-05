@@ -16,7 +16,6 @@ const pisteetStore = usePisteetStore()
 
   <h1>Turvallisuus</h1>
   <p>
-    Turvallisen aseen käsittelyn säännöt
     Kaikessa aseen käytössä on noudatettava seuraavia turvallisen aseenkäsittelyn sääntöjä:
   </p>
   <ol>
