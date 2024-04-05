@@ -84,6 +84,13 @@ a {
 
 .turvallisuuscheckbox {
   padding: 1rem 0 1rem 0;
+
+
+  input[type=checkbox] {
+    transform: scale(2.0);
+    padding: 1rem;
+    margin: 1rem;
+  }
 }
 
 
