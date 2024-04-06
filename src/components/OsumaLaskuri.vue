@@ -79,7 +79,7 @@ button:disabled {
 }
 
 input.osumat {
-  width: 1.5rem;
+  width: 2.5rem;
   height: 2.0rem;
   font-size: 120%;
   background: #fff9d6;
