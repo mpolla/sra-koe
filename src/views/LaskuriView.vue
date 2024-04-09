@@ -201,6 +201,10 @@ const rastiClasses = (rasti: number, r: number) => {
   return 'todo'
 }
 
+const naytaKuvaus = (rasti: number) => {
+  alert(SraAmpumakoe.rastikuvaus(rasti))
+}
+
 const muotoileOsumakerroin = (hf: number): string => {
   if (hf === 0) {
     return ""
@@ -270,6 +274,9 @@ const peruHylkays = (ampuja: string) => {
       <div class="actions">
         <button v-if="!(ampuja in pisteetStore.hylkaykset)" class="action dq" @click="kirjaaHylkays(ampuja)">Kirjaa hylkäys</button>
         <button v-else @click="peruHylkays(ampuja as string)">Peru hylkäys</button>
+
+        <button class="action" @click="naytaKuvaus(rasti)">🛈 Rastikuvaus</button>
+
         <button v-if="pisteetStore.mute === true" class="action" @click="pisteetStore.mute = false">🔊 Poista mykistys</button>
         <button v-if="pisteetStore.mute === false" class="action" @click="pisteetStore.mute = true">🔇 Mykistä</button>
       </div>
