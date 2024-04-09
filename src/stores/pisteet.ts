@@ -103,7 +103,7 @@ export const usePisteetStore = defineStore('pisteet', {
         return RastiSuorituksenTila.Kesken
       }
       // Kaikki laukaukset on pisteytetty ja ajat on kirjattu
-      if (pisteytetytOsumat == rastinLaukausmaara && ajatKirjattu) {
+      if (pisteytetytOsumat >= rastinLaukausmaara && ajatKirjattu) {
         return RastiSuorituksenTila.Suoritettu
       }
       // Muutoin rasti on suorittamatta

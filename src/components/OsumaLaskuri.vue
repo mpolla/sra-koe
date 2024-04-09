@@ -17,7 +17,7 @@ const synth = window.speechSynthesis;
 
 const minOsumat = 0
 
-
+/** Tämän osumaluokan (A/C/D/Ohi/Rang) lukumäärät tässä taulussa. */
 const osumaLkm = computed({
   get() {
     return pisteetStore.pisteet[props.ampuja][props.rasti][SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka)][props.taulu]
@@ -27,9 +27,23 @@ const osumaLkm = computed({
   }
 })
 
+/** Rangaistuksien lukumäärä tämän taulun osalta. */
+const rangLkm = computed({
+  get() {
+    return pisteetStore.pisteet[props.ampuja][props.rasti][SraAmpumakoe.osumaluokat.indexOf('Rang')][props.taulu]
+  },
+  set(newValue: number) {
+    pisteetStore.pisteet[props.ampuja][props.rasti][SraAmpumakoe.osumaluokat.indexOf('Rang')][props.taulu] = newValue
+  }
+})
+
 const maxOsumat = computed(() => {
+  // Rangaistuksilla ei ole varsinaista maksimimäärää
+  if (props.osumaluokka == 'Rang') {
+    return 100
+  }
   return SraAmpumakoe.laukausMaarat[props.rasti][props.taulu] - (pisteetStore.pisteet[props.ampuja][props.rasti]
-      .reduce((acc, cur) => acc + Number(cur[props.taulu]), 0) - osumaLkm.value)
+      .reduce((acc, cur) => acc + Number(cur[props.taulu]), 0) - osumaLkm.value - rangLkm.value)
 })
 
 const sano = (s: any) => {
@@ -46,7 +60,7 @@ const miinus = () => {
 }
 
 const plus = () => {
-  if (osumaLkm.value < maxOsumat.value) {
+  if (osumaLkm.value < maxOsumat.value || props.osumaluokka == 'Rang') {
     osumaLkm.value++
     sano(SraAmpumakoe.osumaLuokatLausuttuna(props.osumaluokka))
   }
@@ -58,7 +72,7 @@ const plus = () => {
 <div class="osumalaskuri">
   <button @click="miinus()" :disabled="osumaLkm === minOsumat || ampuja in pisteetStore.hylkaykset">-</button>
   <input class="osumat" v-model="osumaLkm" type="number" :disabled="ampuja in pisteetStore.hylkaykset" />
-  <button @click="plus()" :disabled="osumaLkm === maxOsumat || ampuja in pisteetStore.hylkaykset">+</button>
+  <button @click="plus()" :disabled="(osumaluokka != 'Rang' && osumaLkm >= maxOsumat) || ampuja in pisteetStore.hylkaykset">+</button>
 </div>
 </template>
 

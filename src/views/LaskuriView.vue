@@ -207,7 +207,7 @@ const muotoileOsumakerroin = (hf: number): string => {
 
 /** Onko taulun pisteytys valmis tämän ampuja/rasti suorituksen osalta? */
 const taulunPisteytysValmis = (ampuja: string, rasti: number, taulu: number) => {
-  return (pisteetStore.pisteet[ampuja][rasti].reduce((acc, cur) => acc + Number(cur[taulu]), 0) == SraAmpumakoe.laukausMaarat[rasti][taulu])
+  return (pisteetStore.pisteet[ampuja][rasti].reduce((acc, cur) => acc + Number(cur[taulu]), 0) >= SraAmpumakoe.laukausMaarat[rasti][taulu])
 }
 
 const peruHylkays = (ampuja: string) => {
