@@ -179,6 +179,10 @@ async function createPdf(ampuja: string) {
       }
     }
 
+    if (pisteetStore.hylkaykset[ampuja] !== undefined) {
+      pages[0].drawText(pisteetStore.hylkaykset[ampuja], {x: 40, y: 50, size: 10})
+    }
+
     // Yhteenlasketut pisteet ja aika
     pages[0].drawText(muotoileLuku(pisteetStore.getPelaajaRastiPisteSumma(ampuja, Number(rasti))), {x: PISTEET_X, y: RASTI_Y_OFFSET[rasti] - 5 * ROW_H, size: 10})
     pages[0].drawText(muotoileAika(pisteetStore.getPelaajanRastiAika(ampuja as string, Number(rasti))), {x: AIKA_X, y: RASTI_Y_OFFSET[rasti] - 5 * ROW_H, size: 10})
