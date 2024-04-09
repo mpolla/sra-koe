@@ -181,7 +181,7 @@ async function createPdf(ampuja: string) {
   pages[0].drawText(muotoileOsumakerroin(pisteetStore.getPelaajanOsumakerroin(ampuja as string)), {x: 552, y: 137, size: 10})
 
   const pdfBytes = await pdfDoc.save()
-  download(pdfBytes, "sra-ampumakoe.pdf", "application/pdf");
+  download(pdfBytes, "sra-ampumakoe-" + (new Date()).toISOString().substring(0,10) + "-" +ampuja.replace(" ", "-")+ ".pdf", "application/pdf");
 }
 
 // onMounted(() => {
