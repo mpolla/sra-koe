@@ -13,6 +13,8 @@ Jos löydät puutteita tai haluat ehdottaa parannuksia, ota yhteyttä kehittäj�
 
 ## Tulevia kehityskohteita
 
+- TODO Rasti 5 kiväärillä ammuttuna
+- TODO Äänet oletuksena mykistettynä
 - TODO Ulkoasun pienet päivitykset iPhone/iOS alustalla.
 - TODO Rastikuvaukset näkyviin sovellukseen.
 - TODO Keskeneräisen suorituksen osumakerroin näkyviin (eli HF "väliaikatulos") jotta suorituksen läpi meneminen on helpompi ennustaa kesken koetilaisuuden.
@@ -31,5 +33,11 @@ Kehittäjän muistiinpanoja..
 Kuvien generointi
 
   convert -background transparent -resize 64x64 -gravity center -extent 64x64 -define 'icon:auto-resize=16,24,32,64' public/logo.svg public/favicon.ico
+
+Kuvien (Public Domain) lähteet
+
+https://www.dvidshub.net/image/7873037/army-reserve-sgt-christine-won-and-army-reserve-1st-lt-jessica-romero-fire-glocks
+
+
 
 -->
