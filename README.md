@@ -13,7 +13,6 @@ Jos löydät puutteita tai haluat ehdottaa parannuksia, ota yhteyttä kehittäj�
 
 ## Tulevia kehityskohteita
 
-- TODO Rasti 5 kiväärillä ammuttuna
 - TODO Äänet oletuksena mykistettynä
 - TODO Ulkoasun pienet päivitykset iPhone/iOS alustalla.
 - TODO Rastikuvaukset näkyviin sovellukseen.

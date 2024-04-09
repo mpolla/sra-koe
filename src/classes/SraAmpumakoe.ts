@@ -1,5 +1,5 @@
 export class SraAmpumakoe {
-    static laukausMaarat = [
+    static laukausMaaratPistoolilla = [
         // Rasti 1: Kahdella ja yhdellä kädellä
         [6, 6],
         // Rasti 2: Käännökset
@@ -8,8 +8,20 @@ export class SraAmpumakoe {
         [4, 2],
         // Rasti 4: Siirtyminen eteen päin ja lippaan vaihto
         [6, 6],
-        // Rasti 5: Siirtyminen taakse
+        // Rasti 5: Siirtyminen taakse (pistooliversio)
         [4, 4]]
+
+    static laukausMaaratKivaarilla = [
+        // Rasti 1: Kahdella ja yhdellä kädellä
+        [6, 6],
+        // Rasti 2: Käännökset
+        [6, 6],
+        // Rasti 3: Siirtyminen sivulle ja lippaan vaihto
+        [4, 2],
+        // Rasti 4: Siirtyminen eteen päin ja lippaan vaihto
+        [6, 6],
+        // Rasti 5: Siirtyminen taakse (kivääriversio)
+        [6, 6]]
 
     static osumaluokat = ['A', 'C', 'D', 'Ohi', 'Rang']
 

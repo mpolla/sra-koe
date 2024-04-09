@@ -42,8 +42,13 @@ const maxOsumat = computed(() => {
   if (props.osumaluokka == 'Rang') {
     return 100
   }
-  return SraAmpumakoe.laukausMaarat[props.rasti][props.taulu] - (pisteetStore.pisteet[props.ampuja][props.rasti]
-      .reduce((acc, cur) => acc + Number(cur[props.taulu]), 0) - osumaLkm.value - rangLkm.value)
+  if (pisteetStore.rastin5suoritustavat[props.ampuja] == 'kiv') {
+    return SraAmpumakoe.laukausMaaratKivaarilla[props.rasti][props.taulu] - (pisteetStore.pisteet[props.ampuja][props.rasti]
+        .reduce((acc, cur) => acc + Number(cur[props.taulu]), 0) - osumaLkm.value - rangLkm.value)
+  } else {
+    return SraAmpumakoe.laukausMaaratPistoolilla[props.rasti][props.taulu] - (pisteetStore.pisteet[props.ampuja][props.rasti]
+        .reduce((acc, cur) => acc + Number(cur[props.taulu]), 0) - osumaLkm.value - rangLkm.value)
+  }
 })
 
 const sano = (s: any) => {

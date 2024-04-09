@@ -207,7 +207,11 @@ const muotoileOsumakerroin = (hf: number): string => {
 
 /** Onko taulun pisteytys valmis tämän ampuja/rasti suorituksen osalta? */
 const taulunPisteytysValmis = (ampuja: string, rasti: number, taulu: number) => {
-  return (pisteetStore.pisteet[ampuja][rasti].reduce((acc, cur) => acc + Number(cur[taulu]), 0) >= SraAmpumakoe.laukausMaarat[rasti][taulu])
+  if (pisteetStore.rastin5suoritustavat[ampuja] == 'kiv') {
+    return (pisteetStore.pisteet[ampuja][rasti].reduce((acc, cur) => acc + Number(cur[taulu]), 0) >= SraAmpumakoe.laukausMaaratKivaarilla[rasti][taulu])
+  } else {
+    return (pisteetStore.pisteet[ampuja][rasti].reduce((acc, cur) => acc + Number(cur[taulu]), 0) >= SraAmpumakoe.laukausMaaratPistoolilla[rasti][taulu])
+  }
 }
 
 const peruHylkays = (ampuja: string) => {
@@ -242,80 +246,90 @@ const peruHylkays = (ampuja: string) => {
     <div class="main">
 
 
-    <div class="ohje" v-if="!(ampuja in pisteetStore.hylkaykset)">
-      "{{ ohjeFraasi(rasti, ampuja) }}" <div class="puhu" @click="sano(ohjeFraasi(rasti, ampuja))">🔊</div>
-    </div>
+      <div class="ohje" v-if="!(ampuja in pisteetStore.hylkaykset)">
+        "{{ ohjeFraasi(rasti, ampuja) }}" <div class="puhu" @click="sano(ohjeFraasi(rasti, ampuja))">🔊</div>
+      </div>
 
-    <div class="rastiotsikkopalkki">
-      <h2 class="rastiotsikko">Rasti {{ rasti+1 }} / {{ ampuja }} </h2><div class="tulos" v-bind:class="rastinOsumakerroin(ampuja, rasti) >= 1.3 ? 'ok' : 'notok'">{{ muotoileOsumakerroin(rastinOsumakerroin(ampuja, rasti)) }}</div>
-    </div>
+      <div class="rastiotsikkopalkki">
+        <h2 class="rastiotsikko">Rasti {{ rasti+1 }} / {{ ampuja }} </h2><div class="tulos" v-bind:class="rastinOsumakerroin(ampuja, rasti) >= 1.3 ? 'ok' : 'notok'">{{ muotoileOsumakerroin(rastinOsumakerroin(ampuja, rasti)) }}</div>
+      </div>
 
-    <div class="actions">
-      <button v-if="!(ampuja in pisteetStore.hylkaykset)" class="action dq" @click="kirjaaHylkays(ampuja)">Kirjaa hylkäys</button>
-      <button v-else @click="peruHylkays(ampuja as string)">Peru hylkäys</button>
-    </div>
+      <fieldset v-if="rasti === 4">
+        <legend>Suoritustapa:</legend>
+        <div>
+          <input type="radio" id="pist" value="pist" v-model="pisteetStore.rastin5suoritustavat[ampuja]" />
+          <label for="pist">Pistooli</label>
+          <input type="radio" id="kiv" value="kiv" v-model="pisteetStore.rastin5suoritustavat[ampuja]" />
+          <label for="kiv">Kivääri</label>
+        </div>
+      </fieldset>
 
-    <table class="rasti" :class="{ dq: ampuja in pisteetStore.hylkaykset }">
-      <tr>
-        <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0] > 0 ? 'ok' : 'notok'">{{ pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0] > 0 ? '✔' : '⏱' }}</th>
-        <td>
-          <input onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0]" type="number"
-                 min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
-        </td>
-      </tr>
-      <tr v-if="rasti in [0, 1]">
-        <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[1] > 0 ? 'ok' : 'notok'">{{ pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[1] > 0 ? '✔' : '⏱' }}</th>
-        <td>
-          <input onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[1]" type="number"
-                 min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
-        </td>
-      </tr>
-      <tr v-if="rasti in [0, 1]">
-        <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[2] > 0 ? 'ok' : 'notok'">{{ pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[2] > 0 ? '✔' : '⏱' }}</th>
-        <td>
-          <input onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[2]" type="number"
-                 min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
-        </td>
-      </tr>
+      <div class="actions">
+        <button v-if="!(ampuja in pisteetStore.hylkaykset)" class="action dq" @click="kirjaaHylkays(ampuja)">Kirjaa hylkäys</button>
+        <button v-else @click="peruHylkays(ampuja as string)">Peru hylkäys</button>
+      </div>
 
-    </table>
+      <table class="rasti" :class="{ dq: ampuja in pisteetStore.hylkaykset }">
+        <tr>
+          <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0] > 0 ? 'ok' : 'notok'">{{ pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0] > 0 ? '✔' : '⏱' }}</th>
+          <td>
+            <input onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0]" type="number"
+                   min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
+          </td>
+        </tr>
+        <tr v-if="rasti in [0, 1]">
+          <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[1] > 0 ? 'ok' : 'notok'">{{ pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[1] > 0 ? '✔' : '⏱' }}</th>
+          <td>
+            <input onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[1]" type="number"
+                   min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
+          </td>
+        </tr>
+        <tr v-if="rasti in [0, 1]">
+          <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[2] > 0 ? 'ok' : 'notok'">{{ pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[2] > 0 ? '✔' : '⏱' }}</th>
+          <td>
+            <input onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[2]" type="number"
+                   min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
+          </td>
+        </tr>
 
-    <br/>
-    <table cellspacing="0" class="rasti" :class="{ dq: ampuja in pisteetStore.hylkaykset }">
-      <thead>
-      <tr>
-        <th class="osumaluokka"></th>
-        <th class="taulu" v-bind:class="taulunPisteytysValmis(ampuja, rasti, 0) ? 'ok' : 'notok'"><span>{{  taulunPisteytysValmis(ampuja, rasti, 0) ? '✔' : 'T1' }}</span></th>
-        <th class="taulu" v-bind:class="taulunPisteytysValmis(ampuja, rasti, 1) ? 'ok' : 'notok'"><span>{{  taulunPisteytysValmis(ampuja, rasti, 1) ? '✔' : 'T2' }}</span></th>
-        <th class="osumat">Osumat</th>
-        <th class="pisteet">Pisteet</th>
-        <!--        <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAika(ampuja, rasti) > 0 ? 'ok' : 'notok'">Aika</th>-->
-      </tr>
-      </thead>
-      <tbody>
+      </table>
 
-      <RastiPisteRivi :key="idx" v-for="(osumaluokka, idx) in SraAmpumakoe.osumaluokat" :ampuja="ampuja" :rasti="rasti" :osumaluokka="osumaluokka" />
+      <br/>
+      <table cellspacing="0" class="rasti" :class="{ dq: ampuja in pisteetStore.hylkaykset }">
+        <thead>
+        <tr>
+          <th class="osumaluokka"></th>
+          <th class="taulu" v-bind:class="taulunPisteytysValmis(ampuja, rasti, 0) ? 'ok' : 'notok'"><span>{{  taulunPisteytysValmis(ampuja, rasti, 0) ? '✔' : 'T1' }}</span></th>
+          <th class="taulu" v-bind:class="taulunPisteytysValmis(ampuja, rasti, 1) ? 'ok' : 'notok'"><span>{{  taulunPisteytysValmis(ampuja, rasti, 1) ? '✔' : 'T2' }}</span></th>
+          <th class="osumat">Osumat</th>
+          <th class="pisteet">Pisteet</th>
+          <!--        <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAika(ampuja, rasti) > 0 ? 'ok' : 'notok'">Aika</th>-->
+        </tr>
+        </thead>
+        <tbody>
 
-      <tr>
-        <td class="inv"></td>
-        <td class="inv"></td>
-        <td></td>
-        <td></td>
-        <td>{{ pisteetStore.getPelaajaRastiPisteSumma(ampuja, rasti) }}</td>
-        <!--        <td>{{ (pisteetStore.getPelaajanRastiAika(ampuja, rasti)).toFixed(2) }}-->
-        <!--        </td>-->
-      </tr>
+        <RastiPisteRivi :key="idx" v-for="(osumaluokka, idx) in SraAmpumakoe.osumaluokat" :ampuja="ampuja" :rasti="rasti" :osumaluokka="osumaluokka" />
 
-      </tbody>
+        <tr>
+          <td class="inv"></td>
+          <td class="inv"></td>
+          <td></td>
+          <td></td>
+          <td>{{ pisteetStore.getPelaajaRastiPisteSumma(ampuja, rasti) }}</td>
+          <!--        <td>{{ (pisteetStore.getPelaajanRastiAika(ampuja, rasti)).toFixed(2) }}-->
+          <!--        </td>-->
+        </tr>
 
-    </table>
+        </tbody>
 
-    <div class="actions">
-      <button class="action" @click="$router.push(edellinenLinkki(rasti, ampuja))">Edellinen ampuja</button>
-      <!--      <button class="action tuloslista" @click="$router.push('/')">Palaa tuloslistaan</button>-->
-      <!--      <button class="action" :disabled="pisteetStore.getRastiSuorituksenTila(ampuja, rasti) != RastiSuorituksenTila.Suoritettu" @click="$router.push(seuraavaLinkki(rasti, ampuja))">Seuraava</button>-->
-      <button class="action" @click="$router.push(seuraavaLinkki(rasti, ampuja))">Seuraava ampuja</button>
-    </div>
+      </table>
+
+      <div class="actions">
+        <button class="action" @click="$router.push(edellinenLinkki(rasti, ampuja))">Edellinen ampuja</button>
+        <!--      <button class="action tuloslista" @click="$router.push('/')">Palaa tuloslistaan</button>-->
+        <!--      <button class="action" :disabled="pisteetStore.getRastiSuorituksenTila(ampuja, rasti) != RastiSuorituksenTila.Suoritettu" @click="$router.push(seuraavaLinkki(rasti, ampuja))">Seuraava</button>-->
+        <button class="action" @click="$router.push(seuraavaLinkki(rasti, ampuja))">Seuraava ampuja</button>
+      </div>
     </div>
 
   </main>
@@ -326,6 +340,10 @@ const peruHylkays = (ampuja: string) => {
   margin: 0 .2rem 0 .2rem;
 }
 
+label {
+  padding-right: 2rem;
+  padding-left: .5rem;
+}
 
 .rastiotsikkopalkki {
   display: flex;
@@ -689,7 +707,7 @@ th.aika {
 
 
 th.aika {
-padding: .3rem;
+  padding: .3rem;
 }
 
 th.aika.ok {
