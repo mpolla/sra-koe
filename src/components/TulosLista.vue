@@ -44,6 +44,15 @@ const muotoileOsumakerroin = (osumakerroin: number) => {
   }
 }
 
+const muotoileOsumakerroinPdf = (osumakerroin: number) => {
+  if (osumakerroin == null || isNaN(osumakerroin)) {
+    return ""
+  }
+  else {
+    return osumakerroin.toFixed(2)
+  }
+}
+
 const muotoileTulos = (kaikkiRastitSuoritettu: boolean, osumakerroin: number, ampuja: string) => {
   if (ampuja in pisteetStore.hylkaykset) {
     return "HYLÄTTY"
@@ -178,7 +187,7 @@ async function createPdf(ampuja: string) {
   // Aikasumma, pistesumma, osumakerroin
   pages[0].drawText(muotoileLuku(pisteetStore.getPelaajanPisteSumma(ampuja)), {x: 552, y: 165, size: 10})
   pages[0].drawText(muotoileAika(pisteetStore.getPelaajanAikaSumma(ampuja)), {x: 552, y: 149, size: 10})
-  pages[0].drawText(muotoileOsumakerroin(pisteetStore.getPelaajanOsumakerroin(ampuja as string)), {x: 552, y: 137, size: 10})
+  pages[0].drawText(muotoileOsumakerroinPdf(pisteetStore.getPelaajanOsumakerroin(ampuja as string)), {x: 552, y: 137, size: 10})
 
   const pdfBytes = await pdfDoc.save()
   download(pdfBytes, "sra-ampumakoe-" + (new Date()).toISOString().substring(0,10) + "-" +ampuja.replace(" ", "-")+ ".pdf", "application/pdf");
