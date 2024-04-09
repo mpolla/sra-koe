@@ -21,6 +21,7 @@ const jarjestysOnSama = (a: string[], b: string[]) => {
 export const usePisteetStore = defineStore('pisteet', {
   state: () => ({
     turvallisuuskoulutusSuoritettu: false,
+    mute: true,
     count: 0,
     pisteet: {} as AmpujaPisteet,
     ajat: {} as AmpujaAjat,

@@ -13,7 +13,6 @@ Jos löydät puutteita tai haluat ehdottaa parannuksia, ota yhteyttä kehittäj�
 
 ## Tulevia kehityskohteita
 
-- TODO Äänet oletuksena mykistettynä
 - TODO Ulkoasun pienet päivitykset iPhone/iOS alustalla.
 - TODO Rastikuvaukset näkyviin sovellukseen.
 - TODO Keskeneräisen suorituksen osumakerroin näkyviin (eli HF "väliaikatulos") jotta suorituksen läpi meneminen on helpompi ennustaa kesken koetilaisuuden.

@@ -106,6 +106,9 @@ const kierrataJarjestys = (ampujat: string[], rasti: number): string[] => {
 }
 
 const sano = (s: string) => {
+  if (pisteetStore.mute === true) {
+    return
+  }
   const utterThis = new SpeechSynthesisUtterance(s)
   utterThis.lang = "fi-FI";
   synth.speak(utterThis);
@@ -267,6 +270,8 @@ const peruHylkays = (ampuja: string) => {
       <div class="actions">
         <button v-if="!(ampuja in pisteetStore.hylkaykset)" class="action dq" @click="kirjaaHylkays(ampuja)">Kirjaa hylkäys</button>
         <button v-else @click="peruHylkays(ampuja as string)">Peru hylkäys</button>
+        <button v-if="pisteetStore.mute === true" class="action" @click="pisteetStore.mute = false">🔊 Poista mykistys</button>
+        <button v-if="pisteetStore.mute === false" class="action" @click="pisteetStore.mute = true">🔇 Mykistä</button>
       </div>
 
       <table class="rasti" :class="{ dq: ampuja in pisteetStore.hylkaykset }">

@@ -52,6 +52,9 @@ const maxOsumat = computed(() => {
 })
 
 const sano = (s: any) => {
+  if (pisteetStore.mute === true) {
+    return
+  }
   const utterThis = new SpeechSynthesisUtterance(s)
   utterThis.lang = "fi-FI";
   synth.speak(utterThis);
