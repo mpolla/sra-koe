@@ -426,6 +426,7 @@ label {
   background-color: #8d8d8d;
   a {
     color: var(--vari2);
+    font-size: 180%;
   }
   :before {
     content: '✔';
@@ -440,6 +441,7 @@ label {
   a {
     color: var(--vari1);
     display: flex;
+    font-size: 180%;
   }
   ::before {
     content: '👤';
@@ -453,6 +455,7 @@ label {
   background-color: #8a8a8a;
   a {
     display: flex;
+    font-size: 180%;
   }
   ::before {
     content: '⚠';
@@ -467,6 +470,7 @@ label {
   color: #666;
   a {
     display: flex;
+    font-size: 180%;
   }
   ::before {
     content: '🚫';
@@ -483,7 +487,7 @@ label {
     color: #606060;
     font-weight: bold;
     display: flex;
-
+    font-size: 180%;
   }
   ::before {
     content: '🔫';
@@ -500,7 +504,7 @@ label {
     color: #606060;
     font-weight: bold;
     display: flex;
-
+    font-size: 180%;
   }
   ::before {
     content: '🚫';
