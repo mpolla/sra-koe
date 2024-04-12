@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from 'vue'
+import {ref, watch} from 'vue'
 import {RastiSuorituksenTila, SraAmpumakoe} from '@/classes/SraAmpumakoe'
 import { usePisteetStore } from '@/stores/pisteet'
 import { useRoute } from 'vue-router'
@@ -8,6 +8,9 @@ import RastiPisteRivi from '@/components/RastiPisteRivi.vue'
 const route = useRoute()
 const pisteetStore = usePisteetStore()
 const synth = window.speechSynthesis;
+
+const naytaRastiInfo = ref(false)
+
 
 let ampuja : string = (route.params.ampuja) ? route.params.ampuja as string : Object.keys(pisteetStore.pisteet)[0]
 let rasti : number = (route.params.rasti) ? Number(route.params.rasti) as number : 0
@@ -202,7 +205,7 @@ const rastiClasses = (rasti: number, r: number) => {
 }
 
 const naytaKuvaus = (rasti: number) => {
-  alert(SraAmpumakoe.rastikuvaus(rasti))
+  return SraAmpumakoe.rastikuvaus(rasti)
 }
 
 const muotoileOsumakerroin = (hf: number): string => {
@@ -275,11 +278,23 @@ const peruHylkays = (ampuja: string) => {
         <button v-if="!(ampuja in pisteetStore.hylkaykset)" class="action dq" @click="kirjaaHylkays(ampuja)">Kirjaa hylkäys</button>
         <button v-else @click="peruHylkays(ampuja as string)">Peru hylkäys</button>
 
-        <button class="action" @click="naytaKuvaus(rasti)">ⓘ Rastikuvaus</button>
+        <button class="action" @click="naytaRastiInfo = true">ⓘ Rastikuvaus</button>
 
         <button v-if="pisteetStore.mute === true" class="action" @click="pisteetStore.mute = false">🔊 Poista mykistys</button>
         <button v-if="pisteetStore.mute === false" class="action" @click="pisteetStore.mute = true">🔇 Mykistä</button>
       </div>
+
+      <div class="rasti-info-tausta" v-if="naytaRastiInfo"></div>
+      <div class="rasti-info" v-if="naytaRastiInfo">
+        <h2>Rasti {{rasti + 1}}</h2>
+
+        <p>{{naytaKuvaus(rasti)}}</p>
+
+        <div class="rasti-info-painike">
+        <button class="close action" @click="naytaRastiInfo = false">Sulje</button>
+        </div>
+      </div>
+
 
       <table class="rasti" :class="{ dq: ampuja in pisteetStore.hylkaykset }">
         <tr>
@@ -356,6 +371,27 @@ label {
   padding-right: 2rem;
   padding-left: .5rem;
 }
+
+div.rasti-info-tausta {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+}
+div.rasti-info {
+  position: relative;
+  min-width: 300px;
+  width: 80%;
+  z-index: 9999;
+  margin: 0 auto;
+  padding: 10px 20px;
+  background-color: #fff;
+}
+
+
 
 .rastiotsikkopalkki {
   display: flex;
@@ -759,6 +795,12 @@ input.sekunnit {
     input { background-color: #c7c7c7; }
   }
 }
+
+.rasti-info-painike {
+  margin-top: 1rem;
+  text-align: right;
+}
+
 
 
 </style>
