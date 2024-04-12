@@ -15,13 +15,10 @@ Jos löydät puutteita tai haluat ehdottaa parannuksia, ota yhteyttä kehittäj�
 
 - TODO Ulkoasun pienet päivitykset iPhone/iOS alustalla.
 - TODO Keskeneräisen suorituksen osumakerroin näkyviin (eli HF "väliaikatulos") jotta suorituksen läpi meneminen on helpompi ennustaa kesken koetilaisuuden.
-- TODO "Lisää aloitusruutuun" ja offline-toiminnallisuus.
 
 ## Kehittäminen
 
-    npm dev
-
-
+    npm run dev
 
 <!--
 
@@ -34,7 +31,5 @@ Kuvien generointi
 Kuvien (Public Domain) lähteet
 
 https://www.dvidshub.net/image/7873037/army-reserve-sgt-christine-won-and-army-reserve-1st-lt-jessica-romero-fire-glocks
-
-
 
 -->
