@@ -43,6 +43,22 @@ const version = __APP_VERSION__
       <a href="https://github.com/mpolla/sra-ampumakoe-laskuri">Projekti Githubissa</a>
     </p>
 
+    <h2>Versiohistoria</h2>
+
+    <h3>0.2 (12.4.2024)</h3>
+    <ul>
+      <li>Äänet oletuksena mykistetty</li>
+      <li>Mahdollisuus ampua rasti 5 kiväärillä</li>
+      <li>PWA-sovellus, eli mahdollisuus asentaa työpöydälle</li>
+      <li>Offline-toiminnallisuus</li>
+      <li>Rastien kuvaukset näkyviin</li>
+      <li>Pieniä ulkoasukorjauksia</li>
+    </ul>
+
+    <h3>0.0.1 (5.4.2024)</h3>
+    <ul>
+      <li>Alkuperäinen toteutus</li>
+    </ul>
 
   </div>
 </template>
