@@ -1,6 +1,16 @@
+<script setup lang="ts">
+const version = __APP_VERSION__
+</script>
+
+
 <template>
   <div class="about">
     <h1>Tietoja</h1>
+
+    <p>
+      Sovelluksen versio {{ version }}
+    </p>
+
     <p>
       Tämä on Sovelletun reserviläisammunan (SRA) käytännön ampumakokeen pisteystystyökalu, jota voidaan
       käyttää ampumakoetilaisuuksissa pisteenlaskun apuna. Sovellettu reserviläisammunta on Reserviläisurheiluliiton
@@ -24,11 +34,15 @@
       <li><a href="https://resul.fi/wp-content/uploads/2023/05/SRA-ampumakoe-2023.pdf">SRA ampumakoe</a></li>
     </ul>
 
-    <h2>Palaute</h2>
+    <h2>Palaute ja kehitys</h2>
     <p>
       Jos huomaat sovelluksessa puutteita tai toivoisit parannuksia, ole yhteydessä suoraan kehittäjään Matti Pöllä
       <a href="mailto:mpo@iki.fi">mpo@iki.fi</a>.
     </p>
+    <p>
+      <a href="https://github.com/mpolla/sra-ampumakoe-laskuri">Projekti Githubissa</a>
+    </p>
+
 
   </div>
 </template>
@@ -50,6 +64,8 @@ a {
   color: var(--color-text);
 }
 
-
+p {
+  margin-top: 1rem;
+}
 
 </style>
