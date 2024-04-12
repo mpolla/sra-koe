@@ -16,7 +16,7 @@ export default defineConfig({
       },
       injectRegister: 'auto',
       workbox: {
-        globPatterns: ['**/*.{js,ts,css,html,ico,png,pdf,svg}']
+        globPatterns: ['**/*.{js,ts,css,html,ico,jpg,png,pdf,svg}']
       },
       manifest: {
         name: 'SRA ampumakokeen pistelaskuri',
