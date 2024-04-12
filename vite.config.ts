@@ -20,7 +20,7 @@ export default defineConfig({
       },
       manifest: {
         name: 'SRA ampumakokeen pistelaskuri',
-        short_name: 'SRA ampumakoe',
+        short_name: 'SRA koe',
         description: 'Sovellettu reserviläisammunta (SRA) ampumakokeen pistelaskuri.',
         theme_color: '#a28c67',
         icons: [
