@@ -1,9 +1,9 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import PisteLaskuri from '../views/LaskuriView.vue'
 import TulosLista from "@/components/TulosLista.vue";
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
@@ -27,6 +27,20 @@ const router = createRouter({
       path: '/turvallisuus',
       name: 'turvallisuus',
       component: () => import('../views/TurvallisuusView.vue')
+    },
+    {
+      path: '/saannot',
+      name: 'saannot',
+      component: () => import('../views/Saannot.vue')
+    },
+    {
+      // path: "*",
+      path: "/:catchAll(.*)",
+      name: "NotFound",
+      component: PisteLaskuri,
+      meta: {
+        requiresAuth: false
+      }
     }
   ]
 })
