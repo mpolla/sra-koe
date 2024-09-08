@@ -238,7 +238,7 @@ async function createPdf(ampuja: string) {
         </td>
         <td class="rastipallot">
           <div v-bind:key="rasti" class="rastipallo" v-bind:class="mapClass(pisteetStore.getRastiSuorituksenTila(ampuja as string, rasti))"  v-for="rasti in [0,1,2,3,4]">
-            <a :href="'kirjaus/' + rasti + '/' + ampuja">{{ rasti+1 }}</a></div>
+            <a :href="'#/kirjaus/' + rasti + '/' + ampuja">{{ rasti+1 }}</a></div>
         </td>
         <td>
           <span id="tulos" v-bind:class="muotoileTulos(pisteetStore.getKaikkiRastitSuoritettu(ampuja as string), pisteetStore.getPelaajanOsumakerroin(ampuja as string), ampuja as string)">
