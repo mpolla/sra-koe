@@ -45,6 +45,11 @@ const version = __APP_VERSION__
 
     <h2>Versiohistoria</h2>
 
+    <h3>0.3 (9.9.2024)</h3>
+    <ul>
+      <li>SRA säännöt osaksi sovellusta</li>
+    </ul>
+
     <h3>0.2 (12.4.2024)</h3>
     <ul>
       <li>Äänet oletuksena mykistetty</li>
