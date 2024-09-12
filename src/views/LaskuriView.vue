@@ -237,7 +237,7 @@ const peruHylkays = (ampuja: string) => {
     <nav class="rastit">
       <ul>
         <li :key="r" class="rasti" v-for="r in [0,1,2,3,4]" v-bind:class="rastiClasses(rasti, r)">
-          <a class="rasti" :href="'/kirjaus/' + r + '/' + ampuja">Rasti {{ r + 1 }}</a>
+          <a class="rasti" :href="'../../kirjaus/' + r + '/' + ampuja">Rasti {{ r + 1 }}</a>
         </li>
       </ul>
     </nav>
@@ -247,7 +247,7 @@ const peruHylkays = (ampuja: string) => {
         <li class="ampuja" :key="aid"
             v-for="aid in kierrataJarjestys(Object.keys(pisteetStore.pisteet), rasti)"
             v-bind:class="getClasses(rasti, ampuja, aid)">
-          <a :href="'/kirjaus/' + rasti + '/' + aid">{{ lyhennaNimi(aid) }}</a>
+          <a :href="'../../kirjaus/' + rasti + '/' + aid">{{ lyhennaNimi(aid) }}</a>
         </li>
       </ul>
     </nav>
