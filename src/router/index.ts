@@ -3,7 +3,7 @@ import PisteLaskuri from '../views/LaskuriView.vue'
 import TulosLista from "@/components/TulosLista.vue";
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/sra-ampumakoe-laskuri/'),
   routes: [
     {
       path: '/',
