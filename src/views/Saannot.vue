@@ -2,9 +2,14 @@
 
 
 
-  <h1>SRA säännöt ver. 8.1</h1>
+
 
   <div class="saannot">
+
+    <h1 class="saannot_otsikko">SRA säännöt</h1>
+    <p class="saannot_otsikko">Versio 8.1. Lähde <a href="https://resul.fi/sra/">https://resul.fi/sra/</a></p>
+
+    <hr />
     <ul class="toc">
 
       <li><a href="#1">1. Johdanto</a></li>
@@ -1924,7 +1929,16 @@
 </template>
 <style>
 
+h1.saannot_otsikko {
+  padding: .6rem;
+}
+p.saannot_otsikko {
+  padding: .6rem;
+}
+
 .saannot {
+
+  padding: .6rem;
 
   h2,h3 {
     padding-top: .8rem;
@@ -1938,16 +1952,17 @@
       list-style-type: none;
     }
 
-    a {
-      color: darkblue;
-      :hover {
-        text-decoration: underline !important;
-      }
-      :visited {
-        color: purple !important;
-      }
+  }
+  a {
+    color: darkblue;
+    :hover {
+      text-decoration: underline !important;
+    }
+    :visited {
+      color: purple !important;
     }
   }
+
 
   p {
     padding: .3rem;
@@ -1976,6 +1991,7 @@
     }
     tr td {
       border: 1px solid gray;
+      overflow-wrap: anywhere;
     }
   }
 

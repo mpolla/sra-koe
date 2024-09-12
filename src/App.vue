@@ -47,6 +47,8 @@ nav {
 }
 
 nav.sivuvalikko {
+  /* Kaikki yläpalkin otsikot samalle riville */
+  font-size: 96%;
   width: 100%;
   text-align: center;
   background-image: linear-gradient(to bottom, rgba(84, 101, 82, .7), rgba(84, 101, 82, 1)), url("./assets/metsa.jpg");
