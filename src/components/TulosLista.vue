@@ -147,18 +147,6 @@ async function createPdf(ampuja: string) {
   const pdfDoc = await PDFDocument.load(fontBytes)
   const pages = pdfDoc.getPages()
 
-  // Peitetään ResUL logo
-  pages[0].drawRectangle({
-    x: 250,
-    y: 720,
-    width: 80,
-    height: 40,
-    borderColor: rgb(1, 1, 1),
-    color: rgb(1, 1, 1),
-    opacity: 1,
-    borderWidth: 1.5,
-  })
-
   pages[0].setFontColor(rgb(0.1, 0.1, 0.97))
 
   pages[0].drawText(ampuja, {x: 60, y: 714, size: 12})
