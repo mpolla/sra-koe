@@ -26,7 +26,8 @@ export const usePisteetStore = defineStore('pisteet', {
     pisteet: {} as AmpujaPisteet,
     ajat: {} as AmpujaAjat,
     hylkaykset: {} as Hylkaykset,
-    rastin5suoritustavat: {} as Rastin5Suoritustavat
+    rastin5suoritustavat: {} as Rastin5Suoritustavat,
+    jarjestys: ''
   }),
   persist: true,
   actions: {
@@ -147,6 +148,7 @@ export const usePisteetStore = defineStore('pisteet', {
       this.hylkaykset = {}
       this.rastin5suoritustavat = {}
       this.turvallisuuskoulutusSuoritettu = false
+      this.jarjestys = "kiertava"
     },
     // Järjestä ampujien lista satunnaisesti
     satunnaistaJarjestys() {

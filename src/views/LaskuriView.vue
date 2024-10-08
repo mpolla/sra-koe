@@ -102,6 +102,9 @@ const ohjeFraasi = (rasti: number, ampuja: string) : string => {
 }
 
 const kierrataJarjestys = (ampujat: string[], rasti: number): string[] => {
+  if (pisteetStore.jarjestys !== "kiertava") {
+    return ampujat
+  }
   for (let i = 0; i < rasti; i++ ) {
     ampujat.push(ampujat.shift() as string)
   }
@@ -251,7 +254,6 @@ const peruHylkays = (ampuja: string) => {
         </li>
       </ul>
     </nav>
-
 
     <div class="main">
 
