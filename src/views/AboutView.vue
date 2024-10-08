@@ -45,6 +45,11 @@ const version = __APP_VERSION__
 
     <h2>Versiohistoria</h2>
 
+    <h3>0.4.0 (8.10.2024)</h3>
+    <ul>
+      <li>Mahdollisuus valita ampujien kiertävän järjestyksen sijaan sama järjestys joka rastilla</li>
+    </ul>
+
     <h3>0.3 (9.9.2024)</h3>
     <ul>
       <li>SRA säännöt osaksi sovellusta</li>
