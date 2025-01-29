@@ -78,9 +78,9 @@ const plus = () => {
 
 <template>
 <div class="osumalaskuri">
-  <button @click="miinus()" :disabled="osumaLkm === minOsumat || ampuja in pisteetStore.hylkaykset">-</button>
+  <button @click="miinus()" :disabled="osumaLkm === minOsumat || ampuja in pisteetStore.hylkaykset" :id="'T' + taulu + osumaluokka + 'minus'">-</button>
   <input class="osumat" v-model="osumaLkm" type="number" :disabled="ampuja in pisteetStore.hylkaykset" />
-  <button @click="plus()" :disabled="(osumaluokka != 'Rang' && osumaLkm >= maxOsumat) || ampuja in pisteetStore.hylkaykset">+</button>
+  <button @click="plus()" :disabled="(osumaluokka != 'Rang' && osumaLkm >= maxOsumat) || ampuja in pisteetStore.hylkaykset" :id="'T' + taulu + osumaluokka + 'plus'">+</button>
 </div>
 </template>
 
