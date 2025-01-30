@@ -1,8 +1,6 @@
 describe('Ampujien lisääminen', () => {
 
-it('passes', () => {
-
-})
-
-
+  it('passes', () => {
+    cy.syotaAmpujat()
+  })
 })

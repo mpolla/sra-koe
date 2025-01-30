@@ -1,9 +1,8 @@
-describe('Turvallisuusinfon kuittaamisen pakollisuus', () => {
+describe('Rasti 4', () => {
 
-
-  // Jatka-nappi ei saa toimia jos turvallisuusinfoa ei ole kuitattu
-  // läpikäydyksi.
   it('passes', () => {
+
+    cy.alustaKoe()
 
     cy.get('.rasti').contains('Rasti 4').click()
 

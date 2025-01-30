@@ -1,12 +1,11 @@
-describe('Turvallisuusinfon kuittaamisen pakollisuus', () => {
+describe('Rasti 3', () => {
 
-  // Jatka-nappi ei saa toimia jos turvallisuusinfoa ei ole kuitattu
-  // läpikäydyksi.
   it('passes', () => {
+
+    cy.alustaKoe()
 
     cy.get('.rasti').contains('Rasti 3').click()
 
-    // Rasti 3
     for(let ampuja of [1,2,3,4]) {
       cy.get('input[id="aika1"]').type('9.87')
       // Kaksi laukausta ensimmäiseen tauluun
@@ -19,8 +18,6 @@ describe('Turvallisuusinfon kuittaamisen pakollisuus', () => {
 
       cy.get('.action').contains('Seuraava ampuja').click()
     }
-
-
 
   })
 })
