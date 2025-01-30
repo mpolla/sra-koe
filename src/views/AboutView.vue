@@ -45,6 +45,12 @@ const version = __APP_VERSION__
 
     <h2>Versiohistoria</h2>
 
+    <h3>0.6.0 (31.1.2025)</h3>
+    <ul>
+      <li>Varoitus keskeneräisestä tuloskirjauksesta 'Seuraava ampuja' toiminnon yhteyteen.</li>
+      <li>Ajan syöttäminen ilman desimaalierotitnta: esim. syöttämällä "987" tulkitaan automaattisesti "9.87 sekuntia".</li>
+    </ul>
+
     <h3>0.5.0 (8.10.2024)</h3>
     <ul>
       <li>PDF-pöytäkirjan virallisempi muoto (Resulin logon kanssa)</li>
