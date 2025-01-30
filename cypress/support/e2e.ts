@@ -15,6 +15,25 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+import {beforeAll} from "vitest";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+
+// Esivaatimuksena ampujien syöttäminen
+beforeEach(() => {
+    cy.visit('/')
+        .get('input[id="uusinimi"]')
+        .type('Matti Meikäläinen').type('{enter}')
+        .type('Tiina Testi').type('{enter}')
+        .type('Kalle Koehenkilö').type('{enter}')
+        .type('Gabriella Glock').type('{enter}')
+    cy.get('.action').contains('Jatka').click()
+
+    cy.get('.action').contains('Jatka').should('be.disabled')
+
+    cy.get('input[id="turvallisuuskuittaus"]').click()
+    cy.get('.action').contains('Jatka').click()
+    cy.get('.action').contains('Aloita ampumakoe').click()
+})
