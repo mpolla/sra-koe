@@ -6,18 +6,11 @@ describe('Rasti 3', () => {
 
     cy.get('.rasti').contains('Rasti 3').click()
 
-    for(let ampuja of [1,2,3,4]) {
-      cy.get('input[id="aika1"]').type('9.87')
-      // Kaksi laukausta ensimmäiseen tauluun
-      cy.get('button[id=T0Aplus]').click().click()
-      // Kaksi laukausta toiseen tauluun
-      cy.get('button[id=T1Aplus]').click().click()
-
-      // Ja vielä kaksi laukausta ensimmäiseen tauluun
-      cy.get('button[id=T0Cplus]').click().click()
-
+     for(let ampuja of Array(4)) {
+      cy.aika1(12, 10)
+      cy.ammu(0, 4)
+      cy.ammu(1, 2)
       cy.get('.action').contains('Seuraava ampuja').click()
     }
-
   })
 })
