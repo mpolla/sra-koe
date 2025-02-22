@@ -45,6 +45,11 @@ const version = __APP_VERSION__
 
     <h2>Versiohistoria</h2>
 
+    <h3>0.6.1 (22.2.2025)</h3>
+    <ul>
+      <li>Ajan syöttäminen ilman desimaalierotinta pois käytöstä (yhteensopivuusongelmien vuoksi).</li>
+    </ul>
+
     <h3>0.6.0 (31.1.2025)</h3>
     <ul>
       <li>Varoitus keskeneräisestä tuloskirjauksesta 'Seuraava ampuja' toiminnon yhteyteen.</li>
