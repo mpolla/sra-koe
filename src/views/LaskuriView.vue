@@ -240,8 +240,8 @@ const peruHylkays = (ampuja: string) => {
 const tulkitseSyotettyAika = (event: Event) => {
   const inputElement = event.target as HTMLInputElement
 
-  // Aika on syötetty muodossa xxxx.yy - tätä ei tarvitse muuttaa.
-  if (inputElement.value.match(/^[0-9]{0,4}\.[0-9]{2}$/)) {
+  // Aika on syötetty muodossa xxxx.yy tai merkkejä on syötetty alle 3: Ei syötetä välimerkkiä.
+  if (inputElement.value.length < 3 || inputElement.value.match(/^[0-9]{0,4}\.[0-9]{2}$/)) {
     return
   }
 
@@ -249,7 +249,9 @@ const tulkitseSyotettyAika = (event: Event) => {
   // "12" --> "0.12"
   // "123 --> "1.23"
   // "1234 --> "12.34"
-  const vainnumerot = inputElement.value.replace(/[^0-9]/g, "").padStart(3, '0')
+  // "1028 --> "10.28"
+  // "002003 --> "20.03"
+  const vainnumerot = inputElement.value.replace(/[^0-9]/g, "").replace(/^0+/, "").padStart(3, '0')
   if (vainnumerot.length >= 2) {
     let sekunnit = vainnumerot.substring(0,vainnumerot.length-2)
     let sadasosat = vainnumerot.substring(vainnumerot.length-2,vainnumerot.length)
@@ -355,21 +357,21 @@ const confirmKeskenerainenKirjaus = (ampuja: string, rasti: number) => {
         <tr>
           <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0] > 0 ? 'ok' : 'notok'">{{ pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0] > 0 ? '✔' : '⏱' }}</th>
           <td>
-            <input id="aika1" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0]" type="number" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
+            <input id="aika1" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0]" type="number" @keyup="tulkitseSyotettyAika($event)" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
           </td>
         </tr>
         <tr v-if="rasti in [0, 1]">
           <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[1] > 0 ? 'ok' : 'notok'">{{ pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[1] > 0 ? '✔' : '⏱' }}</th>
           <td>
             <input id="aika2" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[1]" type="number"
-                    min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
+                   @keyup="tulkitseSyotettyAika($event)" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
           </td>
         </tr>
         <tr v-if="rasti in [0, 1]">
           <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[2] > 0 ? 'ok' : 'notok'">{{ pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[2] > 0 ? '✔' : '⏱' }}</th>
           <td>
             <input id="aika3" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[2]" type="number"
-                    min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
+                   @keyup="tulkitseSyotettyAika($event)" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
           </td>
         </tr>
 
