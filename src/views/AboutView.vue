@@ -45,6 +45,11 @@ const version = __APP_VERSION__
 
     <h2>Versiohistoria</h2>
 
+    <h3>0.6.2 (23.2.2025)</h3>
+    <ul>
+      <li>Korjaus automaattiseen desimaalierottimen syöttämiseen. Aiemmin syöte esim. "1028" ei tuottanut tulosta "10.28 s".</li>
+    </ul>
+
     <h3>0.6.1 (22.2.2025)</h3>
     <ul>
       <li>Ajan syöttäminen ilman desimaalierotinta pois käytöstä (yhteensopivuusongelmien vuoksi).</li>
