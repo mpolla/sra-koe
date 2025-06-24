@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Redirecting…</title>
-    <script>
-      // Adjust this if your app is served from a subdirectory
-      const base = '/sra-ampumakoe-laskuri';
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirecting…</title>
+  <script>
+    (function () {
+      const base = '/sra-ampumakoe-laskuri'; // Change this to match your GitHub Pages project path
 
-      const redirectPath = location.pathname.replace(new RegExp(`^${base}`), '');
-      const search = location.search || '';
-      const hash = location.hash || '';
-      const target = `${base}/index.html${search}${hash}`;
+      const fullPath = location.pathname + location.search + location.hash;
+      const route = fullPath.replace(base, '') || '/';
 
-      // Store the intended path so Vue Router can read it
-      sessionStorage.setItem('redirectPath', redirectPath);
-      window.location.replace(target);
-    </script>
-  </head>
-  <body>
-    <p>Redirecting…</p>
-  </body>
+      // Store the actual route (after base path) for Vue to restore
+      sessionStorage.setItem('redirectPath', route);
+
+      // Now redirect to index.html so the Vue app loads
+      window.location.replace(`${base}/index.html`);
+    })();
+  </script>
+</head>
+<body>
+  <p>Redirecting…</p>
+</body>
 </html>
