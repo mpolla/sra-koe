@@ -6,7 +6,7 @@
       const pathname = location.pathname;
       const search = location.search;
       const hash = location.hash;
-      const newUrl = pathname + '/?' + 'redirect=' + encodeURIComponent(search + hash);
+      const newUrl = pathname + '?' + 'redirect=' + encodeURIComponent(search + hash);
       window.location.replace(newUrl);
     </script>
   </head>
