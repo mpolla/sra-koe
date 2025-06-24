@@ -1,24 +1,20 @@
 <!DOCTYPE html>
+<!-- Redirect 404 to index.html for handling URLs containing paths inside a PWA hostedn at Github Pages. -->
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Redirecting…</title>
-  <script>
-    (function () {
-      const base = '/sra-ampumakoe-laskuri'; // Change this to match your GitHub Pages project path
-
-      const fullPath = location.pathname + location.search + location.hash;
-      const route = fullPath.replace(base, '') || '/';
-
-      // Store the actual route (after base path) for Vue to restore
-      sessionStorage.setItem('redirectPath', route);
-
-      // Now redirect to index.html so the Vue app loads
-      window.location.replace(`${base}/index.html`);
-    })();
-  </script>
+    <meta charset="UTF-8" />
+    <title>Redirecting…</title>
+    <script>
+        (function () {
+            const base = '/sra-ampumakoe-laskuri';
+            const fullPath = location.pathname + location.search + location.hash;
+            const route = fullPath.replace(base, '') || '/';
+            sessionStorage.setItem('redirectPath', route);
+            window.location.replace(`${base}/index.html`);
+        })();
+    </script>
 </head>
 <body>
-  <p>Redirecting…</p>
+<p>Redirecting…</p>
 </body>
 </html>
