@@ -2,13 +2,22 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <script type="text/javascript">
-      const pathname = location.pathname;
-      const search = location.search;
-      const hash = location.hash;
-      const newUrl = 'https://mpolla.github.io/sra-ampumakoe-laskuri/';
-      window.location.replace(newUrl);
+    <title>Redirecting...</title>
+    <script>
+      // GitHub Pages serves this page for 404s
+      (function () {
+        const fullPath = window.location.pathname + window.location.search + window.location.hash;
+        const newUrl = window.location.origin + "/index.html";
+
+        // Use History API to fake the original path so Vue Router can pick it up
+        window.history.replaceState(null, '', fullPath);
+
+        // Reload the app from index.html (which now has the right path in URL bar)
+        window.location.replace(newUrl);
+      })();
     </script>
   </head>
-  <body></body>
+  <body>
+    <h1>Redirecting…</h1>
+  </body>
 </html>
