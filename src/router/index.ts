@@ -37,12 +37,24 @@ const router = createRouter({
       // path: "*",
       path: "/:catchAll(.*)",
       name: "NotFound",
-      component: PisteLaskuri,
+      component: () => import('../views/AboutView.vue'),
       meta: {
         requiresAuth: false
       }
     }
-  ]
+  ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: 'smooth',
+      };
+    } else {
+      return { top: 0 };
+    }
+  },
 })
 
 export default router

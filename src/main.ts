@@ -14,13 +14,15 @@ import router from './router'
 const app = createApp(App)
 
 app.use(pinia)
-app.use(router)
 
-// Käsittele 404.html:n tekemä uudelleenohjaus
-const params = new URLSearchParams(window.location.search)
-const redirect = params.get('redirect')
-if (redirect) {
-  router.replace(redirect)
+// Uudelleenohjauksien käsittely (ks. 404.html)
+const redirectPath = sessionStorage.getItem('redirectPath');
+if (redirectPath) {
+  router.replace(redirectPath).finally(() => {
+    app.use(router);
+    app.mount('#app');
+  });
+} else {
+  app.use(router);
+  app.mount('#app');
 }
-
-app.mount('#app')
