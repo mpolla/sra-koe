@@ -94,7 +94,7 @@ const vahvistaPoisto = (ampuja: string) => {
 }
 
 const reset = () => {
-  if (confirm("Haluatko todella tyhjentää listan ja poistaa kaikki tulokset?")) {
+  if (confirm("Haluatko todella tyhjentää ampujien listan ja poistaa kaikki tulokset?")) {
     pisteetStore.reset()
   }
 }
@@ -211,7 +211,11 @@ async function createPdf(ampuja: string) {
 
 
   // Vastaanottavan tuomarin tiedot
+<<<<<<< HEAD
   pages[0].drawText(tuomarinTiedot(), {x: 312, y: 33, size: 10})
+=======
+  pages[0].drawText(tuomarinTiedot(), {x: 282, y: 33, size: 10})
+>>>>>>> f655d5c (Koepäivän, -paikan ja tuomarin tietojen kirjaaminen)
 
   const pdfBytes = await pdfDoc.save()
   download(pdfBytes, "sra-ampumakoe-" + (new Date()).toISOString().substring(0,10) + "-" +ampuja.replace(" ", "-")+ ".pdf", "application/pdf");
@@ -283,20 +287,36 @@ async function createPdf(ampuja: string) {
 
       <fieldset v-if="muokkausTila">
         <legend>Kokeen ampumajärjestys</legend>
+<<<<<<< HEAD
         <input type="radio" id="kiertavaJarjestys" name="ampumajarjestys" v-model="pisteetStore.jarjestys" value="kiertava" checked />
         <label for="kiertavaJarjestys">Kiertävä järjestys: ensimmäisenä ampunut siirtyy seuraavalla rastilla viimeiseksi</label>
         <input type="radio" id="eiKiertavaJarjestys" name="ampumajarjestys" v-model="pisteetStore.jarjestys" value="pysyva" />
         <label for="eiKiertavaJarjestys">Sama järjestys joka rastilla</label>
+=======
+        <div>
+          <input type="radio" id="kiertavaJarjestys" name="ampumajarjestys" v-model="pisteetStore.jarjestys" value="kiertava" checked />
+          <label for="kiertavaJarjestys">Kiertävä järjestys: ensimmäisenä ampunut siirtyy seuraavalla rastilla viimeiseksi</label>
+        </div>
+        <div>
+          <input type="radio" id="eiKiertavaJarjestys" name="ampumajarjestys" v-model="pisteetStore.jarjestys" value="pysyva" />
+          <label for="eiKiertavaJarjestys">Sama järjestys joka rastilla</label>
+        </div>
+>>>>>>> f655d5c (Koepäivän, -paikan ja tuomarin tietojen kirjaaminen)
       </fieldset>
 
       <div>
         <div v-if="muokkausTila" @click="naytaKoetilaisuudenTiedot = !naytaKoetilaisuudenTiedot" class="accordion-header">
+<<<<<<< HEAD
           <h3>Koetilaisuus »</h3>
+=======
+          <h3>Koetilaisuus ja tuomari »</h3>
+>>>>>>> f655d5c (Koepäivän, -paikan ja tuomarin tietojen kirjaaminen)
         </div>
       </div>
 
       <div v-if="naytaKoetilaisuudenTiedot" class="accordion-content">
 
+<<<<<<< HEAD
         <fieldset>
           <legend>Paikka ja aika</legend>
           <div v-if="muokkausTila">
@@ -305,10 +325,29 @@ async function createPdf(ampuja: string) {
             </div>
             <div>
               📅<input id="koetilaisuus_paiva" v-model="pisteetStore.koetilaisuus_paiva" type="date" :readonly="!muokkausTila"/>
+=======
+        <fieldset v-if="muokkausTila || pisteetStore.koetilaisuus_paikka || pisteetStore.koetilaisuus_paiva">
+          <legend>Paikka ja aika</legend>
+          <div v-if="muokkausTila">
+            <div>
+              <span class="ikoni">📍</span><input id="koetilaisuus_paikka" v-model="pisteetStore.koetilaisuus_paikka" placeholder="Paikka"/>
+            </div>
+            <div>
+              <span class="ikoni">📅</span><input id="koetilaisuus_paiva" v-model="pisteetStore.koetilaisuus_paiva" type="date"/>
+            </div>
+          </div>
+          <div v-else>
+            <div v-if="pisteetStore.koetilaisuus_paikka">
+              <span class="ikoni">📍</span><span id="koetilaisuus_paikka">{{ pisteetStore.koetilaisuus_paikka}}</span>
+            </div>
+            <div v-if="pisteetStore.koetilaisuus_paiva">
+              <span class="ikoni">📅</span><span id="koetilaisuus_paikka">{{ pisteetStore.koetilaisuus_paiva}}</span>
+>>>>>>> f655d5c (Koepäivän, -paikan ja tuomarin tietojen kirjaaminen)
             </div>
           </div>
         </fieldset>
 
+<<<<<<< HEAD
         <fieldset>
           <legend>Vastaanottava tuomari</legend>
           <div>
@@ -320,13 +359,44 @@ async function createPdf(ampuja: string) {
             </div>
             <div>
               &#x1F4DE;<input v-model="pisteetStore.tuomari_puhelin" placeholder="Puhelin" :readonly="!muokkausTila"/>
+=======
+        <fieldset v-if="muokkausTila || pisteetStore.tuomari_nimi || pisteetStore.tuomari_sraid || pisteetStore.tuomari_puhelin">
+          <legend>Vastaanottava tuomari</legend>
+          <div v-if="muokkausTila">
+            <div>
+              <span class="ikoni">&#x1F464;</span><input v-if="muokkausTila" id="tuomari_nimi" v-model="pisteetStore.tuomari_nimi" placeholder="Nimi"/>
+            </div>
+            <div>
+              <span class="ikoni">&#x1FAAA;</span><input v-if="muokkausTila" v-model="pisteetStore.tuomari_sraid" placeholder="SRA ID"/>
+            </div>
+            <div>
+              <span class="ikoni">&#x1F4DE;</span><input v-if="muokkausTila" v-model="pisteetStore.tuomari_puhelin" placeholder="Puhelin"/>
+            </div>
+          </div>
+          <div v-else>
+            <div v-if="pisteetStore.tuomari_nimi">
+              <span class="ikoni">&#x1F464;</span>
+              <span>{{ pisteetStore.tuomari_nimi }}</span>
+            </div>
+            <div v-if="pisteetStore.tuomari_sraid">
+              <span class="ikoni">&#x1FAAA;</span>
+              <span>{{ pisteetStore.tuomari_sraid }}</span>
+            </div>
+            <div v-if="pisteetStore.tuomari_puhelin">
+              <span class="ikoni">&#x1F4DE;</span>
+              <span>{{ pisteetStore.tuomari_puhelin }}</span>
+>>>>>>> f655d5c (Koepäivän, -paikan ja tuomarin tietojen kirjaaminen)
             </div>
           </div>
         </fieldset>
       </div>
 
       <div class="actions">
+<<<<<<< HEAD
         <button class="action danger" v-if="muokkausTila && Object.keys(pisteetStore.pisteet).length > 0" @click="reset()">Poista kaikki ampujat</button>
+=======
+        <button class="action danger" v-if="muokkausTila && Object.keys(pisteetStore.pisteet).length > 0" @click="reset()">Poista tiedot</button>
+>>>>>>> f655d5c (Koepäivän, -paikan ja tuomarin tietojen kirjaaminen)
         <button v-if="muokkausTila && Object.keys(pisteetStore.pisteet).length > 1" @click="pisteetStore.satunnaistaJarjestys()" class="action">⤭ Järjestä satunnaisesti</button>
         <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 && !muokkausTila" @click="muokkausTila = !muokkausTila">Muokkaa tietoja</button>
         <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 && muokkausTila && pisteetStore.turvallisuuskoulutusSuoritettu" @click="muokkausTila = !muokkausTila">Jatka</button>
@@ -497,12 +567,25 @@ table#tuloslista {
 
 fieldset {
   margin: .1rem 0 .5rem 0;
+<<<<<<< HEAD
   display: flex;
   justify-content: space-between;
 }
 
 input:read-only {
   background-color: #eee;
+=======
+
+  input {
+    margin: .2rem;
+  }
+
+}
+
+.ikoni {
+  margin: .6rem;
+  color: white;
+>>>>>>> f655d5c (Koepäivän, -paikan ja tuomarin tietojen kirjaaminen)
 }
 
 </style>
