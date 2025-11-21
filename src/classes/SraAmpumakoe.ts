@@ -27,6 +27,8 @@ export class SraAmpumakoe {
 
     static rastit = [0, 1, 2, 3, 4]
 
+    static vaadittuOsumakerroin = 1.3
+
     static osumaPisteytys = { 'A': 5, 'C': 3, 'D': 1, 'Ohi': -10, 'Rang': -10 }
 
     static rastikuvaus = (rasti: number): string => {

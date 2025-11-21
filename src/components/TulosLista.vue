@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-
 // https://www.flickr.com/photos/30478819@N08/44723128954
 // https://commons.wikimedia.org/wiki/File:200909-F-NS874-1163_-_7th_SFG_Soldiers_conduct_Best_ODA_Competition_(Image_12_of_13).jpg
 
@@ -16,6 +15,8 @@ let lisattavapelaaja = ref('')
 
 // Ampujien listaus näytetään heti muokkaustilassa jos lista on tyhjä
 let muokkausTila = ref(Object.keys(pisteetStore.pisteet).length < 1)
+
+let naytaKoetilaisuudenTiedot = ref(false)
 
 const lisaaPelaaja = (nimi: string) => {
   if (nimi == null || nimi == '') {
@@ -61,7 +62,7 @@ const muotoileTulos = (kaikkiRastitSuoritettu: boolean, osumakerroin: number, am
   if (!kaikkiRastitSuoritettu) {
     return "KESKEN"
   }
-  if (osumakerroin >= 1.3) {
+  if (osumakerroin >= SraAmpumakoe.vaadittuOsumakerroin) {
     return "HYVÄKSYTTY"
   }
   return "HYLÄTTY"
@@ -127,10 +128,6 @@ const muotoileAika = (luku: number) : string => {
   }
 }
 
-
-
-
-
 async function createPdf(ampuja: string) {
 
   const RASTI_Y_OFFSET = [687, 573, 469, 366, 262]
@@ -181,6 +178,41 @@ async function createPdf(ampuja: string) {
   pages[0].drawText(muotoileAika(pisteetStore.getPelaajanAikaSumma(ampuja)), {x: 552, y: 149, size: 10})
   pages[0].drawText(muotoileOsumakerroinPdf(pisteetStore.getPelaajanOsumakerroin(ampuja as string)), {x: 552, y: 137, size: 10})
 
+  function tuomarinTiedot() {
+    var tuomarinTiedot = ""
+    tuomarinTiedot += pisteetStore.tuomari_nimi
+    if (pisteetStore.tuomari_sraid != undefined) {
+      tuomarinTiedot += " (SRA ID " + pisteetStore.tuomari_sraid + ")"
+    }
+    if (pisteetStore.tuomari_puhelin != undefined) {
+      tuomarinTiedot += " puh. " + pisteetStore.tuomari_puhelin
+    }
+    return tuomarinTiedot
+  }
+
+  // X Hyväksytty
+  let hf = pisteetStore.getPelaajanOsumakerroin(ampuja as string)
+  if (pisteetStore.hylkaykset[ampuja] == undefined  && (pisteetStore.getKaikkiAmmuttu(ampuja) && hf >= SraAmpumakoe.vaadittuOsumakerroin)) {
+    pages[0].drawText('X', {x: 336, y: 83, size: 18})
+  }
+
+  // X Hylätty
+  if (pisteetStore.hylkaykset[ampuja] !== undefined || (pisteetStore.getKaikkiAmmuttu(ampuja) && hf < SraAmpumakoe.vaadittuOsumakerroin)) {
+    pages[0].drawText('X', {x: 399, y: 83, size: 18})
+  }
+
+  // Paikka ja päivämäärä
+  if (pisteetStore.koetilaisuus_paikka != '') {
+    pages[0].drawText(pisteetStore.koetilaisuus_paikka, {x: 350, y: 69, size: 10})
+  }
+  if (pisteetStore.koetilaisuus_paiva != '') {
+    pages[0].drawText(pisteetStore.koetilaisuus_paiva, {x: 450, y: 69, size: 10})
+  }
+
+
+  // Vastaanottavan tuomarin tiedot
+  pages[0].drawText(tuomarinTiedot(), {x: 312, y: 33, size: 10})
+
   const pdfBytes = await pdfDoc.save()
   download(pdfBytes, "sra-ampumakoe-" + (new Date()).toISOString().substring(0,10) + "-" +ampuja.replace(" ", "-")+ ".pdf", "application/pdf");
 }
@@ -199,88 +231,119 @@ async function createPdf(ampuja: string) {
 
     <div class="sisalto">
 
-    <div class="intro" v-if="muokkausTila">
-      Tervetuloa SRA ampumakokeeseen. Syötä ampumakokeeseen ostallistuvien henkilöiden nimet alla. Sovellukseen
-      kirjatut tiedot tallentuvat ainoastaan päätelaitteen muistiin. Tietoja ei tallenneta ja jaeta verkossa. Voit
-      ladata PDF-muotoiset tulospöytäkirjat tuloksien kirjaamisen jälkeen.
-    </div>
+      <div class="intro" v-if="muokkausTila">
+        Tervetuloa SRA ampumakokeeseen. Syötä ampumakokeeseen ostallistuvien henkilöiden nimet alla. Sovellukseen
+        kirjatut tiedot tallentuvat ainoastaan päätelaitteen muistiin. Tietoja ei tallenneta ja jaeta verkossa. Voit
+        ladata PDF-muotoiset tulospöytäkirjat tuloksien kirjaamisen jälkeen.
+      </div>
 
-    <h2 v-if="muokkausTila">Ampujat</h2>
-    <h2 v-if="!muokkausTila">Tuloslista</h2>
+      <h2 v-if="muokkausTila">Ampujat</h2>
+      <h2 v-if="!muokkausTila">Tuloslista</h2>
 
-    <ul v-if="muokkausTila" class="ampujat">
-      <li v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet">{{ ampuja }} <span @click="vahvistaPoisto(ampuja as string)" class="remove">ⓧ</span></li>
-    </ul>
+      <ul v-if="muokkausTila" class="ampujat">
+        <li v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet">{{ ampuja }} <span @click="vahvistaPoisto(ampuja as string)" class="remove">ⓧ</span></li>
+      </ul>
 
-    <table id="tuloslista" cellspacing="0" v-if="!muokkausTila">
-      <tr>
-        <th class="nimi">Nimi</th>
-        <th class="rastipallot">Rastit</th>
-        <th class="osumakerroin">Tulos ja HF</th>
-        <th class="tulos">Pöytäkirja</th>
-        <th v-if="muokkausTila">Poista</th>
-      </tr>
-      <tr v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet" v-bind:class="{dq: pisteetStore.getHylkaysperuste(ampuja as string) }">
-        <td class="nimi">
-          {{ ampuja }} <span v-if="ampuja in pisteetStore.hylkaykset">🚫</span>
-        </td>
-        <td class="rastipallot">
-          <div v-bind:key="rasti" class="rastipallo" v-bind:class="mapClass(pisteetStore.getRastiSuorituksenTila(ampuja as string, rasti))"  v-for="rasti in [0,1,2,3,4]">
-            <a :href="'kirjaus/' + rasti + '/' + ampuja">{{ rasti+1 }}</a></div>
-        </td>
-        <td>
+      <table id="tuloslista" cellspacing="0" v-if="!muokkausTila">
+        <tr>
+          <th class="nimi">Nimi</th>
+          <th class="rastipallot">Rastit</th>
+          <th class="osumakerroin">Tulos ja HF</th>
+          <th class="tulos">Pöytäkirja</th>
+          <th v-if="muokkausTila">Poista</th>
+        </tr>
+        <tr v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet" v-bind:class="{dq: pisteetStore.getHylkaysperuste(ampuja as string) }">
+          <td class="nimi">
+            {{ ampuja }} <span v-if="ampuja in pisteetStore.hylkaykset">🚫</span>
+          </td>
+          <td class="rastipallot">
+            <div v-bind:key="rasti" class="rastipallo" v-bind:class="mapClass(pisteetStore.getRastiSuorituksenTila(ampuja as string, rasti))"  v-for="rasti in [0,1,2,3,4]">
+              <a :href="'kirjaus/' + rasti + '/' + ampuja">{{ rasti+1 }}</a></div>
+          </td>
+          <td>
           <span id="tulos" v-bind:class="muotoileTulos(pisteetStore.getKaikkiRastitSuoritettu(ampuja as string), pisteetStore.getPelaajanOsumakerroin(ampuja as string), ampuja as string)">
           {{ muotoileTulos(pisteetStore.getKaikkiRastitSuoritettu(ampuja as string), pisteetStore.getPelaajanOsumakerroin(ampuja as string), ampuja as string) }}
           </span>
-          {{ muotoileOsumakerroin(pisteetStore.getPelaajanOsumakerroin(ampuja as string)) }}
-        </td>
+            {{ muotoileOsumakerroin(pisteetStore.getPelaajanOsumakerroin(ampuja as string)) }}
+          </td>
 
-        <td><button @click="createPdf(ampuja as string)">PDF</button></td>
+          <td><button @click="createPdf(ampuja as string)">PDF</button></td>
 
-        <td v-if="muokkausTila"><button class="danger" @click="vahvistaPoisto(ampuja as string)">🗑 POISTA</button></td>
-      </tr>
+          <td v-if="muokkausTila"><button class="danger" @click="vahvistaPoisto(ampuja as string)">🗑 POISTA</button></td>
+        </tr>
 
-    </table>
+      </table>
 
-    <fieldset v-if="muokkausTila" >
-      <legend>Lisää ampuja</legend>
-      <input placeholder="Ampujan nimi" id="uusinimi" name="uusinimi" v-model="lisattavapelaaja" v-on:keyup.enter="lisaaPelaaja(lisattavapelaaja)"/>
-      <input type="submit" value="Lisää" @click="lisaaPelaaja(lisattavapelaaja);pisteetStore.turvallisuuskoulutusSuoritettu = false;"  />
-    </fieldset>
+      <fieldset v-if="muokkausTila" >
+        <legend>Lisää ampuja</legend>
+        <input placeholder="Ampujan nimi" id="uusinimi" name="uusinimi" v-model="lisattavapelaaja" v-on:keyup.enter="lisaaPelaaja(lisattavapelaaja)"/>
+        <input type="submit" value="Lisää" @click="lisaaPelaaja(lisattavapelaaja);pisteetStore.turvallisuuskoulutusSuoritettu = false;"  />
+      </fieldset>
+
 
       <fieldset v-if="muokkausTila">
         <legend>Kokeen ampumajärjestys</legend>
         <input type="radio" id="kiertavaJarjestys" name="ampumajarjestys" v-model="pisteetStore.jarjestys" value="kiertava" checked />
         <label for="kiertavaJarjestys">Kiertävä järjestys: ensimmäisenä ampunut siirtyy seuraavalla rastilla viimeiseksi</label>
-        <br/>
         <input type="radio" id="eiKiertavaJarjestys" name="ampumajarjestys" v-model="pisteetStore.jarjestys" value="pysyva" />
         <label for="eiKiertavaJarjestys">Sama järjestys joka rastilla</label>
       </fieldset>
 
-    <div class="actions">
-      <button class="action danger" v-if="muokkausTila && Object.keys(pisteetStore.pisteet).length > 0" @click="reset()">Poista kaikki</button>
-      <button v-if="muokkausTila && Object.keys(pisteetStore.pisteet).length > 1" @click="pisteetStore.satunnaistaJarjestys()" class="action">⤭ Järjestä satunnaisesti</button>
+      <div>
+        <div v-if="muokkausTila" @click="naytaKoetilaisuudenTiedot = !naytaKoetilaisuudenTiedot" class="accordion-header">
+          <h3>Koetilaisuus »</h3>
+        </div>
+      </div>
 
-<!--      <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 || !muokkausTila" @click="muokkausTila = !muokkausTila">{{ muokkaaLabel() }}</button>-->
+      <div v-if="naytaKoetilaisuudenTiedot" class="accordion-content">
 
-      <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 && !muokkausTila" @click="muokkausTila = !muokkausTila">Muokkaa osallistujia</button>
-      <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 && muokkausTila && pisteetStore.turvallisuuskoulutusSuoritettu" @click="muokkausTila = !muokkausTila">Jatka</button>
-      <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 && muokkausTila && pisteetStore.turvallisuuskoulutusSuoritettu == false" @click="$router.push('turvallisuus')">Jatka</button>
+        <fieldset>
+          <legend>Paikka ja aika</legend>
+          <div v-if="muokkausTila">
+            <div>
+              📍<input id="koetilaisuus_paikka" v-model="pisteetStore.koetilaisuus_paikka" placeholder="Paikka" :readonly="!muokkausTila"/>
+            </div>
+            <div>
+              📅<input id="koetilaisuus_paiva" v-model="pisteetStore.koetilaisuus_paiva" type="date" :readonly="!muokkausTila"/>
+            </div>
+          </div>
+        </fieldset>
 
-      <button v-if="!muokkausTila && pisteetStore.turvallisuuskoulutusSuoritettu" class="action" @click="$router.push('kirjaus/0/' + Object.keys(pisteetStore.pisteet)[0])">Aloita ampumakoe</button>
-    </div>
+        <fieldset>
+          <legend>Vastaanottava tuomari</legend>
+          <div>
+            <div>
+              &#x1F464;<input id="tuomari_nimi" v-model="pisteetStore.tuomari_nimi" placeholder="Nimi" :readonly="!muokkausTila"/>
+            </div>
+            <div>
+              &#x1FAAA;<input v-model="pisteetStore.tuomari_sraid" placeholder="SRA ID" :readonly="!muokkausTila"/>
+            </div>
+            <div>
+              &#x1F4DE;<input v-model="pisteetStore.tuomari_puhelin" placeholder="Puhelin" :readonly="!muokkausTila"/>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="actions">
+        <button class="action danger" v-if="muokkausTila && Object.keys(pisteetStore.pisteet).length > 0" @click="reset()">Poista kaikki ampujat</button>
+        <button v-if="muokkausTila && Object.keys(pisteetStore.pisteet).length > 1" @click="pisteetStore.satunnaistaJarjestys()" class="action">⤭ Järjestä satunnaisesti</button>
+        <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 && !muokkausTila" @click="muokkausTila = !muokkausTila">Muokkaa osallistujia</button>
+        <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 && muokkausTila && pisteetStore.turvallisuuskoulutusSuoritettu" @click="muokkausTila = !muokkausTila">Jatka</button>
+        <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 && muokkausTila && pisteetStore.turvallisuuskoulutusSuoritettu == false" @click="$router.push('turvallisuus')">Jatka</button>
+
+        <button v-if="!muokkausTila && pisteetStore.turvallisuuskoulutusSuoritettu" class="action" @click="$router.push('kirjaus/0/' + Object.keys(pisteetStore.pisteet)[0])">Aloita ampumakoe</button>
+      </div>
 
     </div>
   </main>
 </template>
 <style scoped>
 
-
 body {
   background-color: red;
 
 }
-
 
 main {
   background-image: linear-gradient(to bottom, rgba(233, 233, 233, .2), rgba(233, 233, 233, 1)), url("../assets/tausta.jpg");
@@ -432,9 +495,14 @@ table#tuloslista {
   }
 }
 
-
 fieldset {
-  margin: 1rem 0 1.5rem 0;
+  margin: .1rem 0 .5rem 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+input:read-only {
+  background-color: #eee;
 }
 
 </style>

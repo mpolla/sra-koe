@@ -27,7 +27,12 @@ export const usePisteetStore = defineStore('pisteet', {
     ajat: {} as AmpujaAjat,
     hylkaykset: {} as Hylkaykset,
     rastin5suoritustavat: {} as Rastin5Suoritustavat,
-    jarjestys: ''
+    jarjestys: '',
+    tuomari_nimi: '',
+    tuomari_sraid: '',
+    tuomari_puhelin: '',
+    koetilaisuus_paikka: '',
+    koetilaisuus_paiva: ''
   }),
   persist: true,
   actions: {
@@ -90,6 +95,9 @@ export const usePisteetStore = defineStore('pisteet', {
     },
     getPelaajanOsumakerroin(ampuja: string) : number {
       return this.getPelaajanPisteSumma(ampuja) / this.getPelaajanAikaSumma(ampuja)
+    },
+    getKaikkiAmmuttu(ampuja: string) : boolean {
+      return [0,1,2,3,4].map((x) => this.getRastiSuorituksenTila(ampuja, x)).filter(num => num === RastiSuorituksenTila.Suoritettu).length === 5
     },
     getRastiSuorituksenTila(ampuja: string, rasti: number) {
 
