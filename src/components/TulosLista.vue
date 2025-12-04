@@ -181,10 +181,10 @@ async function createPdf(ampuja: string) {
   function tuomarinTiedot() {
     var tuomarinTiedot = ""
     tuomarinTiedot += pisteetStore.tuomari_nimi
-    if (pisteetStore.tuomari_sraid != undefined) {
+    if (pisteetStore.tuomari_sraid != undefined && pisteetStore.tuomari_sraid != "") {
       tuomarinTiedot += " (SRA ID " + pisteetStore.tuomari_sraid + ")"
     }
-    if (pisteetStore.tuomari_puhelin != undefined) {
+    if (pisteetStore.tuomari_puhelin != undefined && pisteetStore.tuomari_puhelin != "") {
       tuomarinTiedot += " puh. " + pisteetStore.tuomari_puhelin
     }
     return tuomarinTiedot
@@ -328,7 +328,7 @@ async function createPdf(ampuja: string) {
       <div class="actions">
         <button class="action danger" v-if="muokkausTila && Object.keys(pisteetStore.pisteet).length > 0" @click="reset()">Poista kaikki ampujat</button>
         <button v-if="muokkausTila && Object.keys(pisteetStore.pisteet).length > 1" @click="pisteetStore.satunnaistaJarjestys()" class="action">⤭ Järjestä satunnaisesti</button>
-        <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 && !muokkausTila" @click="muokkausTila = !muokkausTila">Muokkaa osallistujia</button>
+        <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 && !muokkausTila" @click="muokkausTila = !muokkausTila">Muokkaa tietoja</button>
         <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 && muokkausTila && pisteetStore.turvallisuuskoulutusSuoritettu" @click="muokkausTila = !muokkausTila">Jatka</button>
         <button class="action" v-if="Object.keys(pisteetStore.pisteet).length > 0 && muokkausTila && pisteetStore.turvallisuuskoulutusSuoritettu == false" @click="$router.push('turvallisuus')">Jatka</button>
 

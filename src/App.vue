@@ -65,31 +65,6 @@ nav.sivuvalikko {
   }
 }
 
-nav.rastit {
-  background-color: var(--vari1);
-}
-
-
-nav.ampujat {
-  background-color: #ddd;
-  font-size: 50%;
-
-  ul {
-    padding-top: .4rem;
-    padding-bottom: .4rem;
-    width: 100%;
-  }
-
-  ul li {
-    display: inline-block;
-    background-color: #8f9d8f;
-    border-radius: .8rem;
-    margin-right: .2rem;
-    margin-left: .2rem;
-    padding-left: .6rem;
-  }
-}
-
 nav a {
   display: inline-block;
   padding: 0 1rem 0 .1rem;

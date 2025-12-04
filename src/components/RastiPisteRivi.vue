@@ -64,35 +64,3 @@ const pisteSumma = (pist: Array<Array<number>>, luokkaIdx: number) : number => {
   </tr>
 
 </template>
-
-<style scoped>
-
-.nowrap {
-  white-space: nowrap;
-}
-
-
-
-div.vaihe {
-  border-radius: 50%;
-  background: #727272;
-  color: #dddddd;
-
-  display: inline-block;
-  font-size: 80%;
-
-  vertical-align: middle;
-  text-align: center;
-
-  width: 1.1rem;
-  height: 1.1rem;
-
-  margin-right: .1rem;
-
-}
-td {
-  background: #eee8d2;
-  text-align: center;
-}
-
-</style>

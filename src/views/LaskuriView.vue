@@ -614,13 +614,16 @@ nav {
 
 /* http://tarangchokshi.weebly.com/blog/how-to-create-flat-style-breadcrumb-links-with-css */
 nav.rastit {
+  background-color: var(--vari1);
   ul {
-    margin: auto;
     width: 100%;
     padding: 0;
+    display: flex;
+    justify-content: center;
+    margin: .4rem;
   }
   ul li {
-    display: inline-block;
+    display: flex;
     a {
       width: 3.9rem;
       padding: .2rem .4rem 0 .9rem;
@@ -736,15 +739,35 @@ nav.rastit {
     transition: 0.4s;
   }
 }
+
+
+
+
 nav.ampujat {
+  background-color: #ddd;
+  font-size: 50%;
+
   ul {
-    li {
-      display: inline-block;
-      margin: .1rem;
-    }
+    padding-top: .4rem;
+    padding-bottom: .4rem;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+  }
+
+  ul li {
+    background-color: #8f9d8f;
+    border-radius: .8rem;
+    margin-right: .2rem;
+    margin-left: .2rem;
+    margin-top: .1rem;
+    margin-bottom: .1rem;
+    padding-left: .6rem;
+    display: flex;
   }
 }
-
 
 
 
