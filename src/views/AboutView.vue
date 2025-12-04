@@ -45,6 +45,12 @@ const version = __APP_VERSION__
 
     <h2>Versiohistoria</h2>
 
+    <h3>0.6.4 (4.12.2025)</h3>
+    <ul>
+      <li>Korjauksia käyttöliittymän asetteluun.</li>
+      <li>Päivitetty kirjastoriippuvuudet.</li>
+    </ul>
+
     <h3>0.6.3 (22.11.2025)</h3>
     <ul>
       <li>Mahdollisuus syöttää koetilaisuuden tiedot: kokeen vastaanottava tuomari, aika ja paikka.</li>
