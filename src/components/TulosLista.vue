@@ -241,10 +241,11 @@ async function createPdf(ampuja: string) {
       <h2 v-if="!muokkausTila">Tuloslista</h2>
 
       <ul v-if="muokkausTila" class="ampujat">
-        <li v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet">{{ ampuja }} <span @click="vahvistaPoisto(ampuja as string)" class="remove">ⓧ</span></li>
+        <li v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet"><span class="ampuja">{{ ampuja }}</span><span @click="vahvistaPoisto(ampuja as string)" class="remove">⨉</span></li>
       </ul>
 
       <table id="tuloslista" cellspacing="0" v-if="!muokkausTila">
+        <thead>
         <tr>
           <th class="nimi">Nimi</th>
           <th class="rastipallot">Rastit</th>
@@ -252,6 +253,8 @@ async function createPdf(ampuja: string) {
           <th class="tulos">Pöytäkirja</th>
           <th v-if="muokkausTila">Poista</th>
         </tr>
+        </thead>
+        <tbody>
         <tr v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet" v-bind:class="{dq: pisteetStore.getHylkaysperuste(ampuja as string) }">
           <td class="nimi">
             {{ ampuja }} <span v-if="ampuja in pisteetStore.hylkaykset">🚫</span>
@@ -271,13 +274,13 @@ async function createPdf(ampuja: string) {
 
           <td v-if="muokkausTila"><button class="danger" @click="vahvistaPoisto(ampuja as string)">🗑 POISTA</button></td>
         </tr>
-
+        </tbody>
       </table>
 
       <fieldset v-if="muokkausTila" >
         <legend>Lisää ampuja</legend>
         <input placeholder="Ampujan nimi" id="uusinimi" name="uusinimi" v-model="lisattavapelaaja" v-on:keyup.enter="lisaaPelaaja(lisattavapelaaja)"/>
-        <input type="submit" value="Lisää" @click="lisaaPelaaja(lisattavapelaaja);pisteetStore.turvallisuuskoulutusSuoritettu = false;"  />
+        <button class="action" value="Lisää" @click="lisaaPelaaja(lisattavapelaaja);pisteetStore.turvallisuuskoulutusSuoritettu = false;">Lisää</button>
       </fieldset>
 
 
@@ -342,7 +345,6 @@ async function createPdf(ampuja: string) {
 
 body {
   background-color: red;
-
 }
 
 main {
@@ -353,16 +355,12 @@ main {
   &.muok {
     padding: 0 0 0 0;
   }
-
 }
 
 .sisalto {
-
-
   background-color: rgba(233,233,233, .7);
   padding: 1rem;
   line-height: 1.5;
-
 }
 
 
@@ -371,7 +369,7 @@ table#tuloslista {
   width: 100%;
 
 
-  tr {
+  & tr {
 
     height: 3rem;
 
@@ -382,11 +380,11 @@ table#tuloslista {
       background-color: #e7e7e7;
     }
 
-    td {
+    & td {
       text-align: center;
     }
 
-    th {
+    & th {
       word-wrap: anywhere;
       font-size: 105%;
       background-color: #ececec;
@@ -400,9 +398,9 @@ table#tuloslista {
     }
 
     &.dq {
-      div.rastipallo {
+      & div.rastipallo {
         background-color: #ccc;
-        a {
+        & a {
           color: #333;
         }
       }
@@ -449,21 +447,21 @@ table#tuloslista {
 
   &.done {
     background-color: var(--vari1);
-    a {
+    & a {
       color: rgba(255, 255, 255, 0.8);
       font-weight: bold;
     }
   }
   &.notdone {
     background-color: var(--vari2);
-    a {
+    & a {
       color: var(--vari1);
       font-weight: bold;
     }
   }
   &.incomplete {
     background-color: #dea187;
-    a {
+    & a {
       color: var(--vari1);
       font-weight: bold;
     }
@@ -473,24 +471,36 @@ table#tuloslista {
 
 .ampujat {
 
-  margin: 0;
   padding: .5rem 0 .5rem 0;
+  display: flex;
+  flex-wrap: wrap;
 
-  li {
-    display: inline-block;
-    background-color: var(--vari1);
+  & li {
+    display: flex;
     color: #f1f1f1;
-    border-radius: .8rem;
-    padding: 0 .6rem 0 .6rem;
     margin: .1rem;
 
     .remove {
-      display: inherit;
-      padding: .2rem 0 .3rem 0;
+      background-color: var(--vari1);
+      border-radius: 0 .8rem .8rem 0;
+      padding: 0 .7rem .15rem .6rem;
+      height: 1.7rem;
+      font-size: 70%;
+      align-content: center;
+      color: #dddddd;
 
       &:hover {
-        color: darkred;
+        color: white;
+        background-color: maroon;
       }
+    }
+
+    .ampuja {
+      background-color: var(--vari1);
+      align-content: center;
+      height: 1.7rem;
+      padding: 0 .1rem 0 1rem;
+      border-radius: .8rem 0 0 .8rem;
     }
   }
 }

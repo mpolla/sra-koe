@@ -1389,6 +1389,7 @@
     <h2>Liite 3 - Kivääri</h2>
 
     <table>
+      <tbody>
       <tr>
         <th></th>
         <th></th>
@@ -1516,6 +1517,7 @@
         <td>On&nbsp;sallittu</td>
         <td>On&nbsp;sallittu</td>
       </tr>
+      </tbody>
     </table>
 
     <p>(1) Esimerkiksi pitkä tai lyhyt kivääri (muu ase) sekä pistoolikarbiini.</p>
@@ -1530,6 +1532,7 @@
     <h2>Liite 4 - Pistooli ja revolveri</h2>
 
     <table>
+      <tbody>
       <tr>
         <th></th>
         <th></th>
@@ -1671,7 +1674,7 @@
         <td>On&nbsp;sallittu</td>
         <td>On&nbsp;sallittu</td>
       </tr>
-
+      </tbody>
     </table>
 
     <p>(1) Revolverissa optisten tähtäimien kiinnityspaikkaaei ole rajoitettu.</p>
@@ -1688,7 +1691,7 @@
     <h2>Liite 5 - Tarkka-ampujakivääri</h2>
 
     <table>
-
+      <tbody>
       <tr>
         <th></th>
         <th></th>
@@ -1774,14 +1777,14 @@
         <td>On&nbsp;sallittu</td>
         <td>On&nbsp;sallittu</td>
       </tr>
-
+      </tbody>
     </table>
 
     <a id="liite6" />
     <h2>Liite 6 - Haulikko</h2>
 
     <table>
-
+      <tbody>
       <tr>
         <th></th>
         <th></th>
@@ -1848,7 +1851,7 @@
         <td>On&nbsp;sallittu</td>
         <td>On&nbsp;sallittu</td>
       </tr>
-
+      </tbody>
     </table>
 
     (1) Optinen tähtäin on tähtäinlaite, jossa on linssi,prisma tai peili. Elektroniseksi tähtäinlaitteeksi katsotaan myös
@@ -1860,7 +1863,7 @@
     TST-luokan ampujalla tulee olla rastia aloittaessaan mukanaan vähintään seuraavat varusteet:
 
     <table>
-
+    <tbody>
       <tr><th>1.</th>
 
         <td>Kilpailussa käytettävä pistooli kotelossaan. Mikäli rastilla ei käytetä pistoolia, tyhjän lippaan voi
@@ -1939,7 +1942,7 @@
             <li>Pitkävartiset eli jalkineen varren tulee peittää nilkan kehräsluu</li>
           </ul>
         </td></tr>
-
+    </tbody>
     </table>
 
     <p>Ampujan varusteiden yhteispainon tulee olla vähintään 12 kg. Punnittavien varusteiden yhteispainoon lasketaan
@@ -1966,10 +1969,6 @@
 </template>
 <style>
 
-
-
-
-
 h1.saannot_otsikko {
   padding: .6rem;
 }
@@ -1977,11 +1976,9 @@ p.saannot_otsikko {
   padding: .6rem;
 }
 
-
 p:target, div:target {
   background-color: rgba(255, 255, 89, 0.6) !important;
 }
-
 
 a {
   color: darkblue;
@@ -1993,13 +1990,11 @@ a {
   }
 }
 
-
-
 .saannot {
 
   padding: .6rem;
 
-  h2,h3 {
+  & h2,h3 {
     padding-top: .8rem;
     color: var(--vari1);
   }
@@ -2007,23 +2002,18 @@ a {
   .toc {
     list-style-type: none;
 
-    ul {
+    & ul {
       list-style-type: none;
     }
 
   }
 
-
-
-
-
-
-  p {
+  & p {
     padding: .3rem;
     margin: .1rem;
   }
 
-  p.ratakomento {
+  & p.ratakomento {
     font-weight: bold;
   }
 
@@ -2033,23 +2023,23 @@ a {
     color: #222;
   }
 
-  ol > li:before {
+  & ol > li:before {
     content: ") ";
   }
 
-  table {
+  & table {
     padding: 0;
     border: 1px solid gray;
-    th {
+    & th {
       min-width: 3rem;
     }
-    tr td {
+    & tr td {
       border: 1px solid gray;
       overflow-wrap: anywhere;
     }
   }
 
-  hr {
+  & hr {
     margin-top: 1rem;
     margin-bottom: 1rem;
   }
@@ -2057,5 +2047,3 @@ a {
 }
 
 </style>
-<script setup lang="ts">
-</script>

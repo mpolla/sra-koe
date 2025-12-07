@@ -18,7 +18,7 @@ const pisteetStore = usePisteetStore()
   <p>
     Kaikessa aseen käytössä on noudatettava seuraavia turvallisen aseenkäsittelyn sääntöjä:
   </p>
-  <ol>
+  <ol class="kasittelysaannot">
     <li><b>Asetta on aina käsiteltävä kuin se olisi ladattu</b>.
       Ei ole merkitystä, onko ase ladattu tai onko ase toimimaton käsittelyase, käsitte-
       lyn on aina oltava samanlaista.</li>
@@ -69,8 +69,8 @@ main.turvallisuus {
   padding: 1rem;
 }
 
-li {
-  margin-top: 1rem;
+.kasittelysaannot li {
+  margin-top: 1.2rem;
 }
 
 a {
@@ -85,7 +85,7 @@ a {
   padding: 1rem 0 1rem 0;
 
 
-  input[type=checkbox] {
+  & input[type=checkbox] {
     transform: scale(2.0);
     padding: 1rem;
     margin: 1rem;

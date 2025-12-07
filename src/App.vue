@@ -55,11 +55,11 @@ nav.sivuvalikko {
   background-repeat: no-repeat;
   background-size: cover;
 
-  a {
+  & a {
     color: var(--vari2);
   }
 
-  span.icon {
+  & span.icon {
     display: inline-block;
     padding: 0 0 0 .3rem;
   }

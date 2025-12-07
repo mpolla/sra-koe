@@ -233,10 +233,10 @@ const peruHylkays = (ampuja: string) => {
 
 
 /**
-  * Jos aika-kenttään on syötetty yli kaksi numeroa, kaksi viimeistä numeroa tulkitaan sekunnin sadasosiksi ja sitä
-  * edeltävät luvut kokonaisiksi sekunneiksi. Tällä tavoin aika-kenttään voi syöttää esim. "1398" (ilman pistettä) ja se
-  * tulkitaan oikein "13.98 sekuntia".
-  */
+ * Jos aika-kenttään on syötetty yli kaksi numeroa, kaksi viimeistä numeroa tulkitaan sekunnin sadasosiksi ja sitä
+ * edeltävät luvut kokonaisiksi sekunneiksi. Tällä tavoin aika-kenttään voi syöttää esim. "1398" (ilman pistettä) ja se
+ * tulkitaan oikein "13.98 sekuntia".
+ */
 const tulkitseSyotettyAika = (event: Event) => {
   const inputElement = event.target as HTMLInputElement
 
@@ -354,6 +354,7 @@ const confirmKeskenerainenKirjaus = (ampuja: string, rasti: number) => {
 
 
       <table class="rasti" :class="{ dq: ampuja in pisteetStore.hylkaykset }">
+        <tbody>
         <tr>
           <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0] > 0 ? 'ok' : 'notok'">{{ pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0] > 0 ? '✔' : '⏱' }}</th>
           <td>
@@ -374,7 +375,7 @@ const confirmKeskenerainenKirjaus = (ampuja: string, rasti: number) => {
                    @keyup="tulkitseSyotettyAika($event)" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
           </td>
         </tr>
-
+        </tbody>
       </table>
 
       <br/>
@@ -516,7 +517,7 @@ div.rasti-info {
 
 .ampuja.done {
   background-color: #8d8d8d;
-  a {
+  & a {
     color: var(--vari2);
     font-size: 180%;
   }
@@ -530,7 +531,7 @@ div.rasti-info {
 
 .ampuja.notdone {
   background-color: var(--vari2);
-  a {
+  & a {
     color: var(--vari1);
     display: flex;
     font-size: 180%;
@@ -545,7 +546,7 @@ div.rasti-info {
 
 .ampuja.incomplete {
   background-color: #8a8a8a;
-  a {
+  & a {
     display: flex;
     font-size: 180%;
   }
@@ -560,7 +561,7 @@ div.rasti-info {
 .ampuja.dq {
   background-color: #8a8a8a;
   color: #666;
-  a {
+  & a {
     display: flex;
     font-size: 180%;
   }
@@ -575,7 +576,7 @@ div.rasti-info {
 .ampuja.active {
   background-color: #ffffff;
   box-shadow: 2px 2px 3px #777;
-  a {
+  & a {
     color: #606060;
     font-weight: bold;
     display: flex;
@@ -592,7 +593,7 @@ div.rasti-info {
 .ampuja.active.dq {
   background-color: #ffffff;
   box-shadow: 2px 2px 3px #777;
-  a {
+  & a {
     color: #606060;
     font-weight: bold;
     display: flex;
@@ -615,21 +616,21 @@ nav {
 /* http://tarangchokshi.weebly.com/blog/how-to-create-flat-style-breadcrumb-links-with-css */
 nav.rastit {
   background-color: var(--vari1);
-  ul {
+  & ul {
     width: 100%;
     padding: 0;
     display: flex;
     justify-content: center;
     margin: .4rem;
   }
-  ul li {
+  & ul li {
     display: flex;
-    a {
+    & a {
       width: 3.9rem;
       padding: .2rem .4rem 0 .9rem;
     }
   }
-  ul li.done a {
+  & ul li.done a {
     display: flex;
     float: left;
     height: 30px;
@@ -644,7 +645,7 @@ nav.rastit {
     margin: 0 6px 0 0;
     font-weight: bold;
   }
-  ul li.done a:after {
+  & ul li.done a:after {
     content: "";
     border-top: 15px solid transparent;
     border-bottom: 15px solid transparent;
@@ -655,7 +656,7 @@ nav.rastit {
     z-index: 10;
   }
 
-  ul li.todo a {
+  & ul li.todo a {
     display: flex;
     float: left;
     height: 30px;
@@ -669,7 +670,7 @@ nav.rastit {
     color: var(--vari1);
     font-weight: bold;
   }
-  ul li.todo a:after {
+  & ul li.todo a:after {
     content: "";
     border-top: 15px solid transparent;
     border-bottom: 15px solid transparent;
@@ -680,7 +681,7 @@ nav.rastit {
     z-index: 10;
   }
 
-  ul li.active a {
+  & ul li.active a {
     display: flex;
     float: left;
     height: 30px;
@@ -694,7 +695,7 @@ nav.rastit {
     color: var(--vari1);
     font-weight: bold;
   }
-  ul li.active a:after {
+  & ul li.active a:after {
     content: "";
     border-top: 15px solid transparent;
     border-bottom: 15px solid transparent;
@@ -704,7 +705,7 @@ nav.rastit {
     top: 0;
     z-index: 10;
   }
-  ul li a:before {
+  & ul li a:before {
     content: "";
     border-top: 15px solid transparent;
     border-bottom: 15px solid transparent;
@@ -714,27 +715,27 @@ nav.rastit {
     top: 0;
     z-index: 5;
   }
-  ul li:first-child a {
+  & ul li:first-child a {
     width: 3.4rem;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
   }
-  ul li:first-child a:before {
+  & ul li:first-child a:before {
     display: none;
   }
-  ul li:last-child a {
+  & ul li:last-child a {
     padding-right: 20px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
   }
-  ul li:last-child a:after {
+  & ul li:last-child a:after {
     display: none;
   }
-  ul li a:hover {
+  & ul li a:hover {
     background: rgba(200,200,200,0.5);
     transition: 0.4s;
   }
-  ul li a:hover:after {
+  & ul li a:hover:after {
     border-left-color: rgba(200,200,200,0.5);
     transition: 0.4s;
   }
@@ -747,7 +748,7 @@ nav.ampujat {
   background-color: #ddd;
   font-size: 50%;
 
-  ul {
+  & ul {
     padding-top: .4rem;
     padding-bottom: .4rem;
     width: 100%;
@@ -757,7 +758,7 @@ nav.ampujat {
 
   }
 
-  ul li {
+  & ul li {
     background-color: #8f9d8f;
     border-radius: .8rem;
     margin-right: .2rem;
@@ -768,8 +769,6 @@ nav.ampujat {
     display: flex;
   }
 }
-
-
 
 span.active {
   background: white;
@@ -785,7 +784,7 @@ table.rasti {
   background: var(--vari2);
   color: #222;
   width: 100%;
-  td {
+  & td {
     background: rgba(255,255,255,0.5);
     text-align: center;
   }
@@ -811,13 +810,13 @@ th.taulu {
   background-position: top;
   background-color: var(--vari2);
   &.ok {
-    span {
+    & span {
       color: darkgreen;
       font-weight: bold;
     }
   }
   &.notok {
-    span {
+    & span {
       color: #4d4032;
       font-weight: normal;
 
@@ -847,7 +846,7 @@ th.aika.ok {
   color: darkgreen;
   font-size: 140%;
   transition: 1s;
-  span {
+  & span {
     color: darkgreen;
   }
 }
@@ -867,11 +866,11 @@ input.sekunnit {
 
 .rasti.dq {
   background-color: #c7c7c7;
-  tr { background-color: #c7c7c7; }
-  th {background-color: #c7c7c7;}
-  td {
+  & tr { background-color: #c7c7c7; }
+  & th {background-color: #c7c7c7;}
+  & td {
     background-color: #c7c7c7;
-    input { background-color: #c7c7c7; }
+    & input { background-color: #c7c7c7; }
   }
 }
 

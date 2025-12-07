@@ -66,10 +66,14 @@ a, .green {
 
   &.danger {
     background-color: darkred;
-    color: #eee
+    color: #eee;
+    border-radius: 5px;
+    border: none;
   }
 
 }
+
+
 
 
 @media (hover: hover) {
