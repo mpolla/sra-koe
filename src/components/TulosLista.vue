@@ -300,28 +300,28 @@ async function createPdf(ampuja: string) {
 
       <div v-if="naytaKoetilaisuudenTiedot" class="accordion-content">
 
-        <fieldset>
+        <fieldset v-if="muokkausTila || pisteetStore.koetilaisuus_paikka != '' || pisteetStore.koetilaisuus_paiva != ''">
           <legend>Paikka ja aika</legend>
-          <div v-if="muokkausTila">
-            <div>
+          <div>
+            <div v-if="muokkausTila || pisteetStore.koetilaisuus_paikka != ''">
               📍<input id="koetilaisuus_paikka" v-model="pisteetStore.koetilaisuus_paikka" placeholder="Paikka" :readonly="!muokkausTila"/>
             </div>
-            <div>
+            <div v-if="muokkausTila || pisteetStore.koetilaisuus_paiva != ''">
               📅<input id="koetilaisuus_paiva" v-model="pisteetStore.koetilaisuus_paiva" type="date" :readonly="!muokkausTila"/>
             </div>
           </div>
         </fieldset>
 
-        <fieldset>
+        <fieldset v-if="muokkausTila || pisteetStore.tuomari_nimi !==''">
           <legend>Vastaanottava tuomari</legend>
           <div>
-            <div>
+            <div v-if="muokkausTila || pisteetStore.tuomari_nimi !==''">
               &#x1F464;<input id="tuomari_nimi" v-model="pisteetStore.tuomari_nimi" placeholder="Nimi" :readonly="!muokkausTila"/>
             </div>
-            <div>
+            <div v-if="muokkausTila || pisteetStore.tuomari_sraid !==''">
               &#x1FAAA;<input v-model="pisteetStore.tuomari_sraid" placeholder="SRA ID" :readonly="!muokkausTila"/>
             </div>
-            <div>
+            <div v-if="muokkausTila || pisteetStore.tuomari_puhelin !==''">
               &#x1F4DE;<input v-model="pisteetStore.tuomari_puhelin" placeholder="Puhelin" :readonly="!muokkausTila"/>
             </div>
           </div>
@@ -513,6 +513,7 @@ fieldset {
 
 input:read-only {
   background-color: #eee;
+  border: none;
 }
 
 </style>
