@@ -20,8 +20,8 @@ const pisteetStore = usePisteetStore()
   </p>
   <ol class="kasittelysaannot">
     <li><b>Asetta on aina käsiteltävä kuin se olisi ladattu</b>.
-      Ei ole merkitystä, onko ase ladattu tai onko ase toimimaton käsittelyase, käsitte-
-      lyn on aina oltava samanlaista.</li>
+      Ei ole merkitystä, onko ase ladattu tai onko ase toimimaton käsittelyase, käsittelyn on aina oltava
+      samanlaista.</li>
     <li>Piippukontrolli, <b>aseen piipun on aina osoitettava turvalliseen suuntaan</b>.
       "Laser-sääntö", aseella ei saa koskaan osoittaa mitään sellaista, jota ei halua
       tuhota.</li>
