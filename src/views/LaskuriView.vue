@@ -4,6 +4,8 @@ import {RastiSuorituksenTila, SraAmpumakoe} from '@/classes/SraAmpumakoe'
 import {usePisteetStore} from '@/stores/pisteet'
 import {useRoute} from 'vue-router'
 import RastiPisteRivi from '@/components/RastiPisteRivi.vue'
+import { Clock, Check, SoundLow, SoundOff, InfoCircle, Prohibition, Undo } from '@iconoir/vue';
+
 
 const route = useRoute()
 const pisteetStore = usePisteetStore()
@@ -332,13 +334,13 @@ const confirmKeskenerainenKirjaus = (ampuja: string, rasti: number) => {
       </fieldset>
 
       <div class="actions">
-        <button v-if="!(ampuja in pisteetStore.hylkaykset)" class="action dq" @click="kirjaaHylkays(ampuja)">Kirjaa hylkäys</button>
-        <button v-else @click="peruHylkays(ampuja as string)">Peru hylkäys</button>
+        <button v-if="!(ampuja in pisteetStore.hylkaykset)" class="action dq" @click="kirjaaHylkays(ampuja)"><Prohibition/> Kirjaa hylkäys</button>
+        <button v-else @click="peruHylkays(ampuja as string)" class="action"><Undo/> Peru hylkäys</button>
 
-        <button class="action" @click="naytaRastiInfo = true">ⓘ Rastikuvaus</button>
+        <button class="action" @click="naytaRastiInfo = true"><InfoCircle/> Rastikuvaus</button>
 
-        <button v-if="pisteetStore.mute === true" class="action" @click="pisteetStore.mute = false">🔊 Poista mykistys</button>
-        <button v-if="pisteetStore.mute === false" class="action" @click="pisteetStore.mute = true">🔇 Mykistä</button>
+        <button v-if="pisteetStore.mute === true" class="action" @click="pisteetStore.mute = false"><SoundLow/> Poista mykistys</button>
+        <button v-if="pisteetStore.mute === false" class="action" @click="pisteetStore.mute = true"><SoundOff/> Mykistä</button>
       </div>
 
       <div class="rasti-info-tausta" v-if="naytaRastiInfo"></div>
@@ -352,30 +354,32 @@ const confirmKeskenerainenKirjaus = (ampuja: string, rasti: number) => {
         </div>
       </div>
 
-
       <table class="rasti" :class="{ dq: ampuja in pisteetStore.hylkaykset }">
         <tbody>
         <tr>
-          <th class="aika" v-bind:class="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[0] > 0 ? 'ok' : 'notok'">{{
-              pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[0] > 0 ? '✔' : '⏱'
-            }}</th>
+          <th class="aika" v-bind:class="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[0] > 0 ? 'ok' : 'notok'">
+            <Check v-if="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[0] > 0" stroke-width="3" color="darkgreen"/>
+            <Clock v-else />
+          </th>
           <td>
             <input id="aika1" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[0]" type="number" @keyup="tulkitseSyotettyAika($event)" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
           </td>
         </tr>
         <tr v-if="rasti in [0, 1]">
-          <th class="aika" v-bind:class="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[1] > 0 ? 'ok' : 'notok'">{{
-              pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[1] > 0 ? '✔' : '⏱'
-            }}</th>
+          <th class="aika" v-bind:class="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[1] > 0 ? 'ok' : 'notok'">
+            <Check v-if="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[1] > 0" stroke-width="3" color="darkgreen"/>
+            <Clock v-else />
+          </th>
           <td>
             <input id="aika2" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[1]" type="number"
                    @keyup="tulkitseSyotettyAika($event)" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
           </td>
         </tr>
         <tr v-if="rasti in [0, 1]">
-          <th class="aika" v-bind:class="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[2] > 0 ? 'ok' : 'notok'">{{
-              pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[2] > 0 ? '✔' : '⏱'
-            }}</th>
+          <th class="aika" v-bind:class="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[2] > 0 ? 'ok' : 'notok'">
+            <Check v-if="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[2] > 0" stroke-width="3" color="darkgreen"/>
+            <Clock v-else />
+          </th>
           <td>
             <input id="aika3" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[2]" type="number"
                    @keyup="tulkitseSyotettyAika($event)" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
@@ -389,8 +393,15 @@ const confirmKeskenerainenKirjaus = (ampuja: string, rasti: number) => {
         <thead>
         <tr>
           <th class="osumaluokka"></th>
-          <th class="taulu" v-bind:class="taulunPisteytysValmis(ampuja, rasti, 0) ? 'ok' : 'notok'"><span>{{  taulunPisteytysValmis(ampuja, rasti, 0) ? '✔' : 'T1' }}</span></th>
-          <th class="taulu" v-bind:class="taulunPisteytysValmis(ampuja, rasti, 1) ? 'ok' : 'notok'"><span>{{  taulunPisteytysValmis(ampuja, rasti, 1) ? '✔' : 'T2' }}</span></th>
+          <th class="taulu" v-bind:class="taulunPisteytysValmis(ampuja, rasti, 0) ? 'ok' : 'notok'"><span>
+            <Check v-if="taulunPisteytysValmis(ampuja, rasti, 0)" stroke-width="3" color="darkgreen"/>
+            <span v-else>T1</span>
+          </span>
+          </th>
+          <th class="taulu" v-bind:class="taulunPisteytysValmis(ampuja, rasti, 1) ? 'ok' : 'notok'"><span>
+            <Check v-if="taulunPisteytysValmis(ampuja, rasti, 1)" stroke-width="3" color="darkgreen"/>
+            <span v-else>T1</span>
+          </span></th>
           <th class="osumat">Osumat</th>
           <th class="pisteet">Pisteet</th>
         </tr>
@@ -565,12 +576,6 @@ div.rasti-info {
   & a {
     display: flex;
     font-size: 180%;
-  }
-  ::before {
-    content: '🚫';
-    color: transparent;
-    text-shadow: 0 0 0 #754444;
-    padding-right: .4rem;
   }
 }
 
@@ -879,7 +884,5 @@ input.sekunnit {
   margin-top: 1rem;
   text-align: right;
 }
-
-
 
 </style>

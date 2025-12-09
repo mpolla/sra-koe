@@ -4,10 +4,11 @@
 // https://commons.wikimedia.org/wiki/File:200909-F-NS874-1163_-_7th_SFG_Soldiers_conduct_Best_ODA_Competition_(Image_12_of_13).jpg
 
 import { usePisteetStore } from '@/stores/pisteet'
-import {computed, ref} from "vue";
+import { ref } from "vue";
 import { RastiSuorituksenTila, SraAmpumakoe } from "@/classes/SraAmpumakoe";
 import { PDFDocument, rgb } from 'pdf-lib'
 import download from "downloadjs"
+import { MapPin, Calendar, User, CardShield, Phone  } from '@iconoir/vue';
 
 const pisteetStore = usePisteetStore()
 
@@ -314,10 +315,10 @@ async function createPdf(ampuja: string) {
           <legend>Paikka ja aika</legend>
           <div>
             <div v-if="muokkausTila || pisteetStore.koetilaisuus_paikka != ''">
-              📍<input id="koetilaisuus_paikka" v-model="pisteetStore.koetilaisuus_paikka" placeholder="Paikka" :readonly="!muokkausTila"/>
+              <MapPin/><input id="koetilaisuus_paikka" v-model="pisteetStore.koetilaisuus_paikka" placeholder="Paikka" :readonly="!muokkausTila"/>
             </div>
             <div v-if="muokkausTila || pisteetStore.koetilaisuus_paiva != ''">
-              📅<input id="koetilaisuus_paiva" v-model="pisteetStore.koetilaisuus_paiva" type="date" :readonly="!muokkausTila"/>
+              <Calendar/><input id="koetilaisuus_paiva" v-model="pisteetStore.koetilaisuus_paiva" type="date" :readonly="!muokkausTila"/>
             </div>
           </div>
         </fieldset>
@@ -326,13 +327,13 @@ async function createPdf(ampuja: string) {
           <legend>Vastaanottava tuomari</legend>
           <div>
             <div v-if="muokkausTila || pisteetStore.tuomari_nimi !==''">
-              &#x1F464;<input id="tuomari_nimi" v-model="pisteetStore.tuomari_nimi" placeholder="Nimi" :readonly="!muokkausTila"/>
+              <User/><input id="tuomari_nimi" v-model="pisteetStore.tuomari_nimi" placeholder="Nimi" :readonly="!muokkausTila"/>
             </div>
             <div v-if="muokkausTila || pisteetStore.tuomari_sraid !==''">
-              &#x1FAAA;<input v-model="pisteetStore.tuomari_sraid" placeholder="SRA ID" :readonly="!muokkausTila"/>
+              <CardShield/><input v-model="pisteetStore.tuomari_sraid" placeholder="SRA ID" :readonly="!muokkausTila"/>
             </div>
             <div v-if="muokkausTila || pisteetStore.tuomari_puhelin !==''">
-              &#x1F4DE;<input v-model="pisteetStore.tuomari_puhelin" placeholder="Puhelin" :readonly="!muokkausTila"/>
+              <Phone/><input v-model="pisteetStore.tuomari_puhelin" placeholder="Puhelin" :readonly="!muokkausTila"/>
             </div>
           </div>
         </fieldset>
@@ -519,6 +520,15 @@ fieldset {
   margin: .1rem 0 .5rem 0;
   display: flex;
   justify-content: space-between;
+
+  & div div {
+    display: flex;
+    margin: .2rem 0 .2rem 0;
+
+    & input {
+      margin-left: .5rem;
+    }
+  }
 }
 
 input:read-only {

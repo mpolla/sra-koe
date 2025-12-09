@@ -30,13 +30,6 @@ html {
   background-color: #c2b5b5;
 }
 
-button.dq::before {
-  content: '🚫';
-  padding-right: .3rem;
-  color: transparent;
-  text-shadow: 0 0 0 black;
-}
-
 .un-dq {
   background-color: maroon;
   color: #ddd;
@@ -63,6 +56,9 @@ a, .green {
 .action {
   font-size: 120%;
   padding: .25rem;
+  display: flex;
+  min-width: 10rem;
+  justify-content: space-evenly;
 
   &.danger {
     background-color: darkred;
