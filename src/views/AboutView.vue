@@ -45,6 +45,12 @@ const version = __APP_VERSION__
 
     <h2>Versiohistoria</h2>
 
+    <h3>0.7.0 (9.12.2025)</h3>
+    <ul>
+      <li>Iconoir-kuvakkeiden käyttöönotto.</li>
+      <li>CSS: Asettelun korjauksia.</li>
+    </ul>
+
     <h3>0.6.4 (4.12.2025)</h3>
     <ul>
       <li>Korjauksia käyttöliittymän asetteluun.</li>

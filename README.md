@@ -24,7 +24,6 @@ Jos löydät puutteita tai haluat ehdottaa parannuksia, ota yhteyttä kehittäj�
 Päivitä muutosloki `src/views/AboutView.vue`
 
     npm version minor
-    npm tag x.y.z
     npm run predeploy
     npm run deploy
 
