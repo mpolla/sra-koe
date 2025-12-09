@@ -24,6 +24,13 @@ html {
   margin-top: .8rem;
   display: flex;
   justify-content: space-between;
+  flex-flow: wrap;
+  margin-bottom: .4rem;
+
+  .action {
+    margin-bottom: .5rem;
+  }
+
 }
 
 .return {
@@ -57,7 +64,7 @@ a, .green {
   font-size: 120%;
   padding: .25rem;
   display: flex;
-  min-width: 10rem;
+  min-width: 6rem;
   justify-content: space-evenly;
 
   &.danger {

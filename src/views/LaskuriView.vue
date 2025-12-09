@@ -866,10 +866,6 @@ input.sekunnit {
   height: 1.5rem;
 }
 
-.actions {
-  margin-bottom: .4rem;
-}
-
 .rasti.dq {
   background-color: #c7c7c7;
   & tr { background-color: #c7c7c7; }
