@@ -4,21 +4,21 @@
 // https://commons.wikimedia.org/wiki/File:200909-F-NS874-1163_-_7th_SFG_Soldiers_conduct_Best_ODA_Competition_(Image_12_of_13).jpg
 
 import { usePisteetStore } from '@/stores/pisteet'
-import { ref } from "vue";
+import {computed, ref} from "vue";
 import { RastiSuorituksenTila, SraAmpumakoe } from "@/classes/SraAmpumakoe";
 import { PDFDocument, rgb } from 'pdf-lib'
 import download from "downloadjs"
 
 const pisteetStore = usePisteetStore()
 
-let lisattavapelaaja = ref('')
+let lisattavaAmpuja = ref('')
 
 // Ampujien listaus näytetään heti muokkaustilassa jos lista on tyhjä
 let muokkausTila = ref(Object.keys(pisteetStore.pisteet).length < 1)
 
-let naytaKoetilaisuudenTiedot = ref(false)
+let toggleKoetilaisuudenTiedot = ref(false)
 
-const lisaaPelaaja = (nimi: string) => {
+const lisaaAmpuja = (nimi: string) => {
   if (nimi == null || nimi == '') {
     return
   }
@@ -32,8 +32,8 @@ const lisaaPelaaja = (nimi: string) => {
     console.warn("Ampuja etunimellä " + lisattavanEtunimi + " on jo listalla. Lisää sukunimi.")
     return
   }
-  pisteetStore.lisaaPelaaja(nimi)
-  lisattavapelaaja.value = ''
+  pisteetStore.lisaaAmpuja(nimi)
+  lisattavaAmpuja.value = ''
 }
 
 const muotoileOsumakerroin = (osumakerroin: number) => {
@@ -93,6 +93,15 @@ const vahvistaPoisto = (ampuja: string) => {
   }
 }
 
+/**
+ * Näytetään koetilaisuuden tiedot jos käyttäjän on klikannut ne näkyväksi tai jos mikä tahansa tieto on syötetty.
+ */
+function naytaKoetilaisuudenTiedot(): boolean {
+  return toggleKoetilaisuudenTiedot.value  || pisteetStore.tuomari_nimi != '' || pisteetStore.tuomari_sraid != ''
+      || pisteetStore.tuomari_puhelin != '' || pisteetStore.koetilaisuus_paikka != ''
+      || pisteetStore.koetilaisuus_paiva != ''
+}
+
 const reset = () => {
   if (confirm("Haluatko todella tyhjentää listan ja poistaa kaikki tulokset?")) {
     pisteetStore.reset()
@@ -105,8 +114,6 @@ const kirjaaHylkays = (ampuja: string) => {
     pisteetStore.kirjaaHylkays(ampuja, peruste)
   }
 }
-
-
 
 const muokkaaLabel = () => {
   return muokkausTila.value ? "Jatka" : "Muokkaa listaa"
@@ -155,12 +162,12 @@ async function createPdf(ampuja: string) {
       // Taulu 2
       pages[0].drawText(muotoileLuku(pisteetStore.pisteet[ampuja][rasti][rivi][1]), {x: T2_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi)*ROW_H, size: 10})
       // Osumat
-      pages[0].drawText(muotoileLuku(pisteetStore.getPelaajaRastiLuokkaOsumat(ampuja, Number(rasti))[rivi]), {x: OSUMAT_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi)*ROW_H, size: 10})
+      pages[0].drawText(muotoileLuku(pisteetStore.getAmpujaRastiLuokkaOsumat(ampuja, Number(rasti))[rivi]), {x: OSUMAT_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi)*ROW_H, size: 10})
       // Pisteet
-      pages[0].drawText(muotoileLuku(pisteetStore.getPelaajaRastiPisteet(ampuja, Number(rasti))[rivi]), {x: PISTEET_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi)*ROW_H, size: 10})
+      pages[0].drawText(muotoileLuku(pisteetStore.getAmpujaRastiPisteet(ampuja, Number(rasti))[rivi]), {x: PISTEET_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi)*ROW_H, size: 10})
       // Aika
       if (Number(rivi) < 3) {
-        pages[0].drawText(muotoileAika(pisteetStore.getPelaajanRastiAjat(ampuja, Number(rasti))[rivi]), {x: AIKA_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi) * ROW_H, size: 10})
+        pages[0].drawText(muotoileAika(pisteetStore.getAmpujanRastiaAjat(ampuja, Number(rasti))[rivi]), {x: AIKA_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi) * ROW_H, size: 10})
       }
     }
 
@@ -169,14 +176,14 @@ async function createPdf(ampuja: string) {
     }
 
     // Yhteenlasketut pisteet ja aika
-    pages[0].drawText(muotoileLuku(pisteetStore.getPelaajaRastiPisteSumma(ampuja, Number(rasti))), {x: PISTEET_X, y: RASTI_Y_OFFSET[rasti] - 5 * ROW_H, size: 10})
-    pages[0].drawText(muotoileAika(pisteetStore.getPelaajanRastiAika(ampuja as string, Number(rasti))), {x: AIKA_X, y: RASTI_Y_OFFSET[rasti] - 5 * ROW_H, size: 10})
+    pages[0].drawText(muotoileLuku(pisteetStore.getAmpujaRastiPisteSumma(ampuja, Number(rasti))), {x: PISTEET_X, y: RASTI_Y_OFFSET[rasti] - 5 * ROW_H, size: 10})
+    pages[0].drawText(muotoileAika(pisteetStore.getAmpujanRastiAika(ampuja as string, Number(rasti))), {x: AIKA_X, y: RASTI_Y_OFFSET[rasti] - 5 * ROW_H, size: 10})
   }
 
   // Aikasumma, pistesumma, osumakerroin
-  pages[0].drawText(muotoileLuku(pisteetStore.getPelaajanPisteSumma(ampuja)), {x: 552, y: 165, size: 10})
-  pages[0].drawText(muotoileAika(pisteetStore.getPelaajanAikaSumma(ampuja)), {x: 552, y: 149, size: 10})
-  pages[0].drawText(muotoileOsumakerroinPdf(pisteetStore.getPelaajanOsumakerroin(ampuja as string)), {x: 552, y: 137, size: 10})
+  pages[0].drawText(muotoileLuku(pisteetStore.getAmpujanPisteSumma(ampuja)), {x: 552, y: 165, size: 10})
+  pages[0].drawText(muotoileAika(pisteetStore.getAmpujanAikaSumma(ampuja)), {x: 552, y: 149, size: 10})
+  pages[0].drawText(muotoileOsumakerroinPdf(pisteetStore.getAmpujanOsumakerroin(ampuja as string)), {x: 552, y: 137, size: 10})
 
   function tuomarinTiedot() {
     var tuomarinTiedot = ""
@@ -191,7 +198,7 @@ async function createPdf(ampuja: string) {
   }
 
   // X Hyväksytty
-  let hf = pisteetStore.getPelaajanOsumakerroin(ampuja as string)
+  let hf = pisteetStore.getAmpujanOsumakerroin(ampuja as string)
   if (pisteetStore.hylkaykset[ampuja] == undefined  && (pisteetStore.getKaikkiAmmuttu(ampuja) && hf >= SraAmpumakoe.vaadittuOsumakerroin)) {
     pages[0].drawText('X', {x: 336, y: 83, size: 18})
   }
@@ -217,11 +224,12 @@ async function createPdf(ampuja: string) {
   download(pdfBytes, "sra-ampumakoe-" + (new Date()).toISOString().substring(0,10) + "-" +ampuja.replace(" ", "-")+ ".pdf", "application/pdf");
 }
 
+// Syötä ampujat kehityskäytössä automaattisesti
 // onMounted(() => {
-//   lisaaPelaaja('Katriina')
-//   lisaaPelaaja('Maija')
-//   lisaaPelaaja('Heidi')
-//   lisaaPelaaja('Tiina')
+//   lisaaAmpuja('Katriina')
+//   lisaaAmpuja('Maija')
+//   lisaaAmpuja('Heidi')
+//   lisaaAmpuja('Tiina')
 // })
 
 </script>
@@ -264,10 +272,12 @@ async function createPdf(ampuja: string) {
               <a :href="'kirjaus/' + rasti + '/' + ampuja">{{ rasti+1 }}</a></div>
           </td>
           <td>
-          <span id="tulos" v-bind:class="muotoileTulos(pisteetStore.getKaikkiRastitSuoritettu(ampuja as string), pisteetStore.getPelaajanOsumakerroin(ampuja as string), ampuja as string)">
-          {{ muotoileTulos(pisteetStore.getKaikkiRastitSuoritettu(ampuja as string), pisteetStore.getPelaajanOsumakerroin(ampuja as string), ampuja as string) }}
+          <span id="tulos" v-bind:class="muotoileTulos(pisteetStore.getKaikkiRastitSuoritettu(ampuja as string), pisteetStore.getAmpujanOsumakerroin(ampuja as string), ampuja as string)">
+          {{
+              muotoileTulos(pisteetStore.getKaikkiRastitSuoritettu(ampuja as string), pisteetStore.getAmpujanOsumakerroin(ampuja as string), ampuja as string)
+            }}
           </span>
-            {{ muotoileOsumakerroin(pisteetStore.getPelaajanOsumakerroin(ampuja as string)) }}
+            {{ muotoileOsumakerroin(pisteetStore.getAmpujanOsumakerroin(ampuja as string)) }}
           </td>
 
           <td><button @click="createPdf(ampuja as string)">PDF</button></td>
@@ -279,8 +289,8 @@ async function createPdf(ampuja: string) {
 
       <fieldset v-if="muokkausTila" >
         <legend>Lisää ampuja</legend>
-        <input placeholder="Ampujan nimi" id="uusinimi" name="uusinimi" v-model="lisattavapelaaja" v-on:keyup.enter="lisaaPelaaja(lisattavapelaaja)"/>
-        <button class="action" value="Lisää" @click="lisaaPelaaja(lisattavapelaaja);pisteetStore.turvallisuuskoulutusSuoritettu = false;">Lisää</button>
+        <input placeholder="Ampujan nimi" id="uusinimi" name="uusinimi" v-model="lisattavaAmpuja" v-on:keyup.enter="lisaaAmpuja(lisattavaAmpuja)"/>
+        <button class="action" value="Lisää" @click="lisaaAmpuja(lisattavaAmpuja);pisteetStore.turvallisuuskoulutusSuoritettu = false;">Lisää</button>
       </fieldset>
 
 
@@ -293,12 +303,12 @@ async function createPdf(ampuja: string) {
       </fieldset>
 
       <div>
-        <div v-if="muokkausTila" @click="naytaKoetilaisuudenTiedot = !naytaKoetilaisuudenTiedot" class="accordion-header">
+        <div v-if="muokkausTila" @click="toggleKoetilaisuudenTiedot = !toggleKoetilaisuudenTiedot" class="accordion-header">
           <h3>Koetilaisuus »</h3>
         </div>
       </div>
 
-      <div v-if="naytaKoetilaisuudenTiedot" class="accordion-content">
+      <div v-if="naytaKoetilaisuudenTiedot()" class="accordion-content">
 
         <fieldset v-if="muokkausTila || pisteetStore.koetilaisuus_paikka != '' || pisteetStore.koetilaisuus_paiva != ''">
           <legend>Paikka ja aika</legend>

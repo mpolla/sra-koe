@@ -51,16 +51,6 @@ const pisteSumma = (pist: Array<Array<number>>, luokkaIdx: number) : number => {
     </td>
     <td>{{ osumaSumma(pisteetStore.pisteet[props.ampuja][props.rasti], SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka)) }}</td>
     <td>{{ pisteSumma(pisteetStore.pisteet[props.ampuja][props.rasti], SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka)) }}</td>
-<!--    <td>-->
-<!--      <div class="nowrap">-->
-<!--      <div class="vaihe" v-if="props.rasti < 2 && SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka) < 3">-->
-<!--        {{SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka)+1}}</div><input v-if="props.osumaluokka == 'A'-->
-<!--        || (props.rasti < 2 && SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka) < 3)"-->
-<!--                                                                              class="sekunnit"-->
-<!--                                                                              v-model="pisteetStore.getPelaajanRastiAjat(props.ampuja, props.rasti)[SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka)]"-->
-<!--                                                                              type="number" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>-->
-<!--      </div>-->
-<!--    </td>-->
   </tr>
 
 </template>

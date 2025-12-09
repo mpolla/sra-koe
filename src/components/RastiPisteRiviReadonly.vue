@@ -5,7 +5,11 @@
     <td class="kuulakarkikyna">{{ osumaLkmTaulu1 > 0 ? osumaLkmTaulu1 : "" }}</td>
     <td class="kuulakarkikyna">{{ osumaSumma(pisteetStore.pisteet[props.ampuja][props.rasti], SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka)) > 0 ? osumaSumma(pisteetStore.pisteet[props.ampuja][props.rasti], SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka)) : "" }}</td>
     <td class="kuulakarkikyna">{{ pisteSumma(pisteetStore.pisteet[props.ampuja][props.rasti], SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka)) > 0 ? pisteSumma(pisteetStore.pisteet[props.ampuja][props.rasti], SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka)) : "" }}</td>
-    <td class="kuulakarkikyna"><span class="vaihe" v-if="props.rasti < 2 && SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka) < 3">{{ SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka) }}</span> {{ pisteetStore.getPelaajanRastiAjat(props.ampuja, props.rasti)[SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka)] > 0 ? pisteetStore.getPelaajanRastiAjat(props.ampuja, props.rasti)[SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka)] : "" }} </td>
+    <td class="kuulakarkikyna"><span class="vaihe" v-if="props.rasti < 2 && SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka) < 3">{{ SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka) }}</span>
+      {{
+        pisteetStore.getAmpujanRastiaAjat(props.ampuja, props.rasti)[SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka)] > 0 ? pisteetStore.getAmpujanRastiaAjat(props.ampuja, props.rasti)[SraAmpumakoe.osumaluokat.indexOf(props.osumaluokka)] : ""
+      }}
+    </td>
   </tr>
 
 </template>

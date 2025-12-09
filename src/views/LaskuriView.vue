@@ -188,8 +188,8 @@ const rastinOsumakerroin = (ampuja: string, rasti: number): number => {
   if (pisteetStore.getRastiSuorituksenTila(ampuja, rasti) !== RastiSuorituksenTila.Suoritettu) {
     return 0
   }
-  const pisteet = pisteetStore.getPelaajaRastiPisteSumma(ampuja, rasti)
-  const aika = pisteetStore.getPelaajanRastiAika(ampuja, rasti)
+  const pisteet = pisteetStore.getAmpujaRastiPisteSumma(ampuja, rasti)
+  const aika = pisteetStore.getAmpujanRastiAika(ampuja, rasti)
   return pisteet/aika
 }
 
@@ -269,11 +269,11 @@ const tulkitseSyotettyAika = (event: Event) => {
 const confirmKeskenerainenKirjaus = (ampuja: string, rasti: number) => {
   if (
       // Ensimmäinen aika puuttuu (mikä tahansa rasti)
-      !(pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0] > 0)
+      !(pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[0] > 0)
       // Toinen aika puuttuu (rasti 1 ja 2)
-      || ([0, 1].includes(rasti) && !(pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[1] > 0))
+      || ([0, 1].includes(rasti) && !(pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[1] > 0))
       // Kolmas aika puuttuu
-      || ([0, 1].includes(rasti) && !(pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[2] > 0))
+      || ([0, 1].includes(rasti) && !(pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[2] > 0))
       // Ensimmäisen taulun pisteytys on kesken
       || !taulunPisteytysValmis(ampuja, rasti, 0)
       // Toisen taulun pisteytys on kesken
@@ -356,22 +356,28 @@ const confirmKeskenerainenKirjaus = (ampuja: string, rasti: number) => {
       <table class="rasti" :class="{ dq: ampuja in pisteetStore.hylkaykset }">
         <tbody>
         <tr>
-          <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0] > 0 ? 'ok' : 'notok'">{{ pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0] > 0 ? '✔' : '⏱' }}</th>
+          <th class="aika" v-bind:class="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[0] > 0 ? 'ok' : 'notok'">{{
+              pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[0] > 0 ? '✔' : '⏱'
+            }}</th>
           <td>
-            <input id="aika1" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[0]" type="number" @keyup="tulkitseSyotettyAika($event)" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
+            <input id="aika1" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[0]" type="number" @keyup="tulkitseSyotettyAika($event)" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
           </td>
         </tr>
         <tr v-if="rasti in [0, 1]">
-          <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[1] > 0 ? 'ok' : 'notok'">{{ pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[1] > 0 ? '✔' : '⏱' }}</th>
+          <th class="aika" v-bind:class="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[1] > 0 ? 'ok' : 'notok'">{{
+              pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[1] > 0 ? '✔' : '⏱'
+            }}</th>
           <td>
-            <input id="aika2" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[1]" type="number"
+            <input id="aika2" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[1]" type="number"
                    @keyup="tulkitseSyotettyAika($event)" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
           </td>
         </tr>
         <tr v-if="rasti in [0, 1]">
-          <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[2] > 0 ? 'ok' : 'notok'">{{ pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[2] > 0 ? '✔' : '⏱' }}</th>
+          <th class="aika" v-bind:class="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[2] > 0 ? 'ok' : 'notok'">{{
+              pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[2] > 0 ? '✔' : '⏱'
+            }}</th>
           <td>
-            <input id="aika3" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getPelaajanRastiAjat(ampuja, rasti)[2]" type="number"
+            <input id="aika3" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[2]" type="number"
                    @keyup="tulkitseSyotettyAika($event)" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
           </td>
         </tr>
@@ -387,7 +393,6 @@ const confirmKeskenerainenKirjaus = (ampuja: string, rasti: number) => {
           <th class="taulu" v-bind:class="taulunPisteytysValmis(ampuja, rasti, 1) ? 'ok' : 'notok'"><span>{{  taulunPisteytysValmis(ampuja, rasti, 1) ? '✔' : 'T2' }}</span></th>
           <th class="osumat">Osumat</th>
           <th class="pisteet">Pisteet</th>
-          <!--        <th class="aika" v-bind:class="pisteetStore.getPelaajanRastiAika(ampuja, rasti) > 0 ? 'ok' : 'notok'">Aika</th>-->
         </tr>
         </thead>
         <tbody>
@@ -399,9 +404,7 @@ const confirmKeskenerainenKirjaus = (ampuja: string, rasti: number) => {
           <td class="inv"></td>
           <td></td>
           <td></td>
-          <td>{{ pisteetStore.getPelaajaRastiPisteSumma(ampuja, rasti) }}</td>
-          <!--        <td>{{ (pisteetStore.getPelaajanRastiAika(ampuja, rasti)).toFixed(2) }}-->
-          <!--        </td>-->
+          <td>{{ pisteetStore.getAmpujaRastiPisteSumma(ampuja, rasti) }}</td>
         </tr>
 
         </tbody>
@@ -410,8 +413,6 @@ const confirmKeskenerainenKirjaus = (ampuja: string, rasti: number) => {
 
       <div class="actions">
         <button class="action" @click="confirmKeskenerainenKirjaus(ampuja, rasti) && $router.push(edellinenLinkki(rasti, ampuja))">Edellinen ampuja</button>
-        <!--      <button class="action tuloslista" @click="$router.push('/')">Palaa tuloslistaan</button>-->
-        <!--      <button class="action" :disabled="pisteetStore.getRastiSuorituksenTila(ampuja, rasti) != RastiSuorituksenTila.Suoritettu" @click="$router.push(seuraavaLinkki(rasti, ampuja))">Seuraava</button>-->
         <button class="action" @click="confirmKeskenerainenKirjaus(ampuja, rasti) && $router.push(seuraavaLinkki(rasti, ampuja))">Seuraava ampuja</button>
       </div>
     </div>
