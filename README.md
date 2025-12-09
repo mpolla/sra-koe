@@ -11,14 +11,22 @@ Sovellus tallentaa tiedot ainoastaan paikalliseen päätelaitteeseen. Tietoja ei
 
 Jos löydät puutteita tai haluat ehdottaa parannuksia, ota yhteyttä kehittäjään mpo@iki.fi
 
-## Tulevia kehityskohteita
-
-- TODO Ulkoasun pienet päivitykset iPhone/iOS alustalla.
-- TODO Keskeneräisen suorituksen osumakerroin näkyviin (eli HF "väliaikatulos") jotta suorituksen läpi meneminen on helpompi ennustaa kesken koetilaisuuden.
-
 ## Kehittäminen
 
     npm run dev
+
+## Testaus
+
+    npm run test:e2e
+
+## Julkaiseminen
+
+Päivitä muutosloki `src/views/AboutView.vue`
+
+    npm version minor
+    npm tag x.y.z
+    npm run predeploy
+    npm run deploy
 
 <!--
 
