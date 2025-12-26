@@ -1,5 +1,5 @@
 # Simuloi kehityskäytössä GH pages -asennusta
-# https://mpolla.github.io/sra-ampumakoe-laskuri/
+# https://mpolla.github.io/sra-koe/
 services:
   proxy:
     image: nginx:alpine
