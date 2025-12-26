@@ -6,7 +6,7 @@
     <title>Redirecting…</title>
     <script>
         (function () {
-            const base = '/sra-ampumakoe-laskuri';
+            const base = '/sra-koe';
             const fullPath = location.pathname + location.search + location.hash;
             const route = fullPath.replace(base, '') || '/';
             sessionStorage.setItem('redirectPath', route);
