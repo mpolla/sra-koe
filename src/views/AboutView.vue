@@ -40,7 +40,7 @@ const version = __APP_VERSION__
       <a href="mailto:mpo@iki.fi">mpo@iki.fi</a>.
     </p>
     <p>
-      <a href="https://github.com/mpolla/sra-ampumakoe-laskuri">Projekti Githubissa</a>
+      <a href="https://github.com/mpolla/sra-koe">Projekti Githubissa</a>
     </p>
 
     <h2>Versiohistoria</h2>
