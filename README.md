@@ -1,11 +1,9 @@
-# SRA ampumakokeen pistelaskuri
+# SRA ampumakokeen pisteytyssovellus
 
 Toimiva sovellus osoitteessa https://mpolla.github.io/sra-koe/
 
 Tämä on selainsovellus [SRA](https://resul.fi/sra/) (Sovellettu Reserviläisammunta) toiminnallisen ampumalajin 
 ampumakoneen pisteiden laskentaan.
-
-*Huom.* Sovellus on testivaiheessa - tarkista toimivuus omalla laitteellasi ennen käyttämistä todellisessa koetilanteessa.
 
 Sovellus tallentaa tiedot ainoastaan paikalliseen päätelaitteeseen. Tietoja ei tallennneta tai jaeta verkkopalvelimilla.
 
