@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import PisteLaskuri from '../views/LaskuriView.vue'
+import Ampuja from '../views/Ampuja.vue'
 import TulosLista from "@/components/TulosLista.vue";
 
 const router = createRouter({
@@ -9,6 +10,11 @@ const router = createRouter({
       path: '/',
       name: 'tuloslista',
       component: TulosLista
+    },
+    {
+      path: '/ampuja/:ampuja',
+      name: 'ampuja',
+      component: Ampuja
     },
     {
       path: '/kirjaus/:rasti/:ampuja',

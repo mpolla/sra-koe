@@ -6,9 +6,8 @@
 import { usePisteetStore } from '@/stores/pisteet'
 import { ref } from "vue";
 import { RastiSuorituksenTila, SraAmpumakoe } from "@/classes/SraAmpumakoe";
-import { PDFDocument, rgb } from 'pdf-lib'
-import download from "downloadjs"
-import { MapPin, Calendar, User, CardShield, Phone  } from '@iconoir/vue';
+import { MapPin, Calendar, User, CardShield, Phone, UserSquare  } from '@iconoir/vue';
+import { PdfPoytakirja } from "@/classes/PdfPoytakirja";
 
 const pisteetStore = usePisteetStore()
 
@@ -43,15 +42,6 @@ const muotoileOsumakerroin = (osumakerroin: number) => {
   }
   else {
     return "(" + osumakerroin.toFixed(2) + ")"
-  }
-}
-
-const muotoileOsumakerroinPdf = (osumakerroin: number) => {
-  if (osumakerroin == null || isNaN(osumakerroin)) {
-    return ""
-  }
-  else {
-    return osumakerroin.toFixed(2)
   }
 }
 
@@ -109,122 +99,6 @@ const reset = () => {
   }
 }
 
-const kirjaaHylkays = (ampuja: string) => {
-  const peruste = window.prompt("Ampujan " + ampuja + " hylkäämisen syy?", "") as string
-  if (peruste != null && peruste !== "") {
-    pisteetStore.kirjaaHylkays(ampuja, peruste)
-  }
-}
-
-const muokkaaLabel = () => {
-  return muokkausTila.value ? "Jatka" : "Muokkaa listaa"
-}
-
-const muotoileLuku = (luku: number) : string => {
-  if (luku == 0) {
-    return ""
-  } else {
-    return luku.toString()
-  }
-}
-
-const muotoileAika = (luku: number) : string => {
-  if (luku == 0 || luku == undefined) {
-    return ""
-  } else {
-    return luku.toFixed(2)
-  }
-}
-
-async function createPdf(ampuja: string) {
-
-  const RASTI_Y_OFFSET = [687, 573, 469, 366, 262]
-
-  const ROW_H = 12
-
-  const T1_X = 393
-  const T2_X = 427
-  const OSUMAT_X = 465
-  const PISTEET_X = 505
-  const AIKA_X = 538
-
-  const fontBytes = await fetch('sra-ampumakoe.pdf').then((res) => res.arrayBuffer());
-  const pdfDoc = await PDFDocument.load(fontBytes)
-  const pages = pdfDoc.getPages()
-
-  pages[0].setFontColor(rgb(0.1, 0.1, 0.97))
-
-  pages[0].drawText(ampuja, {x: 60, y: 714, size: 12})
-
-  for (let rasti in SraAmpumakoe.rastit) {
-    for (let rivi in [0,1,2,3,4,5]) {
-      // Taulu 1
-      pages[0].drawText(muotoileLuku(pisteetStore.pisteet[ampuja][rasti][rivi][0]), {x: T1_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi)*ROW_H, size: 10})
-      // Taulu 2
-      pages[0].drawText(muotoileLuku(pisteetStore.pisteet[ampuja][rasti][rivi][1]), {x: T2_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi)*ROW_H, size: 10})
-      // Osumat
-      pages[0].drawText(muotoileLuku(pisteetStore.getAmpujaRastiLuokkaOsumat(ampuja, Number(rasti))[rivi]), {x: OSUMAT_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi)*ROW_H, size: 10})
-      // Pisteet
-      pages[0].drawText(muotoileLuku(pisteetStore.getAmpujaRastiPisteet(ampuja, Number(rasti))[rivi]), {x: PISTEET_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi)*ROW_H, size: 10})
-      // Aika
-      if (Number(rivi) < 3) {
-        pages[0].drawText(muotoileAika(pisteetStore.getAmpujanRastiaAjat(ampuja, Number(rasti))[rivi]), {x: AIKA_X, y: RASTI_Y_OFFSET[rasti] - Number(rivi) * ROW_H, size: 10})
-      }
-    }
-
-    if (pisteetStore.hylkaykset[ampuja] !== undefined) {
-      pages[0].drawText(pisteetStore.hylkaykset[ampuja], {x: 40, y: 50, size: 10})
-    }
-
-    // Yhteenlasketut pisteet ja aika
-    pages[0].drawText(muotoileLuku(pisteetStore.getAmpujaRastiPisteSumma(ampuja, Number(rasti))), {x: PISTEET_X, y: RASTI_Y_OFFSET[rasti] - 5 * ROW_H, size: 10})
-    pages[0].drawText(muotoileAika(pisteetStore.getAmpujanRastiAika(ampuja as string, Number(rasti))), {x: AIKA_X, y: RASTI_Y_OFFSET[rasti] - 5 * ROW_H, size: 10})
-  }
-
-  // Aikasumma, pistesumma, osumakerroin
-  pages[0].drawText(muotoileLuku(pisteetStore.getAmpujanPisteSumma(ampuja)), {x: 552, y: 165, size: 10})
-  pages[0].drawText(muotoileAika(pisteetStore.getAmpujanAikaSumma(ampuja)), {x: 552, y: 149, size: 10})
-  pages[0].drawText(muotoileOsumakerroinPdf(pisteetStore.getAmpujanOsumakerroin(ampuja as string)), {x: 552, y: 137, size: 10})
-
-  function tuomarinTiedot() {
-    var tuomarinTiedot = ""
-    tuomarinTiedot += pisteetStore.tuomari_nimi
-    if (pisteetStore.tuomari_sraid != undefined && pisteetStore.tuomari_sraid != "") {
-      tuomarinTiedot += " (SRA ID " + pisteetStore.tuomari_sraid + ")"
-    }
-    if (pisteetStore.tuomari_puhelin != undefined && pisteetStore.tuomari_puhelin != "") {
-      tuomarinTiedot += " puh. " + pisteetStore.tuomari_puhelin
-    }
-    return tuomarinTiedot
-  }
-
-  // X Hyväksytty
-  let hf = pisteetStore.getAmpujanOsumakerroin(ampuja as string)
-  if (pisteetStore.hylkaykset[ampuja] == undefined  && (pisteetStore.getKaikkiAmmuttu(ampuja) && hf >= SraAmpumakoe.vaadittuOsumakerroin)) {
-    pages[0].drawText('X', {x: 336, y: 83, size: 18})
-  }
-
-  // X Hylätty
-  if (pisteetStore.hylkaykset[ampuja] !== undefined || (pisteetStore.getKaikkiAmmuttu(ampuja) && hf < SraAmpumakoe.vaadittuOsumakerroin)) {
-    pages[0].drawText('X', {x: 399, y: 83, size: 18})
-  }
-
-  // Paikka ja päivämäärä
-  if (pisteetStore.koetilaisuus_paikka != '') {
-    pages[0].drawText(pisteetStore.koetilaisuus_paikka, {x: 350, y: 69, size: 10})
-  }
-  if (pisteetStore.koetilaisuus_paiva != '') {
-    pages[0].drawText(pisteetStore.koetilaisuus_paiva, {x: 450, y: 69, size: 10})
-  }
-
-
-  // Vastaanottavan tuomarin tiedot
-  pages[0].drawText(tuomarinTiedot(), {x: 312, y: 33, size: 10})
-
-  const pdfBytes = await pdfDoc.save()
-  download(pdfBytes, "sra-ampumakoe-" + (new Date()).toISOString().substring(0,10) + "-" +ampuja.replace(" ", "-")+ ".pdf", "application/pdf");
-}
-
 // Syötä ampujat kehityskäytössä automaattisesti
 // onMounted(() => {
 //   lisaaAmpuja('Katriina')
@@ -266,7 +140,7 @@ async function createPdf(ampuja: string) {
         <tbody>
         <tr v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet" v-bind:class="{dq: pisteetStore.getHylkaysperuste(ampuja as string) }">
           <td class="nimi">
-            {{ ampuja }} <span v-if="ampuja in pisteetStore.hylkaykset">🚫</span>
+            <a :href="'ampuja/' + ampuja"><UserSquare color="#888"/> <span>{{ ampuja }}</span></a>
           </td>
           <td class="rastipallot">
             <div v-bind:key="rasti" class="rastipallo" v-bind:class="mapClass(pisteetStore.getRastiSuorituksenTila(ampuja as string, rasti))"  v-for="rasti in [0,1,2,3,4]">
@@ -281,7 +155,7 @@ async function createPdf(ampuja: string) {
             {{ muotoileOsumakerroin(pisteetStore.getAmpujanOsumakerroin(ampuja as string)) }}
           </td>
 
-          <td><button @click="createPdf(ampuja as string)">PDF</button></td>
+          <td><button @click="(new PdfPoytakirja()).luoPdf(ampuja as string, pisteetStore)">PDF</button></td>
 
           <td v-if="muokkausTila"><button class="danger" @click="vahvistaPoisto(ampuja as string)">🗑 POISTA</button></td>
         </tr>
@@ -395,6 +269,22 @@ table#tuloslista {
       text-align: center;
     }
 
+    & td.nimi {
+      text-align: left;
+      padding-left: .5rem;
+
+      a {
+        color: #333;
+        display: flex;
+
+        span {
+          margin-left: .4rem;
+          font-weight: bold;
+        }
+      }
+    }
+
+
     & th {
       word-wrap: anywhere;
       font-size: 105%;
@@ -415,23 +305,6 @@ table#tuloslista {
           color: #333;
         }
       }
-    }
-  }
-}
-
-#tulos {
-  font-weight: bold;
-  &.KESKEN {
-    color: #2f2f2f;
-  }
-  &.HYVÄKSYTTY {
-    color: darkgreen;
-  }
-  &.HYLÄTTY {
-    color: darkred;
-    :before {
-      content: 'g';
-      background-color: blue;
     }
   }
 }

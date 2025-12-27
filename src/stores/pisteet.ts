@@ -13,6 +13,15 @@ type Hylkaykset = {
 type Rastin5Suoritustavat = {
   [nimi: string]: string
 }
+type Syntymaajat = {
+  [nimi: string]: Date
+}
+type Kurssinumerot = {
+  [nimi: string]: string
+}
+type Yhdistykset = {
+  [nimi: string]: string
+}
 
 const jarjestysOnSama = (a: string[], b: string[]) => {
   return a.length === b.length && a.every((el, idx) => el === b[idx]);
@@ -27,6 +36,9 @@ export const usePisteetStore = defineStore('pisteet', {
     ajat: {} as AmpujaAjat,
     hylkaykset: {} as Hylkaykset,
     rastin5suoritustavat: {} as Rastin5Suoritustavat,
+    syntymaajat: {} as Syntymaajat,
+    kurssinumerot: {} as Kurssinumerot,
+    yhdistykset: {} as Yhdistykset,
     jarjestys: '',
     tuomari_nimi: '',
     tuomari_sraid: '',
@@ -46,6 +58,17 @@ export const usePisteetStore = defineStore('pisteet', {
     getAmpujanPisteet(nimi: any): number[][][] {
       return this.pisteet[nimi]
     },
+
+    asetaSyntymaaika(ampuja: string, aika: Date) {
+      this.syntymaajat[ampuja] = aika
+    },
+    asetaKurssinumero(ampuja: string, kurssinumero: string) {
+      this.kurssinumerot[ampuja] = kurssinumero
+    },
+    asetaYhdistys(ampuja: string, yhdistys: string) {
+      this.yhdistykset[ampuja] = yhdistys
+    },
+
     getAmpujanRastiAika(nimi: string, rasti: number) {
       return this.ajat[nimi][rasti].reduce((a, b) => Number(a) + Number(b), 0)
     },
@@ -86,7 +109,10 @@ export const usePisteetStore = defineStore('pisteet', {
       return [0,1,2,3,4].map((rasti) =>
           this.getRastiSuorituksenTila(ampuja, rasti) == RastiSuorituksenTila.Suoritettu ? this.getAmpujaRastiPisteSumma(ampuja, rasti) : 0).reduce((a, b) => a + b)
     },
-
+    getAmpujanOsumatLuokittain(ampuja: string) : number {
+      return [0,1,2,3,4].map((rasti) =>
+          this.getAmpujaRastiLuokkaOsumat(ampuja, rasti).reduce((a, b) => a + b))
+    },
     // Ampujan kokonaisaika (osittain suoritettuja rasteja ei lasketa)
     getAmpujanAikaSumma(ampuja: string) : number {
       return [0, 1, 2, 3, 4].map(rasti =>
@@ -125,11 +151,19 @@ export const usePisteetStore = defineStore('pisteet', {
       // Muutoin rasti on suorittamatta
       return RastiSuorituksenTila.Suorittamatta
     },
+
+    rastiSuoritettu(ampuja: string, rasti: number) {
+      return this.getRastiSuorituksenTila(ampuja, rasti) == RastiSuorituksenTila.Suoritettu
+    },
+
     poistaAmpuja(ampuja: string) {
       delete this.pisteet[ampuja]
       delete this.ajat[ampuja]
       delete this.hylkaykset[ampuja]
       delete this.rastin5suoritustavat[ampuja]
+      delete this.syntymaajat[ampuja]
+      delete this.kurssinumerot[ampuja]
+      delete this.yhdistykset[ampuja]
 
       // Merkintä turvallisuuskouluksesta vanhenee jos kaikki osallistujat poistetaan.
       if (Object.keys(this.ajat).length == 0) {
@@ -140,7 +174,12 @@ export const usePisteetStore = defineStore('pisteet', {
       return [0,1,2,3,4].map((x) => this.getRastiSuorituksenTila(ampuja, x)).filter((x) => x === RastiSuorituksenTila.Suoritettu).length === 5
     },
     getHylkaysperuste(ampuja: string) {
-      return this.hylkaykset[ampuja]
+      if (this.hylkaykset[ampuja] != null) {
+        return this.hylkaykset[ampuja]
+      } else if (this.getKaikkiAmmuttu(ampuja) && this.getAmpujanOsumakerroin(ampuja) < SraAmpumakoe.vaadittuOsumakerroin) {
+        return "Osumakerroin alle " + SraAmpumakoe.vaadittuOsumakerroin + "."
+      }
+      return null
     },
     kirjaaHylkays(ampuja: string, peruste: string) {
       this.hylkaykset[ampuja] = peruste
@@ -155,6 +194,9 @@ export const usePisteetStore = defineStore('pisteet', {
       this.rastin5suoritustavat = {}
       this.turvallisuuskoulutusSuoritettu = false
       this.jarjestys = "kiertava"
+      this.syntymaajat = {}
+      this.kurssinumerot = {}
+      this.yhdistykset = {}
     },
     // Järjestä ampujien lista satunnaisesti
     satunnaistaJarjestys() {

@@ -76,7 +76,49 @@ a, .green {
 
 }
 
+.tuloskortti {
 
+  thead {
+    th {
+      min-width: 7rem;
+    }
+  }
+
+  td {
+    text-align: right;
+  }
+
+  & tr:nth-child(odd) {
+      background-color: #f5f5f5;
+    }
+  & tr:nth-child(even) {
+      background-color: #e7e7e7;
+    }
+
+  & tr.yhteensa {
+    td {
+      font-weight: bold;
+    }
+  }
+
+}
+
+#tulos {
+  font-weight: bold;
+  &.KESKEN {
+    color: #2f2f2f;
+  }
+  &.HYVÄKSYTTY {
+    color: darkgreen;
+  }
+  &.HYLÄTTY {
+    color: darkred;
+    :before {
+      content: 'g';
+      background-color: blue;
+    }
+  }
+}
 
 
 @media (hover: hover) {
