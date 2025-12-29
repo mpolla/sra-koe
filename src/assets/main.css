@@ -76,11 +76,24 @@ a, .green {
 
 }
 
+
+.nimikortti {
+  display: flex;
+  align-items: center;
+  h1 {
+    margin-left: 1rem;
+  }
+}
+
 .tuloskortti {
+
+  width: 100%;
+  max-width: 120rem;
 
   thead {
     th {
-      min-width: 7rem;
+      min-width: 4rem;
+      max-width: 12rem;
     }
   }
 
@@ -120,6 +133,37 @@ a, .green {
   }
 }
 
+
+.tuloskorttiotsikko {
+  text-align: center;
+  font-variant: all-petite-caps;
+  font-weight: bold;
+  background-color: #ccc;
+  color: #444;
+  margin: .2rem;
+}
+
+.qrcode {
+  text-align: center;
+  margin: 2rem;
+}
+
+.paivajapaikka {
+  text-align: right;
+}
+
+.tuomarileima {
+  color: purple;
+  border: 3px solid purple;
+  border-radius: 5px;
+  font-family: monospace;
+  padding: .1rem;
+  margin-right: 1rem;
+  max-width: 11rem;
+  text-align: center;
+  margin-left: auto;
+  transform: rotate(9deg);
+}
 
 @media (hover: hover) {
   a:hover {

@@ -20,9 +20,11 @@
   "dependencies": {
     "@iconoir/vue": "^7.11.0",
     "downloadjs": "^1.4.7",
+    "pako": "^2.1.0",
     "pdf-lib": "^1.17.1",
     "pinia": "^2.1.6",
     "pinia-plugin-persistedstate": "^3.2.0",
+    "qrcode": "^1.5.4",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"
   },

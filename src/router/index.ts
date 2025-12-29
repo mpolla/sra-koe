@@ -12,6 +12,11 @@ const router = createRouter({
       component: TulosLista
     },
     {
+      path: '/ampuja',
+      name: 'ampujadatalla',
+      component: Ampuja
+    },
+    {
       path: '/ampuja/:ampuja',
       name: 'ampuja',
       component: Ampuja
@@ -39,15 +44,15 @@ const router = createRouter({
       name: 'saannot',
       component: () => import('../views/Saannot.vue')
     },
-    {
-      // path: "*",
-      path: "/:catchAll(.*)",
-      name: "NotFound",
-      component: () => import('../views/AboutView.vue'),
-      meta: {
-        requiresAuth: false
-      }
-    }
+    // {
+    //   // path: "*",
+    //   path: "/:catchAll(.*)",
+    //   name: "NotFound",
+    //   component: () => import('../views/AboutView.vue'),
+    //   meta: {
+    //     requiresAuth: false
+    //   }
+    // }
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
