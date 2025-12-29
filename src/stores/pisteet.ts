@@ -184,6 +184,32 @@ export const usePisteetStore = defineStore('pisteet', {
     kirjaaHylkays(ampuja: string, peruste: string) {
       this.hylkaykset[ampuja] = peruste
     },
+
+    getAikaJaPaikka(): string {
+      let k = ""
+      if (this.koetilaisuus_paiva != null) {
+        k = k.concat(this.koetilaisuus_paiva)
+      }
+      if (this.koetilaisuus_paikka != null) {
+        k = k.concat(" " + this.koetilaisuus_paikka)
+      }
+      return k
+    },
+    getTuomariNimi(): string {
+      if (this.tuomari_nimi != null) {
+        return this.tuomari_nimi
+      }
+      return null
+
+
+    },
+    getTuomariNumero(): string {
+      if (this.tuomari_sraid != null) {
+        return this.tuomari_sraid
+      }
+      return null
+    },
+
     peruHylkays(ampuja: string) {
       delete this.hylkaykset[ampuja]
     },
