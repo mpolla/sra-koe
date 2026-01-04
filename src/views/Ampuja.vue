@@ -56,13 +56,9 @@ let ampuja : string = (route.params.ampuja) ? route.params.ampuja as string : nu
       </div>
 
       <div class="actions">
-
         <button v-if="!(ampuja in pisteetStore.hylkaykset)" class="action dq" @click="kirjaaHylkays(pisteetStore, ampuja)"><Prohibition/> Kirjaa hylkäys</button>
         <button v-else @click="peruHylkays(pisteetStore, ampuja as string)" class="action"><Undo/> Peru hylkäys</button>
-
-        <button class="action" v-if="ampuja != null" @click="(new PdfPoytakirja()).luoPdf(ampuja as string, pisteetStore)">PDF-pöytäkirja</button>
-
-
+        <button class="action" v-if="ampuja != null" @click="(new PdfPoytakirja()).luoPdf(ampuja as string, pisteetStore, '../')">PDF-pöytäkirja</button>
       </div>
     </div>
 

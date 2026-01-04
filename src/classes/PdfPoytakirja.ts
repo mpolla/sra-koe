@@ -44,7 +44,7 @@ export class PdfPoytakirja {
         return tuomarinTiedot
     }
 
-    async luoPdf(ampuja: string, pisteetStore: any) {
+    async luoPdf(ampuja: string, pisteetStore: any, polku = "") {
         const RASTI_Y_OFFSET = [687, 573, 469, 366, 262]
 
         const ROW_H = 12
@@ -55,7 +55,7 @@ export class PdfPoytakirja {
         const PISTEET_X = 505
         const AIKA_X = 538
 
-        const fontBytes = await fetch('sra-ampumakoe.pdf').then((res) => res.arrayBuffer());
+        const fontBytes = await fetch(polku + 'sra-ampumakoe.pdf').then((res) => res.arrayBuffer());
         const pdfDoc = await PDFDocument.load(fontBytes)
         const pages = pdfDoc.getPages()
 
