@@ -165,7 +165,7 @@ onMounted(() => {
 
     <div v-if="data != null" class="main">
 
-      <h1 class="tuloskorttiotsikko1"><a href="/">SRA Ampumakoe</a></h1>
+      <h1 class="tuloskorttiotsikko1"><a :href="baseUrl">SRA Ampumakoe</a></h1>
       <h2 class="tuloskorttiotsikko2">Tuloskortti</h2>
       <div class="paivajapaikka">
         {{ data.dl }}
@@ -257,10 +257,13 @@ onMounted(() => {
     </div>
 
     <div class="footer">
-      <a href="/">SRA-koe sovellus</a>
+      <a :href="baseUrl">SRA-koe sovellus</a>
     </div>
 
   </main>
 
 </template>
 
+<script lang="ts">
+const baseUrl = import.meta.env.BASE_URL
+</script>
