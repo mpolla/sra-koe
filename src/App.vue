@@ -1,26 +1,10 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header style="background: #ddd">
-
-    <!--    <img alt="SRA maalitaulu" src="./assets/logo.svg" width="80px"/>-->
-    <!--    <img alt="metsä" src="./assets/metsa.jpg" />-->
-
-    <div class="wrapper">
-
-      <nav class="sivuvalikko">
-        <RouterLink to="/"><span class="icon">☰</span> Tuloslista</RouterLink>
-        <RouterLink to="/saannot"><span class="icon">§</span> Säännöt</RouterLink>
-        <RouterLink to="/about"><span class="icon">ⓘ</span> Tietoja</RouterLink>
-      </nav>
-    </div>
-  </header>
-
+  <header style="background: #ddd"></header>
   <RouterView />
-
 </template>
 
 <style>

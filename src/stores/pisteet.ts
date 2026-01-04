@@ -55,10 +55,6 @@ export const usePisteetStore = defineStore('pisteet', {
       // Jos lisätään uusi ampuja, tarvitaan uusi vahvistus, että turvallisuuskoulutus on annettu kaikille
       this.turvallisuuskoulutusSuoritettu = false
     },
-    getAmpujanPisteet(nimi: any): number[][][] {
-      return this.pisteet[nimi]
-    },
-
     asetaSyntymaaika(ampuja: string, aika: Date) {
       this.syntymaajat[ampuja] = aika
     },
@@ -68,17 +64,12 @@ export const usePisteetStore = defineStore('pisteet', {
     asetaYhdistys(ampuja: string, yhdistys: string) {
       this.yhdistykset[ampuja] = yhdistys
     },
-
     getAmpujanRastiAika(nimi: string, rasti: number) {
       return this.ajat[nimi][rasti].reduce((a, b) => Number(a) + Number(b), 0)
     },
     getAmpujanRastiaAjat(nimi: any, rasti: any) {
       return this.ajat[nimi][rasti]
     },
-    osumaSumma(pist: Array<Array<number>>, luokka: number) : number {
-      return pist[luokka].reduce((a, b) => Number(a) + Number(b), 0)
-    },
-
     getAmpujaRastiLuokkaOsumat(ampuja: string, rasti: number) {
       return this.pisteet[ampuja][rasti].map((it) => it.reduce((a,b) => a+b, 0))
     },
@@ -184,7 +175,6 @@ export const usePisteetStore = defineStore('pisteet', {
     kirjaaHylkays(ampuja: string, peruste: string) {
       this.hylkaykset[ampuja] = peruste
     },
-
     getAikaJaPaikka(): string {
       let k = ""
       if (this.koetilaisuus_paiva != null) {
@@ -200,8 +190,6 @@ export const usePisteetStore = defineStore('pisteet', {
         return this.tuomari_nimi
       }
       return null
-
-
     },
     getTuomariNumero(): string {
       if (this.tuomari_sraid != null) {
@@ -220,6 +208,8 @@ export const usePisteetStore = defineStore('pisteet', {
       this.rastin5suoritustavat = {}
       this.turvallisuuskoulutusSuoritettu = false
       this.jarjestys = "kiertava"
+      this.koetilaisuus_paikka = ''
+      this.koetilaisuus_paiva = ''
       this.syntymaajat = {}
       this.kurssinumerot = {}
       this.yhdistykset = {}

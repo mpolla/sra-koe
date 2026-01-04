@@ -1,58 +1,80 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import PisteLaskuri from '../views/LaskuriView.vue'
 import Ampuja from '../views/Ampuja.vue'
+import Tuloskortti from '../views/Tuloskortti.vue'
 import TulosLista from "@/components/TulosLista.vue";
+import OletusLayout from "@/layouts/OletusLayout.vue";
+import KokoSivuLayout from "@/layouts/KokoSivuLayout.vue";
 
 const router = createRouter({
   history: createWebHistory('/sra-koe/'),
   routes: [
     {
       path: '/',
-      name: 'tuloslista',
-      component: TulosLista
+      component: OletusLayout,
+      children: [
+        {
+          path: '/',
+          name: 'tuloslista',
+          component: TulosLista
+        },
+        {
+          path: '/ampuja',
+          name: 'ampujadatalla',
+          component: Ampuja
+        },
+        {
+          path: '/ampuja/:ampuja',
+          name: 'ampuja',
+          component: Ampuja
+        },
+        {
+          path: '/kirjaus/:rasti/:ampuja',
+          name: 'kirjaus',
+          component: PisteLaskuri
+        },
+        {
+          path: '/about',
+          name: 'about',
+          // route level code-splitting
+          // this generates a separate chunk (About.[hash].js) for this route
+          // which is lazy-loaded when the route is visited.
+          component: () => import('../views/AboutView.vue')
+        },
+        {
+          path: '/turvallisuus',
+          name: 'turvallisuus',
+          component: () => import('../views/TurvallisuusView.vue')
+        },
+        {
+          path: '/saannot',
+          name: 'saannot',
+          component: () => import('../views/Saannot.vue')
+        },
+        {
+          // path: "*",
+          path: "/:catchAll(.*)",
+          name: "NotFound",
+          component: () => import('../views/AboutView.vue'),
+          meta: {
+            requiresAuth: false
+          }
+        }
+      ]
     },
+
     {
-      path: '/ampuja',
-      name: 'ampujadatalla',
-      component: Ampuja
-    },
-    {
-      path: '/ampuja/:ampuja',
-      name: 'ampuja',
-      component: Ampuja
-    },
-    {
-      path: '/kirjaus/:rasti/:ampuja',
-      name: 'kirjaus',
-      component: PisteLaskuri
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
-    },
-    {
-      path: '/turvallisuus',
-      name: 'turvallisuus',
-      component: () => import('../views/TurvallisuusView.vue')
-    },
-    {
-      path: '/saannot',
-      name: 'saannot',
-      component: () => import('../views/Saannot.vue')
-    },
-    // {
-    //   // path: "*",
-    //   path: "/:catchAll(.*)",
-    //   name: "NotFound",
-    //   component: () => import('../views/AboutView.vue'),
-    //   meta: {
-    //     requiresAuth: false
-    //   }
-    // }
+      path: '/tulos',
+      component: KokoSivuLayout,
+      children: [
+        {
+          path: '',
+          component: Tuloskortti
+        }
+      ]
+    }
+
+
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

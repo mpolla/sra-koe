@@ -4,10 +4,11 @@
 // https://commons.wikimedia.org/wiki/File:200909-F-NS874-1163_-_7th_SFG_Soldiers_conduct_Best_ODA_Competition_(Image_12_of_13).jpg
 
 import { usePisteetStore } from '@/stores/pisteet'
-import { ref } from "vue";
-import { RastiSuorituksenTila, SraAmpumakoe } from "@/classes/SraAmpumakoe";
-import { MapPin, Calendar, User, CardShield, Phone, UserSquare  } from '@iconoir/vue';
-import { PdfPoytakirja } from "@/classes/PdfPoytakirja";
+import { ref } from "vue"
+import { RastiSuorituksenTila, SraAmpumakoe } from "@/classes/SraAmpumakoe"
+import { MapPin, Calendar, User, CardShield, Phone, ShareAndroid  } from '@iconoir/vue'
+import { PdfPoytakirja } from "@/classes/PdfPoytakirja"
+import { jakoLinkki, jakoData } from "@/classes/Util";
 
 const pisteetStore = usePisteetStore()
 
@@ -57,14 +58,6 @@ const muotoileTulos = (kaikkiRastitSuoritettu: boolean, osumakerroin: number, am
     return "HYVÄKSYTTY"
   }
   return "HYLÄTTY"
-}
-
-const jatkaLinkkki = () => {
-  if (pisteetStore.turvallisuuskoulutusSuoritettu !== true) {
-    return 'turvallisuus'
-  } else {
-    return 'kirjaus/0/' + Object.keys(pisteetStore.pisteet)[0]
-  }
 }
 
 const mapClass = (tila: RastiSuorituksenTila) => {
@@ -124,7 +117,9 @@ const reset = () => {
       <h2 v-if="!muokkausTila">Tuloslista</h2>
 
       <ul v-if="muokkausTila" class="ampujat">
-        <li v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet"><span class="ampuja">{{ ampuja }}</span><span @click="vahvistaPoisto(ampuja as string)" class="remove">⨉</span></li>
+        <li v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet">
+          <a :href="'ampuja/' + ampuja"><span class="ampuja">{{ ampuja }}</span></a>
+          <span @click="vahvistaPoisto(ampuja as string)" class="remove">⨉</span></li>
       </ul>
 
       <table id="tuloslista" cellspacing="0" v-if="!muokkausTila">
@@ -140,7 +135,7 @@ const reset = () => {
         <tbody>
         <tr v-bind:key="ampuja" v-for="(ampujanPisteet, ampuja) in pisteetStore.pisteet" v-bind:class="{dq: pisteetStore.getHylkaysperuste(ampuja as string) }">
           <td class="nimi">
-            <a :href="'ampuja/' + ampuja"><UserSquare color="#888"/> <span>{{ ampuja }}</span></a>
+            <a :href="'ampuja/' + ampuja"><span>{{ ampuja }}</span></a>
           </td>
           <td class="rastipallot">
             <div v-bind:key="rasti" class="rastipallo" v-bind:class="mapClass(pisteetStore.getRastiSuorituksenTila(ampuja as string, rasti))"  v-for="rasti in [0,1,2,3,4]">
@@ -155,7 +150,7 @@ const reset = () => {
             {{ muotoileOsumakerroin(pisteetStore.getAmpujanOsumakerroin(ampuja as string)) }}
           </td>
 
-          <td><button @click="(new PdfPoytakirja()).luoPdf(ampuja as string, pisteetStore)">PDF</button></td>
+          <td class="tulospainikkeet"><button @click="(new PdfPoytakirja()).luoPdf(ampuja as string, pisteetStore)">PDF</button> <a :href="jakoLinkki(jakoData(ampuja, pisteetStore))"><ShareAndroid/> </a></td>
 
           <td v-if="muokkausTila"><button class="danger" @click="vahvistaPoisto(ampuja as string)">🗑 POISTA</button></td>
         </tr>
@@ -284,6 +279,14 @@ table#tuloslista {
       }
     }
 
+    & td.tulospainikkeet {
+      a {
+        vertical-align: middle;
+        margin-left: .3em;
+        display: inline-flex;
+        color: #444;
+      }
+    }
 
     & th {
       word-wrap: anywhere;
@@ -294,6 +297,10 @@ table#tuloslista {
       font-weight: bold;
 
       &.rastipallot {
+        min-width: 6rem;
+      }
+      &.tulos
+      {
         min-width: 6rem;
       }
     }
@@ -361,8 +368,13 @@ table#tuloslista {
 
   & li {
     display: flex;
-    color: #f1f1f1;
     margin: .1rem;
+
+    & a {
+    color: #f1f1f1;
+    display: flex;
+    }
+
 
     .remove {
       background-color: var(--vari1);

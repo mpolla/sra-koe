@@ -5,7 +5,7 @@ import {usePisteetStore} from '@/stores/pisteet'
 import {useRoute} from 'vue-router'
 import RastiPisteRivi from '@/components/RastiPisteRivi.vue'
 import { Clock, Check, SoundLow, SoundOff, InfoCircle, Prohibition, Undo } from '@iconoir/vue';
-
+import {kirjaaHylkays, peruHylkays} from '@/classes/Util'
 
 const route = useRoute()
 const pisteetStore = usePisteetStore()
@@ -156,12 +156,7 @@ const lyhennaNimi = (kaikkiNimet: string) => {
   return kaikkiNimet
 }
 
-const kirjaaHylkays = (ampuja: string) => {
-  const peruste = window.prompt("Ampujan " + ampuja + " hylkäämisen syy?", "") as string
-  if (peruste != null && peruste !== "") {
-    pisteetStore.kirjaaHylkays(ampuja, peruste)
-  }
-}
+
 
 const getClasses = (rasti: number, vuorossaOlevaAmpuja: string, aid: string) => {
   if (aid === vuorossaOlevaAmpuja) {
@@ -228,11 +223,6 @@ const taulunPisteytysValmis = (ampuja: string, rasti: number, taulu: number) => 
     return (pisteetStore.pisteet[ampuja][rasti].reduce((acc, cur) => acc + Number(cur[taulu]), 0) >= SraAmpumakoe.laukausMaaratPistoolilla[rasti][taulu])
   }
 }
-
-const peruHylkays = (ampuja: string) => {
-  pisteetStore.peruHylkays(ampuja)
-}
-
 
 /**
  * Jos aika-kenttään on syötetty yli kaksi numeroa, kaksi viimeistä numeroa tulkitaan sekunnin sadasosiksi ja sitä
@@ -334,8 +324,8 @@ const confirmKeskenerainenKirjaus = (ampuja: string, rasti: number) => {
       </fieldset>
 
       <div class="actions">
-        <button v-if="!(ampuja in pisteetStore.hylkaykset)" class="action dq" @click="kirjaaHylkays(ampuja)"><Prohibition/> Kirjaa hylkäys</button>
-        <button v-else @click="peruHylkays(ampuja as string)" class="action"><Undo/> Peru hylkäys</button>
+        <button v-if="!(ampuja in pisteetStore.hylkaykset)" class="action dq" @click="kirjaaHylkays(pisteetStore, ampuja)"><Prohibition/> Kirjaa hylkäys</button>
+        <button v-else @click="peruHylkays(pisteetStore, ampuja as string)" class="action"><Undo/> Peru hylkäys</button>
 
         <button class="action" @click="naytaRastiInfo = true"><InfoCircle/> Rastikuvaus</button>
 

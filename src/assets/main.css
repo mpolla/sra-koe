@@ -29,6 +29,15 @@ html {
 
   .action {
     margin-bottom: .5rem;
+
+    &.dq {
+      background-color: darkred;
+      color: #ddd;
+      border-radius: 5px;
+      border: none;
+    }
+
+
   }
 
 }
@@ -36,6 +45,9 @@ html {
 .return {
   background-color: #c2b5b5;
 }
+
+
+
 
 .un-dq {
   background-color: maroon;
@@ -79,7 +91,7 @@ a, .green {
 
 .nimikortti {
   display: flex;
-  align-items: center;
+  align-items: end;
   h1 {
     margin-left: 1rem;
   }
@@ -87,8 +99,7 @@ a, .green {
 
 .tuloskortti {
 
-  width: 100%;
-  max-width: 120rem;
+width: 98%;
 
   thead {
     th {
@@ -134,7 +145,25 @@ a, .green {
 }
 
 
-.tuloskorttiotsikko {
+.tuloskorttiotsikko1 {
+  text-align: center;
+  font-variant: all-petite-caps;
+  font-weight: bold;
+  background-color: var(--vari1);
+  color: var(--vari2);
+  margin: .2rem;
+  a {
+    color: var(--vari2);
+    font-weight: bold;
+    &:hover {
+      text-decoration: none;
+      background-color: transparent;
+    }
+
+  }
+}
+
+.tuloskorttiotsikko2 {
   text-align: center;
   font-variant: all-petite-caps;
   font-weight: bold;
@@ -143,18 +172,26 @@ a, .green {
   margin: .2rem;
 }
 
-.qrcode {
+.qrcodecontainer {
   text-align: center;
-  margin: 2rem;
+  .actions {
+    justify-content: center;
+  }
+}
+
+#qrcode {
+  margin-top: 1rem;
+  text-align: center;
 }
 
 .paivajapaikka {
   text-align: right;
+  width: 97%;
 }
 
 .tuomarileima {
-  color: purple;
-  border: 3px solid purple;
+  color: rgba(85, 2, 85, 0.94);
+  border: 3px solid rgba(85, 2, 85, 0.94);
   border-radius: 5px;
   font-family: monospace;
   padding: .1rem;
@@ -163,6 +200,45 @@ a, .green {
   text-align: center;
   margin-left: auto;
   transform: rotate(9deg);
+}
+
+.eitallenneta {
+  text-align: center;
+}
+
+.footer {
+  margin-top: 2rem;
+  text-align: center;
+  border-top: 1px solid #ccc;
+  a {
+    color: #444;
+  }
+}
+
+.virheellinenlinkki {
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: .9rem;
+  margin: 2rem;
+  background-color: white;
+}
+
+.kurssitiedot {
+  th {
+    font-size: 100%;
+  }
+}
+
+.dqsyy {
+  margin: 1rem;
+  color: darkred;
+}
+
+.tuloskorttilinkki {
+  text-align: right;
+  a {
+    color: black;
+  }
 }
 
 @media (hover: hover) {
