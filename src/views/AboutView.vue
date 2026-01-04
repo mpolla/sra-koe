@@ -45,6 +45,16 @@ const version = __APP_VERSION__
 
     <h2>Versiohistoria</h2>
 
+    <h3>0.8.0 (4.1.2026)</h3>
+    <ul>
+      <li>Ampujan syntymäajan, SRA-kurssin ja jäsenyhdistyksen syöttäminen klikkaamalla ampujan nimeä tuloslistalla.
+      Jos tiedot syötetään, ne kirjoitetaan myös ampumakokeen PDF-pöytäkirjaan.</li>
+      <li>Ampujan tuloskortti (klikkaamalla "jaa" ikonia tuloslistalla). Oman koetuloksen voi kopioida talteen
+      ja halutessaan jakaa kopioimalla tuloskortilla näkyvä QR-koodi. Tulostietoja ei tallenneta palvelimille,
+      vaan QR-koodi itsessään sisältää tulostiedot.</li>
+      <li>Nimimuutos: sovelluksen nimi on nyt ytimekkäämmin "SRA-koe".</li>
+    </ul>
+
     <h3>0.7.0 (9.12.2025)</h3>
     <ul>
       <li>Iconoir-kuvakkeiden käyttöönotto.</li>
