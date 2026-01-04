@@ -2,7 +2,7 @@
 import {onMounted, ref } from 'vue'
 import {useRoute} from 'vue-router'
 import {SraAmpumakoe} from "@/classes/SraAmpumakoe";
-import { MapPin, Calendar, User, CardShield, Phone, UserSquare, ShareAndroid, Copy  } from '@iconoir/vue'
+import { UserSquare, ShareAndroid, Copy  } from '@iconoir/vue'
 
 import pako from 'pako';
 
@@ -241,13 +241,13 @@ onMounted(() => {
       <canvas id="qrcode" ref="qrCanvas" title=""></canvas>
 
       <div class="actions">
-      <button v-if=jakoTuettu @click="jaaSivu" class="action">
-        <ShareAndroid /><span>Jaa</span>
-      </button>
+        <button v-if=jakoTuettu @click="jaaSivu" class="action">
+          <ShareAndroid /><span>Jaa</span>
+        </button>
 
-      <button @click="kopioiLinkki" class="action">
-        <Copy /><span>Kopioi linkki</span>
-      </button>
+        <button @click="kopioiLinkki" class="action">
+          <Copy /><span>Kopioi linkki</span>
+        </button>
       </div>
     </div>
 
@@ -256,9 +256,9 @@ onMounted(() => {
       tietoihin.
     </div>
 
-<div class="footer">
-  <a href="/">SRA-koe sovellus</a>
-</div>
+    <div class="footer">
+      <a href="/">SRA-koe sovellus</a>
+    </div>
 
   </main>
 

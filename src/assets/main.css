@@ -92,7 +92,7 @@ a, .green {
 .nimikortti {
   display: flex;
   align-items: end;
-  h1 {
+  & h1 {
     margin-left: 1rem;
   }
 }
@@ -101,14 +101,14 @@ a, .green {
 
 width: 98%;
 
-  thead {
-    th {
+  & thead {
+    & th {
       min-width: 4rem;
       max-width: 12rem;
     }
   }
 
-  td {
+  & td {
     text-align: right;
   }
 
@@ -120,7 +120,7 @@ width: 98%;
     }
 
   & tr.yhteensa {
-    td {
+    & td {
       font-weight: bold;
     }
   }
@@ -152,7 +152,7 @@ width: 98%;
   background-color: var(--vari1);
   color: var(--vari2);
   margin: .2rem;
-  a {
+  & a {
     color: var(--vari2);
     font-weight: bold;
     &:hover {
@@ -210,7 +210,7 @@ width: 98%;
   margin-top: 2rem;
   text-align: center;
   border-top: 1px solid #ccc;
-  a {
+  & a {
     color: #444;
   }
 }
@@ -224,7 +224,7 @@ width: 98%;
 }
 
 .kurssitiedot {
-  th {
+  & th {
     font-size: 100%;
   }
 }
@@ -236,7 +236,7 @@ width: 98%;
 
 .tuloskorttilinkki {
   text-align: right;
-  a {
+  & a {
     color: black;
   }
 }

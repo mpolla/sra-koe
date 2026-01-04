@@ -268,11 +268,11 @@ table#tuloslista {
       text-align: left;
       padding-left: .5rem;
 
-      a {
+      & a {
         color: #333;
         display: flex;
 
-        span {
+        & span {
           margin-left: .4rem;
           font-weight: bold;
         }
@@ -280,7 +280,7 @@ table#tuloslista {
     }
 
     & td.tulospainikkeet {
-      a {
+      & a {
         vertical-align: middle;
         margin-left: .3em;
         display: inline-flex;
