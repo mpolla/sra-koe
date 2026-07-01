@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+import PwaPaivitys from '@/components/PwaPaivitys.vue'
 </script>
 
 <template>
   <header style="background: #ddd"></header>
   <RouterView />
+  <PwaPaivitys />
 </template>
 
 <style>
