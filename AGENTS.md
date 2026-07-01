@@ -31,15 +31,56 @@ npm run test:e2e:dev           # dev server + interactive Cypress runner
 E2E note: the test server runs at `http://localhost:4173/sra-koe/` — the `/sra-koe/` base
 path matters for both Cypress and any manual preview.
 
-### Deploying
+### Commit convention (Conventional Commits)
 
-Update the changelog in `src/views/AboutView.vue`, then:
+Commits follow [Conventional Commits](https://www.conventionalcommits.org/): a
+`type(scope): description` header. This drives automated versioning, so keep it
+accurate. A `commit-msg` git hook (husky + commitlint) rejects malformed headers.
+
+- **Types in use:** `feat` (new feature, bumps minor), `fix` (bug fix, bumps
+  patch), `docs`, `refactor`, `perf`, `test`, `chore`, `build`, `ci`. Dependency
+  bumps go under `chore(deps)`.
+- **Breaking change:** append `!` after the type (`feat!: ...`) or add a
+  `BREAKING CHANGE:` footer. This bumps the major version.
+- **Description language/style:** Finnish, past-passive ("tehty"-muoto), same as
+  the rest of the repo (e.g. `feat: lisätty tuloskortin QR-koodi`). The header is
+  capped at 72 characters (`subject-case` is intentionally disabled so proper-noun
+  starts like `docs: AGENTS.md ...` pass).
+
+### Releasing
+
+Two changelogs, two audiences:
+
+- **`CHANGELOG.md`** is **generated** from the commits by `commit-and-tag-version`.
+  Never hand-edit it.
+- **`src/views/AboutView.vue`** holds the **curated, end-user Finnish** version
+  history shown in the app. This stays hand-written; use the generated
+  `CHANGELOG.md` section as raw material for a polished, user-facing summary.
+
+Release ritual (all local, no CI):
 
 ```bash
-npm version minor
-npm run predeploy    # = npm run build
-npm run deploy       # gh-pages -d dist
+# 1. Clean tree on main; every commit since the last tag is a Conventional Commit.
+# 2. Preview the computed version N and changelog (writes nothing):
+npm run release:dry
+
+# 3. Add a curated <h3>N (d.m.yyyy)</h3> entry to src/views/AboutView.vue,
+#    then commit it:
+git commit -am "docs: versiohistoria N"
+
+# 4. Bump package.json to N, generate CHANGELOG.md, commit chore(release): N, tag vN:
+npm run release
+
+# 5. Push commits and the tag:
+git push --follow-tags origin main
+
+# 6. Build (injects N as __APP_VERSION__) and deploy to GitHub Pages:
+npm run deploy       # predeploy runs the build first
 ```
+
+`commit-and-tag-version` infers the bump from the commits: `feat` → minor, `fix` →
+patch, `!`/`BREAKING CHANGE` → major. Tag format is `vX.Y.Z` (matches history).
+Optionally publish a GitHub Release afterwards: `gh release create vN --notes-from-tag`.
 
 The version string is injected at build time as `__APP_VERSION__` (see `vite.config.ts`).
 

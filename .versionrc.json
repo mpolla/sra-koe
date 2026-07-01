@@ -1,0 +1,18 @@
+{
+  "types": [
+    { "type": "feat", "section": "Uudet ominaisuudet" },
+    { "type": "fix", "section": "Korjaukset" },
+    { "type": "perf", "section": "Suorituskyky" },
+    { "type": "revert", "section": "Peruutukset" },
+    { "type": "docs", "hidden": true },
+    { "type": "style", "hidden": true },
+    { "type": "chore", "hidden": true },
+    { "type": "refactor", "hidden": true },
+    { "type": "test", "hidden": true },
+    { "type": "build", "hidden": true },
+    { "type": "ci", "hidden": true }
+  ],
+  "commitUrlFormat": "https://github.com/mpolla/sra-koe/commit/{{hash}}",
+  "compareUrlFormat": "https://github.com/mpolla/sra-koe/compare/{{previousTag}}...{{currentTag}}",
+  "header": "# Muutosloki\n\nMerkittävät muutokset. Muotoilu noudattaa Conventional Commits -käytäntöä.\n"
+}
