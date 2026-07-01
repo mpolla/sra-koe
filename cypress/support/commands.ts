@@ -58,3 +58,10 @@ Cypress.Commands.add("ammu", (taulu: number, laukaukset: number) => {
     for (let laukaus of Array(laukaukset))
         cy.get('button[id=T' + taulu + randomOsuma() + 'plus]').click()
 });
+
+// Deterministinen versio: kirjaa n osumaa annettuun osumaluokkaan (A/C/D/Ohi/Rang).
+// Käytetään PDF-testissä, jossa tuloksen (pisteet, hyväksytty/hylätty) on oltava ennustettava.
+Cypress.Commands.add("ammuLuokka", (taulu: number, luokka: string, laukaukset: number) => {
+    for (let laukaus of Array(laukaukset))
+        cy.get('button[id=T' + taulu + luokka + 'plus]').click()
+});
