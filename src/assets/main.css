@@ -20,6 +20,14 @@ html {
   font-weight: normal;
 }
 
+/* Estä tuplanapautuksen aiheuttama zoomaus (etenkin iOS Safari) painikkeissa
+   ja syötekentissä. touch-action: manipulation sallii yhä vierityksen ja
+   nipistyszoomauksen, mutta poistaa tuplanapautuszoomauksen. */
+button,
+input {
+  touch-action: manipulation;
+}
+
 .actions {
   margin-top: .8rem;
   display: flex;
