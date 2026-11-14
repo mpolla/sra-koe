@@ -20,11 +20,14 @@ html {
   font-weight: normal;
 }
 
-/* Estä tuplanapautuksen aiheuttama zoomaus (etenkin iOS Safari) painikkeissa
-   ja syötekentissä. touch-action: manipulation sallii yhä vierityksen ja
-   nipistyszoomauksen, mutta poistaa tuplanapautuszoomauksen. */
-button,
-input {
+/* Estä tuplanapautuksen aiheuttama zoomaus (etenkin iOS Safari) koko
+   sovelluksessa. touch-action: manipulation sallii yhä vierityksen ja
+   nipistyszoomauksen, mutta poistaa tuplanapautuszoomauksen. Sääntö on
+   html-elementissä, koska selain soveltaa touch-actionia myös
+   jälkeläisiin: nopeassa "kaksi A:ta" -kirjauksessa toinen napautus osuu
+   helposti pienen painikkeen viereen, jolloin pelkkä button/input-sääntö
+   ei riitä. */
+html {
   touch-action: manipulation;
 }
 
