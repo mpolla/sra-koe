@@ -45,6 +45,30 @@ const version = __APP_VERSION__
 
     <h2>Versiohistoria</h2>
 
+    <h3>0.9.0 (14.11.2026)</h3>
+    <ul>
+      <li>Sovellus kertoo, kun uusi versio on saatavilla. Päivityksen voi ottaa käyttöön heti tai myöhemmin,
+      eikä keskeneräisiä kirjauksia menetetä.</li>
+      <li>Korjattu kosketuslaitteilla tapahtunut tahaton zoomaus, kun painiketta napautetaan nopeasti
+      useamman kerran.</li>
+      <li>Päivitetty kirjastoriippuvuudet.</li>
+    </ul>
+
+    <h3>0.8.3 (5.1.2026)</h3>
+    <ul>
+      <li>Sovelluksen linkki näyttää esikatselun, kun sen jakaa esimerkiksi viestisovelluksessa.</li>
+    </ul>
+
+    <h3>0.8.2 (4.1.2026)</h3>
+    <ul>
+      <li>Korjattu PDF-pöytäkirjan luonti ampujan sivulta.</li>
+    </ul>
+
+    <h3>0.8.1 (4.1.2026)</h3>
+    <ul>
+      <li>Korjattu sovelluksen juuriosoite.</li>
+    </ul>
+
     <h3>0.8.0 (4.1.2026)</h3>
     <ul>
       <li>Ampujan syntymäajan, SRA-kurssin ja jäsenyhdistyksen syöttäminen klikkaamalla ampujan nimeä tuloslistalla.
