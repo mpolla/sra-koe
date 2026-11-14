@@ -37,11 +37,11 @@ Commits follow [Conventional Commits](https://www.conventionalcommits.org/): a
 `type(scope): description` header. This drives automated versioning, so keep it
 accurate. A `commit-msg` git hook (husky + commitlint) rejects malformed headers.
 
-- **Types in use:** `feat` (new feature, bumps minor), `fix` (bug fix, bumps
-  patch), `docs`, `refactor`, `perf`, `test`, `chore`, `build`, `ci`. Dependency
-  bumps go under `chore(deps)`.
+- **Types in use:** `feat` (new feature, bumps minor; see the 0.x note under
+  Releasing), `fix` (bug fix, bumps patch), `docs`, `refactor`, `perf`, `test`,
+  `chore`, `build`, `ci`. Dependency bumps go under `chore(deps)`.
 - **Breaking change:** append `!` after the type (`feat!: ...`) or add a
-  `BREAKING CHANGE:` footer. This bumps the major version.
+  `BREAKING CHANGE:` footer. This bumps the major version (minor while below 1.0.0).
 - **Description language/style:** Finnish, past-passive ("tehty"-muoto), same as
   the rest of the repo (e.g. `feat: lisätty tuloskortin QR-koodi`). The header is
   capped at 72 characters (`subject-case` is intentionally disabled so proper-noun
@@ -60,27 +60,45 @@ Two changelogs, two audiences:
 Release ritual (all local, no CI):
 
 ```bash
-# 1. Clean tree on main; every commit since the last tag is a Conventional Commit.
-# 2. Preview the computed version N and changelog (writes nothing):
-npm run release:dry
+# 0. Clean tree on main, up to date, with tags. The previous release tag must be
+#    reachable from main, otherwise the tool sees "no previous release" and dumps
+#    the whole history into the changelog:
+git pull && git fetch --tags
+git describe --tags --abbrev=0        # must print the previous vX.Y.Z
 
-# 3. Add a curated <h3>N (d.m.yyyy)</h3> entry to src/views/AboutView.vue,
+# 1. Preview the computed version and changelog (writes nothing, despite the
+#    "created CHANGELOG.md" message). Decide N (see version rule below):
+npm run release:dry                   # or: npm run release:dry -- --release-as minor
+
+# 2. Add a curated <h3>N (d.m.yyyy)</h3> entry to src/views/AboutView.vue,
 #    then commit it:
 git commit -am "docs: versiohistoria N"
 
-# 4. Bump package.json to N, generate CHANGELOG.md, commit chore(release): N, tag vN:
-npm run release
+# 3. Bump package.json to N, generate CHANGELOG.md, commit chore(release): N, tag vN.
+#    Use the same flags as in the dry run:
+npm run release                       # or: npm run release -- --release-as minor
 
-# 5. Push commits and the tag:
+# 4. Push commits and the tag:
 git push --follow-tags origin main
 
-# 6. Build (injects N as __APP_VERSION__) and deploy to GitHub Pages:
-npm run deploy       # predeploy runs the build first
+# 5. Build (injects N as __APP_VERSION__) and deploy to GitHub Pages:
+npm run deploy                        # predeploy runs the build first
 ```
 
-`commit-and-tag-version` infers the bump from the commits: `feat` → minor, `fix` →
-patch, `!`/`BREAKING CHANGE` → major. Tag format is `vX.Y.Z` (matches history).
-Optionally publish a GitHub Release afterwards: `gh release create vN --notes-from-tag`.
+**Version rule (while below 1.0.0).** `commit-and-tag-version` deliberately
+downgrades bumps for 0.x versions: `feat` → patch, breaking → minor. That is not
+what we want. If the release contains any `feat`, pass `--release-as minor` (to
+both the dry run and the real run); with only fixes, the default patch bump is
+right. From 1.0.0 on the defaults apply without flags: `feat` → minor, `fix` →
+patch, `!`/`BREAKING CHANGE` → major.
+
+**Never rewrite tagged history.** Do not rebase, amend or force-push commits that
+are already behind a release tag. Rewriting creates new copies of the commits; the
+branch moves to the copies but the tags stay on the old ones, so the next release
+cannot find its predecessor. (This happened to v0.8.0-v0.8.3.)
+
+Tag format is `vX.Y.Z` (matches history). Optionally publish a GitHub Release
+afterwards: `gh release create vN --notes-from-tag`.
 
 The version string is injected at build time as `__APP_VERSION__` (see `vite.config.ts`).
 
