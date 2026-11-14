@@ -1,1 +1,0 @@
-if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/sra-koe/sw.js', { scope: '/sra-koe/' })})}
