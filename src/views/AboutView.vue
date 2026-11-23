@@ -45,6 +45,12 @@ const version = __APP_VERSION__
 
     <h2>Versiohistoria</h2>
 
+    <h3>0.9.1 (23.11.2026)</h3>
+    <ul>
+      <li>Korjattu Firefox-selaimessa (mm. Android) ilmennyt virhe, jossa rastin aika tallentui väärin,
+      jos siinä oli nolla. Esimerkiksi 12,10 sekuntia tallentui 1,21 sekunniksi.</li>
+    </ul>
+
     <h3>0.9.0 (14.11.2026)</h3>
     <ul>
       <li>Sovellus kertoo, kun uusi versio on saatavilla. Päivityksen voi ottaa käyttöön heti tai myöhemmin,
