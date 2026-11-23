@@ -2,6 +2,13 @@
 
 Merkittävät muutokset. Muotoilu noudattaa Conventional Commits -käytäntöä.
 
+## [0.9.1](https://github.com/mpolla/sra-koe/compare/v0.9.0...v0.9.1) (2026-11-23)
+
+
+### Korjaukset
+
+* korjattu ajan syöttö Firefoxissa ([203f4a6](https://github.com/mpolla/sra-koe/commit/203f4a6d6dd4418ac58db15a4eab42a2a78c5625))
+
 ## [0.9.0](https://github.com/mpolla/sra-koe/compare/v0.8.3...v0.9.0) (2026-11-14)
 
 
