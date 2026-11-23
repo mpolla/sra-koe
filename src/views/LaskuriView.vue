@@ -5,7 +5,7 @@ import {usePisteetStore} from '@/stores/pisteet'
 import {useRoute} from 'vue-router'
 import RastiPisteRivi from '@/components/RastiPisteRivi.vue'
 import { Clock, Check, SoundLow, SoundOff, InfoCircle, Prohibition, Undo } from '@iconoir/vue';
-import {kirjaaHylkays, peruHylkays} from '@/classes/Util'
+import {kirjaaHylkays, peruHylkays, tulkitseAika} from '@/classes/Util'
 
 const route = useRoute()
 const pisteetStore = usePisteetStore()
@@ -231,23 +231,9 @@ const taulunPisteytysValmis = (ampuja: string, rasti: number, taulu: number) => 
  */
 const tulkitseSyotettyAika = (event: Event) => {
   const inputElement = event.target as HTMLInputElement
-
-  // Aika on syötetty muodossa xxxx.yy tai merkkejä on syötetty alle 3: Ei syötetä välimerkkiä.
-  if (inputElement.value.length < 3 || inputElement.value.match(/^[0-9]{0,4}\.[0-9]{2}$/)) {
-    return
-  }
-
-  // "1" --> "0.01"
-  // "12" --> "0.12"
-  // "123 --> "1.23"
-  // "1234 --> "12.34"
-  // "1028 --> "10.28"
-  // "002003 --> "20.03"
-  const vainnumerot = inputElement.value.replace(/[^0-9]/g, "").replace(/^0+/, "").padStart(3, '0')
-  if (vainnumerot.length >= 2) {
-    let sekunnit = vainnumerot.substring(0,vainnumerot.length-2)
-    let sadasosat = vainnumerot.substring(vainnumerot.length-2,vainnumerot.length)
-    inputElement.value = sekunnit + "." + sadasosat
+  const uusiArvo = tulkitseAika(inputElement.value)
+  if (uusiArvo !== null) {
+    inputElement.value = uusiArvo
     inputElement.dispatchEvent(new InputEvent('input'))
   }
 }
@@ -352,7 +338,7 @@ const confirmKeskenerainenKirjaus = (ampuja: string, rasti: number) => {
             <Clock v-else />
           </th>
           <td>
-            <input id="aika1" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[0]" type="number" @keyup="tulkitseSyotettyAika($event)" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
+            <input id="aika1" onfocus="this.select()" class="sekunnit" v-model.number="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[0]" type="text" inputmode="numeric" autocomplete="off" @keyup="tulkitseSyotettyAika($event)" :disabled="ampuja in pisteetStore.hylkaykset"/>
           </td>
         </tr>
         <tr v-if="rasti in [0, 1]">
@@ -361,8 +347,8 @@ const confirmKeskenerainenKirjaus = (ampuja: string, rasti: number) => {
             <Clock v-else />
           </th>
           <td>
-            <input id="aika2" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[1]" type="number"
-                   @keyup="tulkitseSyotettyAika($event)" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
+            <input id="aika2" onfocus="this.select()" class="sekunnit" v-model.number="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[1]" type="text" inputmode="numeric" autocomplete="off"
+                   @keyup="tulkitseSyotettyAika($event)" :disabled="ampuja in pisteetStore.hylkaykset"/>
           </td>
         </tr>
         <tr v-if="rasti in [0, 1]">
@@ -371,8 +357,8 @@ const confirmKeskenerainenKirjaus = (ampuja: string, rasti: number) => {
             <Clock v-else />
           </th>
           <td>
-            <input id="aika3" onfocus="this.select()" class="sekunnit" v-model="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[2]" type="number"
-                   @keyup="tulkitseSyotettyAika($event)" min="0.00" step="0.01" :disabled="ampuja in pisteetStore.hylkaykset"/>
+            <input id="aika3" onfocus="this.select()" class="sekunnit" v-model.number="pisteetStore.getAmpujanRastiaAjat(ampuja, rasti)[2]" type="text" inputmode="numeric" autocomplete="off"
+                   @keyup="tulkitseSyotettyAika($event)" :disabled="ampuja in pisteetStore.hylkaykset"/>
           </td>
         </tr>
         </tbody>

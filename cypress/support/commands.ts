@@ -23,7 +23,7 @@ Cypress.Commands.add("alustaKoe", () => {
 });
 
 function randomAika(ohjeaika: number, ohjeajanmaxylitys: number) {
-    const randomAika = String(Math.round(100*(ohjeaika + ohjeajanmaxylitys*Math.random()))).replace(/0/g,'1')
+    const randomAika = String(Math.round(100*(ohjeaika + ohjeajanmaxylitys*Math.random())))
     return randomAika[0] + '{moveToEnd}' + randomAika.substring(1)
 }
 

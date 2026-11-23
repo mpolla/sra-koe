@@ -55,3 +55,18 @@ export function koodaaTiedot(tulostiedot: Korttidata): string {
         .replace(/\//g, '_')
         .replace(/=+$/, '')
 }
+/**
+ * Syötetyn ajan tulkinta: desimaalierotin lisätään automaattisesti kahden viimeisen numeron eteen.
+ *
+ * "121" --> "1.21", "1210" --> "12.10", "002003" --> "20.03"
+ *
+ * Palauttaa uuden arvon tai null, jos arvoa ei tarvitse muuttaa (alle 3 merkkiä tai valmiiksi
+ * muodossa xxxx.yy).
+ */
+export const tulkitseAika = (arvo: string): string | null => {
+    if (arvo.length < 3 || /^[0-9]{0,4}\.[0-9]{2}$/.test(arvo)) {
+        return null
+    }
+    const vainnumerot = arvo.replace(/[^0-9]/g, "").replace(/^0+/, "").padStart(3, '0')
+    return vainnumerot.substring(0, vainnumerot.length - 2) + "." + vainnumerot.substring(vainnumerot.length - 2)
+}
